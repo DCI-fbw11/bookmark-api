@@ -18,7 +18,7 @@
 ```
 
 - use lowDB
-  - set some defaults
+  - set some defaults, ok!
 - implement as mentioned above api/bookmarks where `/api` is controlled by a middleware
 - create directories for:
   - routes
