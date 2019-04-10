@@ -50,5 +50,26 @@ module.exports = {
     })
 
     next()
+  },
+
+  updateBookmarkById: (req, res, next) => {
+    const { id } = req.params
+    const { url, tags } = req.body
+
+    if (!id) {
+      throw new Error("No ID defined, bookmarks/:id")
+    }
+
+    const bookmark = db
+      .get("bookmarks")
+      .find({ id })
+      .assign({ url }, { tags })
+      .write()
+
+    res.locals.response = Object.assign({}, res.locals.response || {}, {
+      bookmark
+    })
+
+    next()
   }
 }
