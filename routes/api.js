@@ -12,7 +12,8 @@ const {
   getBookmarks,
   getBookmarkByID,
   postBookmark,
-  updateBookmarkById
+  updateBookmarkById,
+  deleteBookmarkById
 } = require("../controller/bookmark");
 
 // Route Config
@@ -20,7 +21,8 @@ const apiRoutes = {
   allBookmarks: "/bookmarks",
   bookmarkByID: "/bookmarks/:id",
   postBookmark: "/bookmarks",
-  updateBookmarkById: "/bookmarks/:id"
+  updateBookmarkById: "/bookmarks/:id",
+  deleteBookmarkById: "/bookmarks/:id"
 };
 
 // To show our api users what is possible we can show all endpoints at home route (/)
@@ -37,6 +39,9 @@ router.post(apiRoutes.postBookmark, postBookmark);
 
 // UPDATE
 router.put(apiRoutes.updateBookmarkById, updateBookmarkById);
+
+// DELETE
+router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById);
 
 // The middleware that actually sends the response
 router.use(sendJsonResp);
