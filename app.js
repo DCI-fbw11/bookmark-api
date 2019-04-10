@@ -1,7 +1,7 @@
 const express = require("express")
 const logger = require("morgan")
 
-const PORT = process.env.PORT || 4000
+const PORT = process.env.PORT || 3001
 
 const indexRouter = require("./routes/index")
 const apiRoutes = require("./routes/api")

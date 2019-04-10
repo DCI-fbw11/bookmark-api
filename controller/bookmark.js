@@ -20,6 +20,7 @@ module.exports = {
     const bookmark = db
       .get("bookmarks")
       .find({ id })
+      .sortBy("createdAt")
       .value()
 
     if (!bookmark) {
