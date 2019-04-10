@@ -50,5 +50,42 @@ module.exports = {
     })
 
     next()
+  },
+
+  updateBookmarkById: (req, res, next) => {
+    const { id } = req.params
+    const { url, tags } = req.body
+
+    if (!id) {
+      throw new Error("No ID defined, bookmarks/:id")
+    }
+
+    const bookmark = db
+      .get("bookmarks")
+      .find({ id })
+      .assign({ url }, { tags })
+      .write()
+
+    res.locals.response = Object.assign({}, res.locals.response || {}, {
+      bookmark
+    })
+
+    next()
+  },
+
+  deleteBookmarkById: (req, res, next) => {
+    const { id } = req.params
+
+    if (!id) {
+      throw new Error("No ID defined, bookmarks/:id")
+    }
+    db.get("bookmarks")
+      .remove({ id })
+      .write()
+
+    res.locals.response = Object.assign({}, res.locals.response || {}, {
+      message: `bookmark with id: ${id} is removed...`
+    })
+    next()
   }
 }
