@@ -10,7 +10,7 @@ db.defaults({
     {
       id: "kmnbvfdr567uikjhbgf",
       url: "https://twitter.com/iamdevloper/status/1112428799222788099",
-      tag: ["humor", "sad reality"],
+      tags: ["humor", "sad reality"],
       createdAt: Date.now()
     }
   ]
