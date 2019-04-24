@@ -4,7 +4,10 @@ const uuidv1 = require("uuid/v1")
 module.exports = {
   getBookmarks: (req, res, next) => {
     res.locals.response = Object.assign({}, res.locals.response || {}, {
-      bookmark: db.get("bookmarks").value()
+      bookmark: db
+        .get("bookmarks")
+        .sortBy({ default: "createdAt", url: "-url" })
+        .value()
     })
 
     next()
@@ -20,7 +23,6 @@ module.exports = {
     const bookmark = db
       .get("bookmarks")
       .find({ id })
-      .sortBy("createdAt")
       .value()
 
     if (!bookmark) {

@@ -11,7 +11,7 @@
     },
     {
       "id": "811de580-5b8c-11e9-94cc-c3053133e650",
-      "url": "www.google.de",
+      "url": "https://www.google.de/?gws_rd=ssl",
       "createdAt": 1554899463129,
       "tags": [
         "searchengine",
@@ -23,7 +23,7 @@
     },
     {
       "id": "8a6c4050-5b8c-11e9-94cc-c3053133e650",
-      "url": "www.yahoo.de",
+      "url": "https://de.yahoo.com/",
       "createdAt": 1554899478741,
       "tags": [
         "searchengine",
@@ -35,7 +35,7 @@
     },
     {
       "id": "90e50cf0-5b8c-11e9-94cc-c3053133e650",
-      "url": "www.amazon.de",
+      "url": "https://www.amazon.de/",
       "createdAt": 1554899489599,
       "tags": [
         "searchengine",
@@ -47,7 +47,7 @@
     },
     {
       "id": "970f6b70-5b8c-11e9-94cc-c3053133e650",
-      "url": "www.bing.de",
+      "url": "https://www.bing.com/?cc=DE",
       "createdAt": 1554899499943,
       "tags": [
         "searchengine",
