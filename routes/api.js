@@ -13,7 +13,8 @@ const {
   getBookmarkByID,
   postBookmark,
   updateBookmarkById,
-  deleteBookmarkById
+  deleteBookmarkById,
+  sortBookmarks
 } = require("../controller/bookmark");
 
 // Route Config
@@ -31,7 +32,7 @@ router.get("/", (req, res) => {
 });
 
 // GET
-router.get(apiRoutes.allBookmarks, getBookmarks);
+router.get(apiRoutes.allBookmarks, getBookmarks, sortBookmarks);
 router.get(apiRoutes.bookmarkByID, getBookmarkByID);
 
 // POST
