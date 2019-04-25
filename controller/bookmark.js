@@ -19,10 +19,6 @@ module.exports = {
   getBookmarkByID: (req, res, next) => {
     const { id } = req.params
 
-    if (!id) {
-      createError(400, noIDDefined)
-    }
-
     const bookmark = db
       .get("bookmarks")
       .find({ id })
@@ -55,11 +51,6 @@ module.exports = {
       bookmark: newBookmark
     })
 
-    next()
-  },
-
-  checkID: (req, res, next) => {
-    createError(400, noIDDefined)
     next()
   },
 
@@ -96,10 +87,6 @@ module.exports = {
   deleteBookmarkById: (req, res, next) => {
     const { id } = req.params
 
-    if (!id) {
-      createError(400, noIDDefined)
-    }
-
     const bookmark = db
       .get("bookmarks")
       .find({ id })
@@ -117,5 +104,10 @@ module.exports = {
       })
       next()
     }
+  },
+
+  badRequest: (req, res, next) => {
+    createError(400, noIDDefined)
+    next()
   }
 }

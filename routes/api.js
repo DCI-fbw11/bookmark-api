@@ -1,5 +1,5 @@
 const express = require("express")
-const router = express.Router()
+const router = express.Router({ strict: true })
 
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
@@ -12,7 +12,7 @@ const {
   getBookmarks,
   getBookmarkByID,
   postBookmark,
-  checkID,
+  badRequest,
   updateBookmarkById,
   deleteBookmarkById
 } = require("../controller/bookmark")
@@ -23,13 +23,17 @@ const apiRoutes = {
   bookmarkByID: "/bookmarks/:id",
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
-  deleteBookmarkById: "/bookmarks/:id"
+  deleteBookmarkById: "/bookmarks/:id",
+  falseRoute: "/bookmarks/"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
 router.get("/", (req, res) => {
   res.json({ availableRoutes: Object.values(apiRoutes) })
 })
+
+// Bad Request Route
+router.all(apiRoutes.falseRoute, badRequest)
 
 // GET
 router.get(apiRoutes.allBookmarks, getBookmarks)
@@ -39,11 +43,11 @@ router.get(apiRoutes.bookmarkByID, getBookmarkByID)
 router.post(apiRoutes.postBookmark, postBookmark)
 
 // UPDATE
-router.put(apiRoutes.allBookmarks, checkID)
+router.put(apiRoutes.allBookmarks)
 router.put(apiRoutes.updateBookmarkById, updateBookmarkById)
 
 // DELETE
-router.delete(apiRoutes.allBookmarks, checkID)
+router.delete(apiRoutes.allBookmarks)
 router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
 
 // The middleware that actually sends the response
