@@ -19,8 +19,8 @@ const {
 
 // Route Config
 const apiRoutes = {
-  allBookmarks: "/bookmarks",
-  bookmarkByID: "/bookmarks/:id",
+  getAllBookmarks: "/bookmarks",
+  getBookmarkByID: "/bookmarks/:id",
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
@@ -29,25 +29,23 @@ const apiRoutes = {
 
 // To show our api users what is possible we can show all endpoints at home route (/)
 router.get("/", (req, res) => {
-  res.json({ availableRoutes: Object.values(apiRoutes) })
+  res.json({ availableRoutes: apiRoutes })
 })
 
 // Bad Request Route
 router.all(apiRoutes.falseRoute, badRequest)
 
 // GET
-router.get(apiRoutes.allBookmarks, getBookmarks)
-router.get(apiRoutes.bookmarkByID, getBookmarkByID)
+router.get(apiRoutes.getAllBookmarks, getBookmarks)
+router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
 router.post(apiRoutes.postBookmark, postBookmark)
 
 // UPDATE
-router.put(apiRoutes.allBookmarks)
 router.put(apiRoutes.updateBookmarkById, updateBookmarkById)
 
 // DELETE
-router.delete(apiRoutes.allBookmarks)
 router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
 
 // The middleware that actually sends the response
