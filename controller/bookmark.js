@@ -6,6 +6,7 @@ const {
   noIDDefined,
   noURLDefined
 } = require("../tools/errorMessages")
+const Bookmark = require('../models/bookmark')
 
 module.exports = {
   getBookmarks: (req, res, next) => {
@@ -36,22 +37,24 @@ module.exports = {
   },
 
   postBookmark: (req, res, next) => {
-    const { url, tags } = req.body
+    const newBookmark = new Bookmark(
+      req.body
+    )
 
-    if (!url) {
-      createError(406, noURLDefined)
-    }
-
-    const newBookmark = { id: uuidv1(), url: url, createdAt: Date.now(), tags }
-    db.get("bookmarks")
-      .push(newBookmark)
-      .write()
-
-    res.locals.response = Object.assign({}, res.locals.response || {}, {
-      bookmark: newBookmark
-    })
-
-    next()
+    newBookmark.save()
+      .then((savedBookmark) => {
+        res.locals.response = Object.assign(
+          {},
+          res.locals.response || {}, {
+          bookmark: savedBookmark
+        })
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        next()
+      })
   },
 
   updateBookmarkById: (req, res, next) => {
