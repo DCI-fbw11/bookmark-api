@@ -6,7 +6,7 @@ const {
   noIDDefined,
   noURLDefined
 } = require("../tools/errorMessages")
-const Bookmark = require('../models/bookmark')
+const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
@@ -37,20 +37,17 @@ module.exports = {
   },
 
   postBookmark: (req, res, next) => {
-    const newBookmark = new Bookmark(
-      req.body
-    )
+    const newBookmark = new Bookmark(req.body)
 
-    newBookmark.save()
-      .then((savedBookmark) => {
-        res.locals.response = Object.assign(
-          {},
-          res.locals.response || {}, {
+    newBookmark
+      .save()
+      .then(savedBookmark => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
           bookmark: savedBookmark
         })
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(err => {
+        console.error(err)
       })
       .finally(() => {
         next()

@@ -14,6 +14,7 @@ module.exports = {
   },
   rules: {
     "no-console": ["warn"],
+    quotes: ["error", "double"],
     semi: [2, "never"]
   }
-};
+}
