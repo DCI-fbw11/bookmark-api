@@ -1,9 +1,7 @@
 exports.apiErrorMiddleware = (err, req, res, next) => {
-  if (!res.headersSent) {
-    res.status(400)
-  }
+  if (!err.statusCode) err.statusCode = 500
 
-  res.json({
+  res.status(err.statusCode).json({
     error: err.message || "Unknown Error",
     data: res.locals.response || {}
   })
