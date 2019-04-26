@@ -13,10 +13,10 @@ mongoose.connect("mongodb://localhost/bookmarks", {
   useNewUrlParser: true
 })
 .then(() => {
-  console.log('Connected to Mongo')
+  console.log("Connected to Mongo")
 })
 .catch((err) => {
-  console.error('Could not connect, ', err)
+  console.error("Could not connect, ", err)
 })
 
 app.use(logger("dev"))

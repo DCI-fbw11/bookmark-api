@@ -1,16 +1,16 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 const { Schema } = mongoose
 
 const BookmarkSchema = new Schema({
   title: {
     type: String,
     maxlength: 50,
-    default: 'No title'
+    default: "No title"
   },
   shortDescription: {
     type: String,
     maxlength: 150,
-    default: ''
+    default: ""
   },
   url: {
     type: String,
@@ -28,5 +28,5 @@ const BookmarkSchema = new Schema({
   }
 })
 
-const Bookmark = mongoose.model('Bookmark', BookmarkSchema)
+const Bookmark = mongoose.model("Bookmark", BookmarkSchema)
 module.exports = Bookmark
