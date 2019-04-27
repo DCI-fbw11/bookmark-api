@@ -1,5 +1,4 @@
 const db = require("../db")
-const uuidv1 = require("uuid/v1")
 const createError = require("../tools/createError")
 const {
   noBookmarkFound,
@@ -20,20 +19,18 @@ module.exports = {
   getBookmarkByID: (req, res, next) => {
     const { id } = req.params
 
-    const bookmark = db
-      .get("bookmarks")
-      .find({ id })
-      .value()
-
-    if (!bookmark) {
-      createError(400, noBookmarkFound)
-    }
-
-    res.locals.response = Object.assign({}, res.locals.response || {}, {
-      bookmark
-    })
-
-    next()
+    Bookmark.findOne({ _id: id })
+      .then(foundBookmark => {
+        if (!foundBookmark) {
+          createError(400, noBookmarkFound)
+        } else {
+          res.locals.response = Object.assign({}, res.locals.response || {}, {
+            bookmark: foundBookmark
+          })
+        }
+      })
+      .catch(err => console.error(err))
+      .finally(() => next())
   },
 
   postBookmark: (req, res, next) => {
