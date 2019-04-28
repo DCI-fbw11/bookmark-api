@@ -1,10 +1,10 @@
 const db = require("../db")
-const createError = require("../tools/createError")
+const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noIDDefined,
   noURLDefined
-} = require("../tools/errorMessages")
+} = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
