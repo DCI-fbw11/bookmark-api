@@ -5,7 +5,7 @@ const router = express.Router({ strict: true })
 const { apiErrorMiddleware } = require("../middleware/api")
 
 //Helper
-const { sendJsonResp } = require("../helper")
+const sendJsonResp = require("../helpers/sendJsonResp")
 
 // Controller
 const {
