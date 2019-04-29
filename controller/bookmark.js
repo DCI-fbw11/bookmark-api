@@ -1,4 +1,5 @@
 const db = require("../db")
+
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
@@ -82,6 +83,9 @@ module.exports = {
   },
 
   deleteBookmarkById: (req, res, next) => {
+    const {bokmark}= Bookmark.findByIdAndDelete(req.params.id,req.body),{
+     new:true 
+    }
     const { id } = req.params
 
     const bookmark = db
