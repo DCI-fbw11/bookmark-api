@@ -18,6 +18,7 @@ const BookmarkSchema = new Schema({
   },
   tag: {
     type: [String],
+    unique: true,
     validate: v => v == null || v.length > 0
   },
   createdAt: {

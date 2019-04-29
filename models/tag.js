@@ -5,7 +5,8 @@ const TagSchema = new Schema({
   title: {
     type: String,
     maxlength: 50,
-    required: true
+    required: true,
+    unique: true
   }
 })
 
