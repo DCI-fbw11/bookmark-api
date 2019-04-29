@@ -9,6 +9,7 @@ const apiRoutes = require("./routes/api")
 
 const app = express()
 
+<<<<<<< HEAD
 mongoose
   .connect("mongodb://localhost/bookmarks", {
     useNewUrlParser: true
@@ -19,6 +20,17 @@ mongoose
   .catch(err => {
     console.error("Could not connect, ", err)
   })
+=======
+mongoose.connect("mongodb://localhost/bookmarks", {
+  useNewUrlParser: true
+})
+.then(() => {
+  console.log("Connected to Mongo")
+})
+.catch((err) => {
+  console.error("Could not connect, ", err)
+})
+>>>>>>> f5d807e960c139c0ea602cbe28981d480e6b28c1
 
 app.use(logger("dev"))
 app.use(express.json())

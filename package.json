@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "lint": "eslint --fix ."
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -11,8 +12,7 @@
     "express": "~4.16.0",
     "lowdb": "^1.0.0",
     "mongoose": "^5.5.3",
-    "morgan": "~1.9.0",
-    "uuid": "^3.3.2"
+    "morgan": "~1.9.0"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
