@@ -7,7 +7,8 @@ module.exports = {
       .save()
       .then(savedTag => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
-          tag: savedTag
+          tag: savedTag,
+          message: "Was successfully saved"
         })
       })
       .catch(err => console.error(err))
@@ -18,12 +19,26 @@ module.exports = {
     Tag.find({})
       .then(tags => {
         if (!tags) {
-          console.log("handle error") // to do: error handling
+          console.log("create error") // to do: createError
         } else {
           res.locals.response = Object.assign({}, res.locals.response || {}, {
             tags: tags
           })
         }
+      })
+      .catch(err => console.error(err))
+      .finally(() => next())
+  },
+
+  updateTagById: (req, res, next) => {
+    const { id } = req.params
+
+    Tag.findByIdAndUpdate(id, { $set: req.body }, { new: true })
+      .then(updatedTag => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          tag: updatedTag,
+          message: "Updated successfully"
+        })
       })
       .catch(err => console.error(err))
       .finally(() => next())
