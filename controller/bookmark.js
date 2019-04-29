@@ -1,12 +1,7 @@
 const db = require("../db")
-const uuidv1 = require("uuid/v1")
 const createError = require("../tools/createError")
-const {
-  noBookmarkFound,
-  noIDDefined,
-  noURLDefined
-} = require("../tools/errorMessages")
-const Bookmark = require('../models/bookmark')
+const { noBookmarkFound, noIDDefined } = require("../tools/errorMessages")
+const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
@@ -37,20 +32,17 @@ module.exports = {
   },
 
   postBookmark: (req, res, next) => {
-    const newBookmark = new Bookmark(
-      req.body
-    )
+    const newBookmark = new Bookmark(req.body)
 
-    newBookmark.save()
-      .then((savedBookmark) => {
-        res.locals.response = Object.assign(
-          {},
-          res.locals.response || {}, {
+    newBookmark
+      .save()
+      .then(savedBookmark => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
           bookmark: savedBookmark
         })
       })
-      .catch((err) => {
-        console.error(err);
+      .catch(err => {
+        console.error(err)
       })
       .finally(() => {
         next()
@@ -58,31 +50,18 @@ module.exports = {
   },
 
   updateBookmarkById: (req, res, next) => {
-    const { id } = req.params
-    const { url, tags } = req.body
+    const { bookmark } = Bookmark.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    })
 
-    if (!url) {
-      createError(406, noURLDefined)
-    }
+    if (!bookmark)
+      return res
+        .status(404)
+        .send("The bookmark with the given ID was not found.")
 
-    const bookmark = db
-      .get("bookmarks")
-      .find({ id })
-      .value()
-
-    if (!bookmark) {
-      createError(400, noBookmarkFound)
-    } else {
-      const updatedBookmark = db
-        .get("bookmarks")
-        .find({ id })
-        .assign({ url }, { tags })
-        .write()
-
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        updatedBookmark
-      })
-    }
+    res.locals.response = Object.assign({}, res.locals.response || {}, {
+      bookmark: bookmark
+    })
 
     next()
   },
