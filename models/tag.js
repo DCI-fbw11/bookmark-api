@@ -6,12 +6,7 @@ const TagSchema = new Schema({
     type: String,
     maxlength: 50,
     required: true
-  },
-  bookmarks: [
-    {
-      type: ObjectId
-    }
-  ]
+  }
 })
 
 const Tag = mongoose.model("Tag", TagSchema)
