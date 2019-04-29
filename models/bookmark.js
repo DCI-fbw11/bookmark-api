@@ -16,12 +16,10 @@ const BookmarkSchema = new Schema({
     type: String,
     required: true
   },
-  tag: [
-    {
-      type: String,
-      maxlength: 50
-    }
-  ],
+  tag: {
+    type: [String],
+    validate: v => v == null || v.length > 0
+  },
   createdAt: {
     type: Date,
     default: Date.now()
