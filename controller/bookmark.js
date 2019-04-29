@@ -83,27 +83,37 @@ module.exports = {
   },
 
   deleteBookmarkById: (req, res, next) => {
-    const {bokmark}= Bookmark.findByIdAndDelete(req.params.id,req.body),{
-     new:true 
-    }
+    const { bookmark } = Bookmark.findByIdAndUpdate(req.params.id, req.body, {
+      new: true
+    })
+
+    if (!bookmark)
     const { id } = req.params
-
-    const bookmark = db
-      .get("bookmarks")
-      .find({ id })
-      .value()
-
-    if (!bookmark) {
-      createError(400, noBookmarkFound)
-    } else {
-      db.get("bookmarks")
-        .remove({ id })
-        .write()
-
+    const deleteBookmark= req.body
+    console.log(req.params)
+    if (!id)
+      return res
+        .status(404)
+        .send("The bookmark with the given ID was not found.")
+    
+    
       res.locals.response = Object.assign({}, res.locals.response || {}, {
-        message: `bookmark with id: ${id} is removed...`
+        bookmark: bookmark
       })
       next()
+      Bookmark.deleteOne({ _id: id }, deleteBookmark, { new: true })
+      .then(deleteBookmark => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: deleteBookmark
+        })
+      })
+      .catch(err => {
+        console.error(err)
+      })
+      .finally(() => {
+        next()
+      })
+
     }
   },
 
@@ -111,4 +121,4 @@ module.exports = {
     createError(400, noIDDefined)
     next()
   }
-}
+
