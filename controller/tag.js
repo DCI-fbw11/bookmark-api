@@ -35,6 +35,9 @@ module.exports = {
 
     Tag.findByIdAndUpdate(id, { $set: req.body }, { new: true })
       .then(updatedTag => {
+        if (!updatedTag) {
+          console.log("create error") // needs createError
+        }
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           tag: updatedTag,
           message: "Updated successfully"
