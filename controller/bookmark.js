@@ -1,4 +1,5 @@
 const db = require("../db")
+
 const createError = require("../helpers/createError")
 const { noBookmarkFound, noIDDefined } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
@@ -68,23 +69,19 @@ module.exports = {
   deleteBookmarkById: (req, res, next) => {
     const { id } = req.params
 
-    const bookmark = db
-      .get("bookmarks")
-      .find({ id })
-      .value()
-
-    if (!bookmark) {
-      createError(400, noBookmarkFound)
-    } else {
-      db.get("bookmarks")
-        .remove({ id })
-        .write()
-
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        message: `bookmark with id: ${id} is removed...`
+    Bookmark.findByIdAndRemove({ _id: id })
+      .then(deleteBookmark => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: deleteBookmark,
+          message: `Bookmark with id ${id} was deleted!`
+        })
       })
-      next()
-    }
+      .catch(err => {
+        next(err)
+      })
+      .finally(() => {
+        next()
+      })
   },
 
   badRequest: (req, res, next) => {
