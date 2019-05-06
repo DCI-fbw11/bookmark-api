@@ -1,16 +1,27 @@
 const db = require("../db")
 
 const createError = require("../helpers/createError")
-const { noBookmarkFound, noIDDefined } = require("../helpers/errorMessages")
+const {
+  noBookmarkFound,
+  noBookmarks,
+  noIDDefined
+} = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
-    res.locals.response = Object.assign({}, res.locals.response || {}, {
-      bookmark: db.get("bookmarks").value()
-    })
-
-    next()
+    Bookmark.find({})
+      .then(bookmarkList => {
+        if (!bookmarkList) {
+          createError(400, noBookmarks)
+        } else {
+          res.locals.response = Object.assign({}, res.locals.response || {}, {
+            bookmark: bookmarkList
+          })
+        }
+      })
+      .catch(err => console.error(err))
+      .finally(() => next())
   },
 
   getBookmarkByID: (req, res, next) => {
