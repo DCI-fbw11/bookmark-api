@@ -50,20 +50,15 @@ module.exports = {
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
     const updateBookmark = req.body
-    console.log(req.params)
-    if (!id)
-      return res
-        .status(404)
-        .send("The bookmark with the given ID was not found.")
 
-    Bookmark.updateOne({ _id: id }, updateBookmark, { new: true })
+    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
       .then(updatedBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           bookmark: updatedBookmark
         })
       })
       .catch(err => {
-        console.error(err)
+        next(err)
       })
       .finally(() => {
         next()
