@@ -2,7 +2,8 @@ const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noBookmarks,
-  noIDDefined
+  noIDDefined,
+  incorrectID
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -63,8 +64,12 @@ module.exports = {
 
     Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
       .then(updatedBookmark => {
+        if (!id) {
+          createError(400, incorrectID)
+        }
         res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: updatedBookmark
+          bookmark: updatedBookmark,
+          message: `Bookmark with id ${id} was updated!`
         })
       })
       .catch(err => {
