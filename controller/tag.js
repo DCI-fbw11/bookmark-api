@@ -1,6 +1,5 @@
 const Tag = require("../models/tag")
-const createError = require("../helpers/createError")
-const errorMessages = require("../helpers/errorMessages")
+
 module.exports = {
   createTag: (req, res, next) => {
     const newTag = new Tag(req.body)
