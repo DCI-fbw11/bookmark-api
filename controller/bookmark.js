@@ -1,5 +1,3 @@
-const db = require("../db")
-
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
@@ -20,7 +18,7 @@ module.exports = {
           })
         }
       })
-      .catch(err => console.error(err))
+      .catch(err => next(err))
       .finally(() => next())
   },
 
@@ -37,7 +35,7 @@ module.exports = {
           })
         }
       })
-      .catch(err => console.error(err))
+      .catch(err => next(err))
       .finally(() => next())
   },
 
@@ -52,7 +50,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        console.error(err)
+        next(err)
       })
       .finally(() => {
         next()
