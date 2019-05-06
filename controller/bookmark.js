@@ -59,7 +59,10 @@ module.exports = {
 
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
-    const updateBookmark = req.body
+    //const updateBookmark = req.body
+    const updateBookmark = Object.assign({}, req.body, {
+      updatedAt: Date.now()
+    })
 
     Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
       .then(updatedBookmark => {
