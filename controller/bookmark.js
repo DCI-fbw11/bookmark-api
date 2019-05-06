@@ -93,7 +93,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        console.error(err)
+        next(err)
       })
       .finally(() => {
         next()
