@@ -65,7 +65,7 @@ module.exports = {
         next()
       })
   },
- 
+
   deleteBookmarkById: (req, res, next) => {
     const { id } = req.params
 
