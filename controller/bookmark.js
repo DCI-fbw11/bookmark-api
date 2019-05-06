@@ -83,28 +83,13 @@ module.exports = {
   },
 
   deleteBookmarkById: (req, res, next) => {
-    const { bookmark } = Bookmark.findByIdAndUpdate(req.params.id, req.body, {
-      new: true
-    })
-
-    if (!bookmark)
     const { id } = req.params
-    const deleteBookmark= req.body
-    console.log(req.params)
-    if (!id)
-      return res
-        .status(404)
-        .send("The bookmark with the given ID was not found.")
-    
-    
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        bookmark: bookmark
-      })
-      next()
-      Bookmark.deleteOne({ _id: id }, deleteBookmark, { new: true })
+
+    Bookmark.findByIdAndRemove({ _id: id })
       .then(deleteBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: deleteBookmark
+          bookmark: deleteBookmark,
+          message: `Bookmark with id ${id} was deleted!`
         })
       })
       .catch(err => {
@@ -113,12 +98,10 @@ module.exports = {
       .finally(() => {
         next()
       })
-
-    }
   },
 
   badRequest: (req, res, next) => {
     createError(400, noIDDefined)
     next()
   }
-
+}
