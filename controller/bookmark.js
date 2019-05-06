@@ -1,10 +1,6 @@
 const db = require("../db")
 const createError = require("../helpers/createError")
-const {
-  noBookmarkFound,
-  noIDDefined,
-  noURLDefined
-} = require("../helpers/errorMessages")
+const { noBookmarkFound, noIDDefined } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
@@ -53,34 +49,22 @@ module.exports = {
 
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
-    const { url, tags } = req.body
+    const updateBookmark = req.body
 
-    if (!url) {
-      createError(406, noURLDefined)
-    }
-
-    const bookmark = db
-      .get("bookmarks")
-      .find({ id })
-      .value()
-
-    if (!bookmark) {
-      createError(400, noBookmarkFound)
-    } else {
-      const updatedBookmark = db
-        .get("bookmarks")
-        .find({ id })
-        .assign({ url }, { tags })
-        .write()
-
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        updatedBookmark
+    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
+      .then(updatedBookmark => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: updatedBookmark
+        })
       })
-    }
-
-    next()
+      .catch(err => {
+        next(err)
+      })
+      .finally(() => {
+        next()
+      })
   },
-
+ 
   deleteBookmarkById: (req, res, next) => {
     const { id } = req.params
 
