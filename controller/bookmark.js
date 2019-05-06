@@ -9,8 +9,10 @@ const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
+    const { body } = req
+    console.log(body)
     res.locals.response = Object.assign({}, res.locals.response || {}, {
-      bookmark: db.get("bookmarks").value()
+      bookmark: body
     })
 
     next()
