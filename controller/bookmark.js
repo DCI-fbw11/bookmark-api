@@ -1,19 +1,25 @@
-const db = require("../db")
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
-  noIDDefined,
-  noURLDefined
+  noBookmarks,
+  noIDDefined
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
-    res.locals.response = Object.assign({}, res.locals.response || {}, {
-      bookmark: db.get("bookmarks").value()
-    })
-
-    next()
+    Bookmark.find({})
+      .then(bookmarkList => {
+        if (!bookmarkList) {
+          createError(400, noBookmarks)
+        } else {
+          res.locals.response = Object.assign({}, res.locals.response || {}, {
+            bookmark: bookmarkList
+          })
+        }
+      })
+      .catch(err => next(err))
+      .finally(() => next())
   },
 
   getBookmarkByID: (req, res, next) => {
@@ -29,7 +35,7 @@ module.exports = {
           })
         }
       })
-      .catch(err => console.error(err))
+      .catch(err => next(err))
       .finally(() => next())
   },
 
@@ -44,7 +50,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        console.error(err)
+        next(err)
       })
       .finally(() => {
         next()
@@ -53,54 +59,38 @@ module.exports = {
 
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
-    const { url, tags } = req.body
+    const updateBookmark = req.body
 
-    if (!url) {
-      createError(406, noURLDefined)
-    }
-
-    const bookmark = db
-      .get("bookmarks")
-      .find({ id })
-      .value()
-
-    if (!bookmark) {
-      createError(400, noBookmarkFound)
-    } else {
-      const updatedBookmark = db
-        .get("bookmarks")
-        .find({ id })
-        .assign({ url }, { tags })
-        .write()
-
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        updatedBookmark
+    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
+      .then(updatedBookmark => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: updatedBookmark
+        })
       })
-    }
-
-    next()
+      .catch(err => {
+        next(err)
+      })
+      .finally(() => {
+        next()
+      })
   },
 
   deleteBookmarkById: (req, res, next) => {
     const { id } = req.params
 
-    const bookmark = db
-      .get("bookmarks")
-      .find({ id })
-      .value()
-
-    if (!bookmark) {
-      createError(400, noBookmarkFound)
-    } else {
-      db.get("bookmarks")
-        .remove({ id })
-        .write()
-
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        message: `bookmark with id: ${id} is removed...`
+    Bookmark.findByIdAndRemove({ _id: id })
+      .then(deleteBookmark => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: deleteBookmark,
+          message: `Bookmark with id ${id} was deleted!`
+        })
       })
-      next()
-    }
+      .catch(err => {
+        next(err)
+      })
+      .finally(() => {
+        next()
+      })
   },
 
   badRequest: (req, res, next) => {

@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon app.js",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "precommit": "npm run lint"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "eslint": "^5.16.0",
+    "husky": "^2.2.0",
     "nodemon": "^1.18.11"
   },
   "nodemonConfig": {
