@@ -1,3 +1,5 @@
+const { validationResult } = require("express-validator/check")
+
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
@@ -41,7 +43,10 @@ module.exports = {
 
   postBookmark: (req, res, next) => {
     const newBookmark = new Bookmark(req.body)
-
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() })
+    }
     newBookmark
       .save()
       .then(savedBookmark => {
