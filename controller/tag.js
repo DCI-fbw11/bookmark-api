@@ -24,7 +24,6 @@ module.exports = {
             tags: tags
           })
         }
-      })
       .catch(err => console.error(err))
       .finally(() => next())
   }
