@@ -13,7 +13,7 @@ module.exports = {
       .catch(err => {
         if (err.name === "ValidationError") {
           err.statusCode = 400
-        } // move validation to schema later to avoid duplicating on each controller?
+        } // TODO move validation to schema later to avoid duplicating on each controller?
         next(err)
       })
       .finally(() => next())
