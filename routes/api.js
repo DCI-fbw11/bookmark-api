@@ -1,7 +1,7 @@
 const express = require("express")
 const { check } = require("express-validator/check")
 const router = express.Router({ strict: true })
-
+// const { validURL } = require("../middleware/validation")
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
 
@@ -48,7 +48,11 @@ router.post(apiRoutes.postBookmark, [check("url").isURL()], postBookmark)
 router.post(apiRoutes.createTag, createTag)
 
 // UPDATE
-router.put(apiRoutes.updateBookmarkById, updateBookmarkById)
+router.put(
+  apiRoutes.updateBookmarkById,
+  [check("url").isURL()],
+  updateBookmarkById
+)
 
 // DELETE
 router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)

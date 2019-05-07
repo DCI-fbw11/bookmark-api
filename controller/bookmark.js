@@ -1,5 +1,4 @@
 const { validationResult } = require("express-validator/check")
-
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
