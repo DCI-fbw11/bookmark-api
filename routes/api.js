@@ -1,5 +1,4 @@
 const express = require("express")
-const { check } = require("express-validator/check")
 const router = express.Router({ strict: true })
 
 // Middleware
@@ -15,7 +14,8 @@ const {
   postBookmark,
   badRequest,
   updateBookmarkById,
-  deleteBookmarkById
+  deleteBookmarkById,
+  batchDeleteBookmarks
 } = require("../controller/bookmark")
 
 // Route Config
@@ -25,6 +25,7 @@ const apiRoutes = {
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
+  batchDeleteBookmarks: "/bookmarks/delete/",
   falseRoute: "/bookmarks/"
 }
 
@@ -41,16 +42,16 @@ router.get(apiRoutes.getAllBookmarks, getBookmarks)
 router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
-
 router.post(apiRoutes.postBookmark, isBodyValid, postBookmark)
-router.post(apiRoutes.createTag, createTag)
-
 
 // UPDATE
 router.put(apiRoutes.updateBookmarkById, isBodyValid, updateBookmarkById)
 
 // DELETE
 router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
+
+// Batch Delete Bookmarks with an Array of ID's
+router.delete(apiRoutes.batchDeleteBookmarks, batchDeleteBookmarks)
 
 // The middleware that actually sends the response
 router.use(sendJsonResp)
