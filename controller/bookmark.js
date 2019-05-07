@@ -104,6 +104,21 @@ module.exports = {
       })
   },
 
+  batchDeleteBookmarks: (req, res, next) => {
+    const { bookmarkIDs } = req.body
+
+    Bookmark.deleteMany({ _id: { $in: bookmarkIDs } })
+      .then(() => {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          message: `Bookmark with id's ${bookmarkIDs.map(
+            id => id
+          )} were deleted!`
+        })
+      })
+      .catch(err => next(err))
+      .finally(() => next())
+  },
+
   badRequest: (req, res, next) => {
     createError(400, noIDDefined)
     next()
