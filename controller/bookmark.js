@@ -67,13 +67,17 @@ module.exports = {
       updatedAt: Date.now()
     })
 
-    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
+    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, {
+      runValidators: true
+    })
       .then(updatedBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: updatedBookmark
+          bookmark: updatedBookmark,
+          message: `Bookmark with id ${id} was updated!`
         })
       })
       .catch(err => {
+        err.message = "Wrong ID please enter a valid ID"
         next(err)
       })
       .finally(() => {
