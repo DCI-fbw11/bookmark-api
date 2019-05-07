@@ -1,5 +1,5 @@
 const express = require("express")
-const { check } = require("express-validator/check")
+// const { check } = require("express-validator/check")
 const router = express.Router({ strict: true })
 
 // Middleware
@@ -43,8 +43,6 @@ router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 // POST
 
 router.post(apiRoutes.postBookmark, isBodyValid, postBookmark)
-router.post(apiRoutes.createTag, createTag)
-
 
 // UPDATE
 router.put(apiRoutes.updateBookmarkById, isBodyValid, updateBookmarkById)
