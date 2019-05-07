@@ -1520,6 +1520,11 @@ mongoose-legacy-pluralize@1.0.2:
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
+mongoose-unique-array@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/mongoose-unique-array/-/mongoose-unique-array-0.3.1.tgz#8371532223ff462d190b037bf1d14b2e16ddd42e"
+  integrity sha512-Cd76M02EUwJ7pb3yfocjyaGmBu/iNJpvmhwF+KvSioB8PUUurgKorzNnF3yX27adVWCyxc9m1MiRhZsOFP1F7Q==
+
 mongoose@^5.5.3:
   version "5.5.5"
   resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.5.5.tgz#d04b97a1ad0740671deeeee09ded5149fa47fe56"
@@ -2581,11 +2586,6 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
-
-validator@^10.11.0:
-  version "10.11.0"
-  resolved "https://registry.yarnpkg.com/validator/-/validator-10.11.0.tgz#003108ea6e9a9874d31ccc9e5006856ccd76b228"
-  integrity sha512-X/p3UZerAIsbBfN/IwahhYaBbY68EN/UQBWHtsbXGT5bfrH/p4NQzUCG1kF/rtKaNpnJ7jAu6NGTdSNtyNIXMw==
 
 vary@~1.1.2:
   version "1.1.2"

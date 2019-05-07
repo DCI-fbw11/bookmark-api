@@ -61,7 +61,9 @@ module.exports = {
     const { id } = req.params
     const updateBookmark = req.body
 
-    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
+    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, {
+      runValidators: true
+    })
       .then(updatedBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           bookmark: updatedBookmark

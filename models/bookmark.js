@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const { Schema } = mongoose
+const arrayUniquePlugin = require("mongoose-unique-array")
 
 const BookmarkSchema = new Schema({
   title: {
@@ -17,12 +18,7 @@ const BookmarkSchema = new Schema({
     required: true
   },
   tag: {
-    type: [String],
-    unique: true,
-    validate: {
-      validator: v => v && v.length > 0,
-      message: "You must provide at least 1 tag."
-    }
+    type: [{ type: String, maxlength: 50, unique: true }]
   },
   createdAt: {
     type: Date,
@@ -31,4 +27,5 @@ const BookmarkSchema = new Schema({
 })
 
 const Bookmark = mongoose.model("Bookmark", BookmarkSchema)
+BookmarkSchema.plugin(arrayUniquePlugin)
 module.exports = Bookmark
