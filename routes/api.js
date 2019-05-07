@@ -1,8 +1,8 @@
 const express = require("express")
 const { check } = require("express-validator/check")
 const router = express.Router({ strict: true })
-// const { validURL } = require("../middleware/validation")
-// Middleware
+
+
 const { apiErrorMiddleware } = require("../middleware/api")
 
 //Helper
