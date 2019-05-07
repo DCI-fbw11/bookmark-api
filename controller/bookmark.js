@@ -68,7 +68,9 @@ module.exports = {
       updatedAt: Date.now()
     })
 
-    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, { new: true })
+    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, {
+      runValidators: true
+    })
       .then(updatedBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           bookmark: updatedBookmark
