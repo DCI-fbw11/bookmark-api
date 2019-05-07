@@ -43,39 +43,42 @@
 
 This will show you the expected **input** for each **endpoint** and the **value** it returns
 
-# GET
+# GET ALL ROUTES
 
-## getBookmarks
-
-The _/bookmarks_ route will show all the bookmarks in the database
-
+To see all available routes, use the `/api` endpoint.
 
 ![all_success](https://user-images.githubusercontent.com/44833666/57297961-446d4b80-70d1-11e9-9ca9-b30f2ecb9d4a.png)
 
-If an Error should occur the following message will show up
+# GET
+
+## getAllBookmarks
+
+The endpoint `/api/bookmarks` will show all bookmarks in the database
+
+If an **error** occurs the following message will be displayed
 
 ![all_error](https://user-images.githubusercontent.com/44833666/57298353-45eb4380-70d2-11e9-9229-01cde10990dd.png)
 
 ## getBookmarkByID
 
-To see a specific bookmark, the ID is needed and can be added like this : _/bookmarks/the id of the bookmark you are looking for_
+To see a specific bookmark, the ID is required and can be added in the following way : `/api/bookmarks/:id`.
 
 # POST
 
 ## postBookmark
 
-To add a bookmark to the database use the /bookmarks route. A **url** must be given as it is required. Titel, short description and tags a optional
+To add a bookmark to the database, use the `/api/bookmarks` endpoint. A **url** is required; titel, short description and tags are optional.
 
 # PUT
 
 ## updateBookmarkByID
 
-To update a bookmark the key, an updated value and the ID of the bookmark you want to update is needed
+To update a bookmark in the database, use the `/api/bookmarks` endpoint. To update a bookmark, the bookmark ID, the key and the updated valueare required.
 
 # DELETE
 
 ## deleteBookmarkByID
 
-Provide the id of the bookmark you want to delete.
+Provide the id of the bookmark you want to delete to the `/api/bookmarks/:id` endpoint.
 
-> **ProTip:** The routes a stric wich means that a **"/"** at the **end** of a route will throw an error if
+> **ProTip:** The routes a strict, which means that a **"/"** at the **end** of a route will throw an error.
