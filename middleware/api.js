@@ -12,7 +12,10 @@ exports.apiErrorMiddleware = (err, req, res, next) => {
 
 exports.isBodyValid = (req, res, next) => {
   if (Object.keys(req.body).length === 0) {
-    createError(400, "please enter a body no body found")
+    createError(
+      400,
+      "no body found please enter body with field to update bookmark"
+    )
   }
   next()
 }
