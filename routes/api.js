@@ -15,7 +15,8 @@ const {
   postBookmark,
   badRequest,
   updateBookmarkById,
-  deleteBookmarkById
+  deleteBookmarkById,
+  sortBookmarks
 } = require("../controller/bookmark")
 
 // Route Config
@@ -37,7 +38,7 @@ router.get("/", (req, res) => {
 router.all(apiRoutes.falseRoute, badRequest)
 
 // GET
-router.get(apiRoutes.getAllBookmarks, getBookmarks)
+router.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
 router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST

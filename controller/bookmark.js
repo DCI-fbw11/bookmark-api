@@ -10,18 +10,22 @@ const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
-    Bookmark.find({})
-      .then(bookmarkList => {
-        if (!bookmarkList) {
-          createError(400, noBookmarks)
-        } else {
-          res.locals.response = Object.assign({}, res.locals.response || {}, {
-            bookmark: bookmarkList
-          })
-        }
-      })
-      .catch(err => next(err))
-      .finally(() => next())
+    //this probably has to be refactored ?
+    if (!req.query.sortValue && !req.query.sortOrder) {
+      Bookmark.find({})
+        .then(bookmarkList => {
+          if (!bookmarkList) {
+            createError(400, noBookmarks)
+          } else {
+            res.locals.response = Object.assign({}, res.locals.response || {}, {
+              bookmark: bookmarkList
+            })
+          }
+        })
+        .catch(err => next(err))
+        .finally(() => next())
+    }
+    next()
   },
 
   getBookmarkByID: (req, res, next) => {
@@ -100,6 +104,31 @@ module.exports = {
       .finally(() => {
         next()
       })
+  },
+
+  // perfect task for a DAO?
+  sortBookmarks: async (req, res, next) => {
+    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
+    let sortedBookmarks //move to try?
+    try {
+      sortedBookmarks =
+        req.query.sortValue === "url"
+          ? await Bookmark.aggregate([
+              { $sort: { createdAt: sortOrder } },
+              { $project: { title: 1, createdAt: 1, _id: 0 } }
+            ])
+          : await Bookmark.aggregate([
+              { $sort: { url: sortOrder } },
+              { $project: { title: 1, createdAt: 1, _id: 0 } }
+            ])
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        sorted_bookmarks: sortedBookmarks
+      })
+    } catch (err) {
+      next(err)
+    } finally {
+      next()
+    }
   },
 
   badRequest: (req, res, next) => {
