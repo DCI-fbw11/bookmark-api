@@ -49,6 +49,13 @@ This will show you the expected **input** for each **endpoint** and the **value*
 
 The _/bookmarks_ route will show all the bookmarks in the database
 
+
+![all_success](https://user-images.githubusercontent.com/44833666/57297961-446d4b80-70d1-11e9-9ca9-b30f2ecb9d4a.png)
+
+If an Error should occur the following message will show up
+
+![all_error](https://user-images.githubusercontent.com/44833666/57298353-45eb4380-70d2-11e9-9229-01cde10990dd.png)
+
 ## getBookmarkByID
 
 To see a specific bookmark, the ID is needed and can be added like this : _/bookmarks/the id of the bookmark you are looking for_
