@@ -1,4 +1,5 @@
 const express = require("express")
+const { check } = require("express-validator/check")
 const router = express.Router({ strict: true })
 
 // Middleware

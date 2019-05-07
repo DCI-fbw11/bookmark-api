@@ -23,6 +23,9 @@ const BookmarkSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now()
+  },
+  updatedAt: {
+    type: Date
   }
 })
 
