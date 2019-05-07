@@ -1,4 +1,5 @@
 const express = require("express")
+const { check } = require("express-validator/check")
 const router = express.Router({ strict: true })
 
 // Middleware
@@ -17,8 +18,6 @@ const {
   deleteBookmarkById
 } = require("../controller/bookmark")
 
-const { createTag } = require("../controller/tag")
-
 // Route Config
 const apiRoutes = {
   getAllBookmarks: "/bookmarks",
@@ -26,8 +25,7 @@ const apiRoutes = {
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
-  falseRoute: "/bookmarks/",
-  createTag: "/tags"
+  falseRoute: "/bookmarks/"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
@@ -43,8 +41,10 @@ router.get(apiRoutes.getAllBookmarks, getBookmarks)
 router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
+
 router.post(apiRoutes.postBookmark, isBodyValid, postBookmark)
 router.post(apiRoutes.createTag, createTag)
+
 
 // UPDATE
 router.put(apiRoutes.updateBookmarkById, isBodyValid, updateBookmarkById)
