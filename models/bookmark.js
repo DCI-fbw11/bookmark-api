@@ -19,7 +19,10 @@ const BookmarkSchema = new Schema({
   tag: {
     type: [String],
     unique: true,
-    validate: v => v == null || v.length > 0
+    validate: {
+      validator: v => v && v.length > 0,
+      message: "You must provide at least 1 tag."
+    }
   },
   createdAt: {
     type: Date,

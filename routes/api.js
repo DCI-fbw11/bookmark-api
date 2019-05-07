@@ -17,8 +17,6 @@ const {
   deleteBookmarkById
 } = require("../controller/bookmark")
 
-const { createTag } = require("../controller/tag")
-
 // Route Config
 const apiRoutes = {
   getAllBookmarks: "/bookmarks",
@@ -26,8 +24,7 @@ const apiRoutes = {
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
-  falseRoute: "/bookmarks/",
-  createTag: "/tags"
+  falseRoute: "/bookmarks/"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
@@ -44,7 +41,6 @@ router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
 router.post(apiRoutes.postBookmark, postBookmark)
-router.post(apiRoutes.createTag, createTag)
 
 // UPDATE
 router.put(apiRoutes.updateBookmarkById, updateBookmarkById)
