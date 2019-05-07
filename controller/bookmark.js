@@ -73,10 +73,12 @@ module.exports = {
     })
       .then(updatedBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: updatedBookmark
+          bookmark: updatedBookmark,
+          message: `Bookmark with id ${id} was updated!`
         })
       })
       .catch(err => {
+        err.message = "Wrong ID please enter a valid ID"
         next(err)
       })
       .finally(() => {

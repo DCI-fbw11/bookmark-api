@@ -3,7 +3,7 @@ const { check } = require("express-validator/check")
 const router = express.Router({ strict: true })
 
 // Middleware
-const { apiErrorMiddleware } = require("../middleware/api")
+const { apiErrorMiddleware, isBodyValid } = require("../middleware/api")
 
 //Helper
 const sendJsonResp = require("../helpers/sendJsonResp")
@@ -41,10 +41,13 @@ router.get(apiRoutes.getAllBookmarks, getBookmarks)
 router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
-router.post(apiRoutes.postBookmark, postBookmark)
+
+router.post(apiRoutes.postBookmark, isBodyValid, postBookmark)
+router.post(apiRoutes.createTag, createTag)
+
 
 // UPDATE
-router.put(apiRoutes.updateBookmarkById, updateBookmarkById)
+router.put(apiRoutes.updateBookmarkById, isBodyValid, updateBookmarkById)
 
 // DELETE
 router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
