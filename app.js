@@ -1,15 +1,11 @@
 const express = require("express")
 const logger = require("morgan")
-const mongoose = require("mongoose")
 
-const PORT = process.env.PORT || 4000
-const apiRoutes = require("./routes/api")
+const { connect } = require("./db/connection")
+const { apiRouter } = require("./routes/api")
 const app = express()
 
-mongoose
-  .connect("mongodb://localhost/bookmarks", {
-    useNewUrlParser: true
-  })
+connect()
   .then(() => {
     console.log("Connected to Mongo")
   })
@@ -19,6 +15,6 @@ mongoose
 
 app.use(logger("dev"))
 app.use(express.json())
-app.use("/api", apiRoutes)
+app.use("/api", apiRouter)
 
-app.listen(PORT, console.log("Server is listening on port:", PORT))
+module.exports = { app }

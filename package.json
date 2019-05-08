@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "NODE_ENV=production node server.js",
+    "dev": "NODE_ENV=development nodemon server.js",
+    "test": "NODE_ENV=test jest",
+    "dev-test": "NODE_ENV=test jest --watchAll",
     "lint": "eslint --fix .",
     "precommit": "npm run lint"
   },
@@ -19,6 +22,8 @@
   "devDependencies": {
     "eslint": "^5.16.0",
     "husky": "^2.2.0",
-    "nodemon": "^1.18.11"
+    "jest": "^24.8.0",
+    "nodemon": "^1.18.11",
+    "supertest": "^4.0.2"
   }
 }
