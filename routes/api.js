@@ -12,6 +12,7 @@ const sendJsonResp = require("../helpers/sendJsonResp")
 const {
   getBookmarks,
   getBookmarkByID,
+  getBookmarkByTag,
   postBookmark,
   badRequest,
   updateBookmarkById,
@@ -24,6 +25,7 @@ const { createTag } = require("../controller/tag")
 const apiRoutes = {
   getAllBookmarks: "/bookmarks",
   getBookmarkByID: "/bookmarks/:id",
+  getBookmarkByTag: "/bookmarks/tag/:id",
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
@@ -42,6 +44,7 @@ router.all(apiRoutes.falseRoute, badRequest)
 // GET
 router.get(apiRoutes.getAllBookmarks, getBookmarks)
 router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
+router.get(apiRoutes.getBookmarkByTag, getBookmarkByTag)
 
 // POST
 router.post(apiRoutes.postBookmark, [check("url").isURL()], postBookmark)
