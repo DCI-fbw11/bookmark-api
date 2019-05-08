@@ -9,7 +9,7 @@ const apiRoutePrefix = "/api"
 
 beforeAll(async () => {
   await mongoose.connection.on("connected", () => Promise.resolve())
-  await mongoose.connection.dropCollection("bookmarks")
+  await mongoose.connection.dropDatabase()
 })
 afterAll(done => mongoose.disconnect(done))
 
