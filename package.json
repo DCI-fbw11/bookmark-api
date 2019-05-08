@@ -19,6 +19,8 @@
   "devDependencies": {
     "eslint": "^5.16.0",
     "husky": "^2.2.0",
-    "nodemon": "^1.18.11"
+    "jest": "^24.8.0",
+    "nodemon": "^1.18.11",
+    "supertest": "^4.0.2"
   }
 }
