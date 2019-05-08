@@ -2,8 +2,10 @@ const express = require("express")
 const logger = require("morgan")
 const mongoose = require("mongoose")
 
-const apiRoutes = require("./routes/api")
+const { apiRouter } = require("./routes/api")
 const app = express()
+
+console.log(process.env.NODE_ENV)
 
 mongoose
   .connect("mongodb://localhost/bookmarks", {
@@ -18,6 +20,6 @@ mongoose
 
 app.use(logger("dev"))
 app.use(express.json())
-app.use("/api", apiRoutes)
+app.use("/api", apiRouter)
 
 module.exports = app
