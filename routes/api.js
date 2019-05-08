@@ -12,10 +12,10 @@ const {
   getBookmarks,
   getBookmarkByID,
   postBookmark,
-  badRequest,
   updateBookmarkById,
   deleteBookmarkById,
-  batchDeleteBookmarks
+  batchDeleteBookmarks,
+  noMatch
 } = require("../controller/bookmark")
 
 // Route Config
@@ -26,16 +26,13 @@ const apiRoutes = {
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
   batchDeleteBookmarks: "/bookmarks/delete/",
-  falseRoute: "/bookmarks/"
+  theFourOFour: "*"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
 apiRouter.get("/", (req, res) => {
   res.json({ availableRoutes: apiRoutes })
 })
-
-// Bad Request Route
-apiRouter.all(apiRoutes.falseRoute, badRequest)
 
 // GET
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
@@ -52,6 +49,9 @@ apiRouter.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
 
 // Batch Delete Bookmarks with an Array of ID's
 apiRouter.delete(apiRoutes.batchDeleteBookmarks, batchDeleteBookmarks)
+
+// No match Route
+apiRouter.all(apiRoutes.theFourOFour, noMatch)
 
 // The middleware that actually sends the response
 apiRouter.use(sendJsonResp)

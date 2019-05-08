@@ -2,9 +2,10 @@ const { validationResult } = require("express-validator/check")
 
 const createError = require("../helpers/createError")
 const {
+  wrongID,
   noBookmarkFound,
   noBookmarks,
-  noIDDefined
+  noMatchingRoutes
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -78,7 +79,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        err.message = "Wrong ID please enter a valid ID"
+        err.message = wrongID
         next(err)
       })
       .finally(() => {
@@ -119,8 +120,8 @@ module.exports = {
       .finally(() => next())
   },
 
-  badRequest: (req, res, next) => {
-    createError(400, noIDDefined)
+  noMatch: (req, res, next) => {
+    createError(404, noMatchingRoutes)
     next()
   }
 }
