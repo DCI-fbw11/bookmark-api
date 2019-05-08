@@ -4,7 +4,8 @@ const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noBookmarks,
-  noIDDefined
+  noIDDefined,
+  noTagDefined
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -39,6 +40,24 @@ module.exports = {
       })
       .catch(err => next(err))
       .finally(() => next())
+  },
+
+  getBookmarkByTag: (req, res, next) => {
+    
+    const id = req.params.id
+
+    Bookmark.find({tag: id })
+    .then(foundByTag => {
+      if(!foundByTag) {
+        createError(400, noTagDefined)
+      } else {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: foundByTag
+        })
+      }
+  })
+    .catch(err => next(err))
+    .finally(() => next())
   },
 
   postBookmark: (req, res, next) => {
