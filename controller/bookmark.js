@@ -121,7 +121,11 @@ module.exports = {
   },
 
   noMatch: (req, res, next) => {
-    createError(404, noMatchingRoutes)
-    next()
+    if (res.locals.response) {
+      next()
+    } else {
+      createError(404, noMatchingRoutes)
+      next()
+    }
   }
 }
