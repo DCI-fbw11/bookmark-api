@@ -1,16 +1,11 @@
 const express = require("express")
 const logger = require("morgan")
-const mongoose = require("mongoose")
 
+const { connect } = require("./db/connection")
 const { apiRouter } = require("./routes/api")
 const app = express()
 
-console.log(process.env.NODE_ENV)
-
-mongoose
-  .connect("mongodb://localhost/bookmarks", {
-    useNewUrlParser: true
-  })
+connect()
   .then(() => {
     console.log("Connected to Mongo")
   })
@@ -22,4 +17,4 @@ app.use(logger("dev"))
 app.use(express.json())
 app.use("/api", apiRouter)
 
-module.exports = app
+module.exports = { app }
