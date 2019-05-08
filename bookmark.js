@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator/check")
-const checkIfUnique = require("../helpers/checkIfUniqe")
+
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
@@ -10,22 +10,18 @@ const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
-    //this probably has to be refactored ?
-    if (!req.query.sortValue && !req.query.sortOrder) {
-      Bookmark.find({})
-        .then(bookmarkList => {
-          if (!bookmarkList) {
-            createError(400, noBookmarks)
-          } else {
-            res.locals.response = Object.assign({}, res.locals.response || {}, {
-              bookmark: bookmarkList
-            })
-          }
-        })
-        .catch(err => next(err))
-        .finally(() => next())
-    }
-    next()
+    Bookmark.find({})
+      .then(bookmarkList => {
+        if (!bookmarkList) {
+          createError(400, noBookmarks)
+        } else {
+          res.locals.response = Object.assign({}, res.locals.response || {}, {
+            bookmark: bookmarkList
+          })
+        }
+      })
+      .catch(err => next(err))
+      .finally(() => next())
   },
 
   getBookmarkByID: (req, res, next) => {
@@ -48,11 +44,8 @@ module.exports = {
   postBookmark: (req, res, next) => {
     const newBookmark = new Bookmark(req.body)
     const errors = validationResult(req)
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
-    } else if (!unique) {
-      return res.status(400).json({ error: "Duplicate tags are not allowed" })
     }
     newBookmark
       .save()
@@ -71,10 +64,6 @@ module.exports = {
 
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!unique) {
-      return res.status(400).json({ error: "Duplicate tags are not allowed" })
-    }
     const updateBookmark = Object.assign({}, req.body, {
       updatedAt: Date.now()
     })
@@ -115,30 +104,6 @@ module.exports = {
       })
   },
 
-  // perfect task for a DAO?
-  sortBookmarks: async (req, res, next) => {
-    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
-    let sortedBookmarks //move to try?
-    try {
-      sortedBookmarks =
-        req.query.sortValue === "url"
-          ? await Bookmark.aggregate([
-              { $sort: { createdAt: sortOrder } },
-              { $project: { title: 1, createdAt: 1, _id: 0 } }
-            ])
-          : await Bookmark.aggregate([
-              { $sort: { url: sortOrder } },
-              { $project: { title: 1, createdAt: 1, _id: 0 } }
-            ])
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        sorted_bookmarks: sortedBookmarks
-      })
-    } catch (err) {
-      next(err)
-    } finally {
-      next()
-    }
-  },
   batchDeleteBookmarks: (req, res, next) => {
     const { bookmarkIDs } = req.body
 

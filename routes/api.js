@@ -1,9 +1,8 @@
 const express = require("express")
-const { check } = require("express-validator/check")
-const router = express.Router({ strict: true })
+const apiRouter = express.Router({ strict: true })
 
 // Middleware
-const { apiErrorMiddleware } = require("../middleware/api")
+const { apiErrorMiddleware, isBodyValid } = require("../middleware/api")
 
 //Helper
 const sendJsonResp = require("../helpers/sendJsonResp")
@@ -16,7 +15,8 @@ const {
   badRequest,
   updateBookmarkById,
   deleteBookmarkById,
-  sortBookmarks
+  sortBookmarks,
+  batchDeleteBookmarks
 } = require("../controller/bookmark")
 
 // Route Config
@@ -26,34 +26,38 @@ const apiRoutes = {
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
+  batchDeleteBookmarks: "/bookmarks/delete/",
   falseRoute: "/bookmarks/"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
-router.get("/", (req, res) => {
+apiRouter.get("/", (req, res) => {
   res.json({ availableRoutes: apiRoutes })
 })
 
 // Bad Request Route
-router.all(apiRoutes.falseRoute, badRequest)
+apiRouter.all(apiRoutes.falseRoute, badRequest)
 
 // GET
-router.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
-router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
+apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
+apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
-router.post(apiRoutes.postBookmark, postBookmark)
+apiRouter.post(apiRoutes.postBookmark, isBodyValid, postBookmark)
 
 // UPDATE
-router.put(apiRoutes.updateBookmarkById, updateBookmarkById)
+apiRouter.put(apiRoutes.updateBookmarkById, isBodyValid, updateBookmarkById)
 
 // DELETE
-router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
+apiRouter.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
+
+// Batch Delete Bookmarks with an Array of ID's
+apiRouter.delete(apiRoutes.batchDeleteBookmarks, batchDeleteBookmarks)
 
 // The middleware that actually sends the response
-router.use(sendJsonResp)
+apiRouter.use(sendJsonResp)
 
 // Custom error handler
-router.use(apiErrorMiddleware)
+apiRouter.use(apiErrorMiddleware)
 
-module.exports = router
+module.exports = { apiRouter, apiRoutes }
