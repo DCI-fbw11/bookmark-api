@@ -44,7 +44,13 @@ module.exports = {
     const newBookmark = new Bookmark(req.body)
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() })
+      const errInfoArray = errors.array()
+      createError(
+        422,
+        `${errInfoArray.map(
+          error => `${error.msg}: ${error.param.toUpperCase()}`
+        )}`
+      )
     }
     newBookmark
       .save()
@@ -63,6 +69,16 @@ module.exports = {
 
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      const errInfoArray = errors.array()
+      createError(
+        422,
+        `${errInfoArray.map(
+          error => `${error.msg}: ${error.param.toUpperCase()}`
+        )}`
+      )
+    }
     const updateBookmark = Object.assign({}, req.body, {
       updatedAt: Date.now()
     })
