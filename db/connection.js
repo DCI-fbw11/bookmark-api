@@ -11,7 +11,7 @@ module.exports = {
   mongoose,
   connect: () => {
     mongoose.Promise = Promise
-    return mongoose.connect("mongodb://localhost/" + dbPaths[NODE_ENV], {
+    return mongoose.connect("mongodb://127.0.0.1/" + dbPaths[NODE_ENV], {
       useNewUrlParser: true
     })
   },
