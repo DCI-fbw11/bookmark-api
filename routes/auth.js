@@ -6,7 +6,7 @@ const createError = require("../helpers/createError")
 const { hashPassword, checkPassword } = require("../helpers/hash")
 
 //Keys
-const secret = require("../config/key").secret
+const { secret } = require("../config/key")
 
 const jwt = require("jsonwebtoken")
 
