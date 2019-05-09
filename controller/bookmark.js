@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator/check")
+const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
@@ -43,6 +44,7 @@ module.exports = {
   postBookmark: (req, res, next) => {
     const newBookmark = new Bookmark(req.body)
     const errors = validationResult(req)
+    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!errors.isEmpty()) {
       const errInfoArray = errors.array()
       createError(
@@ -51,6 +53,9 @@ module.exports = {
           error => `${error.msg}: ${error.param.toUpperCase()}`
         )}`
       )
+      return res.status(422).json({ errors: errors.array() })
+    } else if (!unique) {
+      return res.status(400).json({ error: "Duplicate tags are not allowed" })
     }
     newBookmark
       .save()
@@ -70,6 +75,7 @@ module.exports = {
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
     const errors = validationResult(req)
+    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!errors.isEmpty()) {
       const errInfoArray = errors.array()
       createError(
@@ -78,6 +84,8 @@ module.exports = {
           error => `${error.msg}: ${error.param.toUpperCase()}`
         )}`
       )
+    } else if (!unique) {
+      return res.status(400).json({ error: "Duplicate tags are not allowed" })
     }
     const updateBookmark = Object.assign({}, req.body, {
       updatedAt: Date.now()
