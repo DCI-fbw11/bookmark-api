@@ -44,9 +44,9 @@ module.exports = {
 
   getBookmarkByTag: (req, res, next) => {
     
-    const id = req.params.id
+    const { tags } = req.query  
 
-    Bookmark.find({tag: id })
+    Bookmark.find({tag: { $all: tags } })
     .then(foundByTag => {
       if(!foundByTag) {
         createError(400, noTagDefined)
