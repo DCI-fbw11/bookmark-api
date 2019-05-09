@@ -10,8 +10,8 @@ const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
-    //this probably has to be refactored ?
     if (!req.query.sortValue && !req.query.sortOrder) {
+      // get all bookmarks as long as there's no query
       Bookmark.find({})
         .then(bookmarkList => {
           if (!bookmarkList) {
@@ -115,21 +115,14 @@ module.exports = {
       })
   },
 
-  // perfect task for a DAO?
   sortBookmarks: async (req, res, next) => {
     const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
-    let sortedBookmarks //move to try?
+    let sortedBookmarks
     try {
       sortedBookmarks =
         req.query.sortValue === "url"
-          ? await Bookmark.aggregate([
-              { $sort: { createdAt: sortOrder } },
-              { $project: { title: 1, createdAt: 1, _id: 0 } }
-            ])
-          : await Bookmark.aggregate([
-              { $sort: { url: sortOrder } },
-              { $project: { title: 1, createdAt: 1, _id: 0 } }
-            ])
+          ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
+          : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         sorted_bookmarks: sortedBookmarks
       })
