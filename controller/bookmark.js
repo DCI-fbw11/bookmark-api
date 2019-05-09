@@ -50,10 +50,9 @@ module.exports = {
       createError(
         422,
         `${errInfoArray.map(
-          error => `${error.msg}: ${error.param.toUpperCase()}`
+          error => error.msg + ": " + error.param.toUpperCase()
         )}`
       )
-      return res.status(422).json({ errors: errors.array() })
     } else if (!unique) {
       return res.status(400).json({ error: "Duplicate tags are not allowed" })
     }
@@ -81,7 +80,7 @@ module.exports = {
       createError(
         422,
         `${errInfoArray.map(
-          error => `${error.msg}: ${error.param.toUpperCase()}`
+          error => error.msg + ": " + error.param.toUpperCase()
         )}`
       )
     } else if (!unique) {
