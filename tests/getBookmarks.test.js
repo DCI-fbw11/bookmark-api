@@ -14,12 +14,12 @@ beforeAll(async () => {
 afterAll(done => mongoose.disconnect(done))
 
 describe("GET /bookmarks tests", () => {
-  test("Get all bookmarks without authentication should respond with status code 500", async done => {
+  test("Get all bookmarks should respond with status code 200", async done => {
     const response = await request(app).get(
       apiRoutePrefix + apiRoutes.getAllBookmarks
     )
 
-    expect(response.statusCode).toBe(500)
+    expect(response.statusCode).toBe(200)
     done()
   })
 
