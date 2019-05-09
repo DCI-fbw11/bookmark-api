@@ -1,7 +1,7 @@
 const request = require("supertest")
 
 const { mongoose } = require("../db/connection")
-const Bookmark = require("../models/bookmark")
+// const Bookmark = require("../models/bookmark")
 const { app } = require("../app")
 const { apiRoutes } = require("../routes/api")
 
