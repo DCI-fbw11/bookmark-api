@@ -76,7 +76,8 @@ module.exports = {
     })
 
     Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, {
-      runValidators: true
+      runValidators: true,
+      new: true
     })
       .then(updatedBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
