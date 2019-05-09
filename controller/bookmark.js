@@ -9,6 +9,7 @@ const {
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
+  //get all current bookmarks
   getBookmarks: async (req, res, next) => {
     try {
       const bookmarkList = await Bookmark.find({})
@@ -43,6 +44,7 @@ module.exports = {
     next()
   },
 
+  //creates a new bookmark
   postBookmark: async (req, res, next) => {
     const newBookmark = new Bookmark(req.body)
     const errors = validationResult(req)
@@ -105,6 +107,7 @@ module.exports = {
     next()
   },
 
+  //delete multiple bookmarks
   batchDeleteBookmarks: async (req, res, next) => {
     const { bookmarkIDs } = req.body
     try {
