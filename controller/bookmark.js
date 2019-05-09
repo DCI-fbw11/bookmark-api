@@ -20,7 +20,6 @@ module.exports = {
         })
       }
     } catch (err) {
-      console.log(err)
       next(err)
     }
     next()
@@ -39,7 +38,6 @@ module.exports = {
         })
       }
     } catch (err) {
-      console.log(err)
       next(err)
     }
     next()
@@ -83,12 +81,13 @@ module.exports = {
     } catch (error) {
       next(error)
     }
+    next()
   },
 
   deleteBookmarkById: async (req, res, next) => {
     const { id } = req.params
     try {
-      const deleteBookmark = Bookmark.findByIdAndRemove({ _id: id })
+      const deleteBookmark = await Bookmark.findByIdAndRemove({ _id: id })
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: deleteBookmark,
         message: `Bookmark with id ${id} was deleted!`
@@ -99,19 +98,17 @@ module.exports = {
     next()
   },
 
-  batchDeleteBookmarks: (req, res, next) => {
+  batchDeleteBookmarks: async (req, res, next) => {
     const { bookmarkIDs } = req.body
-
-    Bookmark.deleteMany({ _id: { $in: bookmarkIDs } })
-      .then(() => {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          message: `Bookmark with id's ${bookmarkIDs.map(
-            id => id
-          )} were deleted!`
-        })
+    try {
+      await Bookmark.deleteMany({ _id: { $in: bookmarkIDs } })
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        message: `Bookmark with id's ${bookmarkIDs.map(id => id)} were deleted!`
       })
-      .catch(err => next(err))
-      .finally(() => next())
+    } catch (error) {
+      next(error)
+    }
+    next()
   },
 
   badRequest: (req, res, next) => {
