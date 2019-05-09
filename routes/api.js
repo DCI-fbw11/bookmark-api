@@ -3,6 +3,7 @@ const apiRouter = express.Router({ strict: true })
 
 // Middleware
 const { apiErrorMiddleware, isBodyValid } = require("../middleware/api")
+const checkToken = require("../middleware/checkToken")
 
 //Helper
 const sendJsonResp = require("../helpers/sendJsonResp")
@@ -38,7 +39,7 @@ apiRouter.get("/", (req, res) => {
 apiRouter.all(apiRoutes.falseRoute, badRequest)
 
 // GET
-apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
+apiRouter.get(apiRoutes.getAllBookmarks, checkToken, getBookmarks)
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST

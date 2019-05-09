@@ -5,6 +5,11 @@ const User = require("../models/user.js")
 const createError = require("../helpers/createError")
 const { hashPassword, checkPassword } = require("../helpers/hash")
 
+const jwt = require("jsonwebtoken")
+
+const secret = "shhhhh"
+
+
 // Helpers
 const sendJsonResp = require("../helpers/sendJsonResp")
 
@@ -31,11 +36,19 @@ authRouter.post(authRoutes.login, async (req, res, next) => {
     // compare passwords with bcrypt
     // succes -> get hashsed pass from db
     const isMatching = await checkPassword(password, user.password)
-    let message = isMatching ? "Login success!!" : "Login failed"
+    // Generate token
+    const token = isMatching ?
+      jwt.sign({ user: user._id }, secret, {
+        expiresIn: "1h"
+      }) :
+      null
+
+    const message = isMatching ? "Login success!!" : "Login failed"
     // success -> thumbs up
     // fail -> login failed
     res.locals.response = Object.assign({}, res.locals.response || {}, {
-      message
+      message,
+      token
     })
   } catch(error) {
     next(error)
