@@ -4,7 +4,8 @@ const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noBookmarks,
-  noIDDefined
+  noIDDefined,
+  invalidID
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -37,7 +38,10 @@ module.exports = {
           })
         }
       })
-      .catch(err => next(err))
+      .catch(err => {
+        err.message = invalidID
+        next(err)
+      })
       .finally(() => next())
   },
 
@@ -85,7 +89,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        err.message = "Wrong ID please enter a valid ID"
+        err.message = invalidID
         next(err)
       })
       .finally(() => {
@@ -104,6 +108,7 @@ module.exports = {
         })
       })
       .catch(err => {
+        err.message = invalidID
         next(err)
       })
       .finally(() => {
