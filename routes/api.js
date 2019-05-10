@@ -13,10 +13,10 @@ const {
   getBookmarks,
   getBookmarkByID,
   postBookmark,
-  badRequest,
   updateBookmarkById,
   deleteBookmarkById,
-  batchDeleteBookmarks
+  batchDeleteBookmarks,
+  noMatch
 } = require("../controller/bookmark")
 
 // Route Config
@@ -27,7 +27,6 @@ const apiRoutes = {
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
   batchDeleteBookmarks: "/bookmarks/delete/",
-  falseRoute: "/bookmarks/",
   all: "*"
 }
 
@@ -36,8 +35,7 @@ apiRouter.get("/", (req, res) => {
   res.json({ availableRoutes: apiRoutes })
 })
 
-// Bad Request Route
-apiRouter.all(apiRoutes.falseRoute, badRequest)
+// Protected Route Token Check
 apiRouter.all(apiRoutes.all, checkToken)
 
 // GET
@@ -55,6 +53,9 @@ apiRouter.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
 
 // Batch Delete Bookmarks with an Array of ID's
 apiRouter.delete(apiRoutes.batchDeleteBookmarks, batchDeleteBookmarks)
+
+// No match Route
+apiRouter.all(apiRoutes.all, noMatch)
 
 // The middleware that actually sends the response
 apiRouter.use(sendJsonResp)

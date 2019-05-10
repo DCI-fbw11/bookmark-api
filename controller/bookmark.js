@@ -4,7 +4,7 @@ const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noBookmarks,
-  noIDDefined,
+  noMatchingRoutes,
   invalidID
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
@@ -131,8 +131,12 @@ module.exports = {
       .finally(() => next())
   },
 
-  badRequest: (req, res, next) => {
-    createError(400, noIDDefined)
-    next()
+  noMatch: (req, res, next) => {
+    if (res.locals.response) {
+      next()
+    } else {
+      createError(404, noMatchingRoutes)
+      next()
+    }
   }
 }
