@@ -3,6 +3,7 @@ const apiRouter = express.Router({ strict: true })
 
 // Middleware
 const { apiErrorMiddleware, isBodyValid } = require("../middleware/api")
+const checkToken = require("../middleware/checkToken")
 
 //Helper
 const sendJsonResp = require("../helpers/sendJsonResp")
@@ -26,7 +27,8 @@ const apiRoutes = {
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
   batchDeleteBookmarks: "/bookmarks/delete/",
-  falseRoute: "/bookmarks/"
+  falseRoute: "/bookmarks/",
+  all: "*"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
@@ -36,6 +38,7 @@ apiRouter.get("/", (req, res) => {
 
 // Bad Request Route
 apiRouter.all(apiRoutes.falseRoute, badRequest)
+apiRouter.all(apiRoutes.all, checkToken)
 
 // GET
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
