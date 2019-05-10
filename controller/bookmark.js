@@ -1,11 +1,11 @@
 const { validationResult } = require("express-validator/check")
-
+const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
 const {
-  wrongID,
   noBookmarkFound,
   noBookmarks,
-  noMatchingRoutes
+  noMatchingRoutes,
+  invalidID
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -38,15 +38,21 @@ module.exports = {
           })
         }
       })
-      .catch(err => next(err))
+      .catch(err => {
+        err.message = invalidID
+        next(err)
+      })
       .finally(() => next())
   },
 
   postBookmark: (req, res, next) => {
     const newBookmark = new Bookmark(req.body)
     const errors = validationResult(req)
+    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() })
+    } else if (!unique) {
+      return res.status(400).json({ error: "Duplicate tags are not allowed" })
     }
     newBookmark
       .save()
@@ -65,6 +71,10 @@ module.exports = {
 
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
+    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
+    if (!unique) {
+      return res.status(400).json({ error: "Duplicate tags are not allowed" })
+    }
     const updateBookmark = Object.assign({}, req.body, {
       updatedAt: Date.now()
     })
@@ -79,7 +89,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        err.message = wrongID
+        err.message = invalidID
         next(err)
       })
       .finally(() => {
@@ -98,6 +108,7 @@ module.exports = {
         })
       })
       .catch(err => {
+        err.message = invalidID
         next(err)
       })
       .finally(() => {
