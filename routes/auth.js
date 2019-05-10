@@ -6,7 +6,8 @@ const createError = require("../helpers/createError")
 const { hashPassword, checkPassword } = require("../helpers/hash")
 
 //Keys
-const { secret } = require("../config/key")
+require("dotenv").config()
+const secret = process.env.SECRET
 
 const jwt = require("jsonwebtoken")
 
@@ -29,7 +30,6 @@ const authRoutes = {
 // Login user
 authRouter.post(authRoutes.login, async (req, res, next) => {
   const { username, password } = req.body.loginData
-
   try {
     // find user
     const user = await User.findOne({ username })
