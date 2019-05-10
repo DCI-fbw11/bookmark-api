@@ -4,7 +4,9 @@ const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noBookmarks,
-  noIDDefined
+  noMatchingRoutes,
+  invalidID,
+  duplicateTags
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -37,7 +39,10 @@ module.exports = {
           })
         }
       })
-      .catch(err => next(err))
+      .catch(err => {
+        err.message = invalidID
+        next(err)
+      })
       .finally(() => next())
   },
 
@@ -46,15 +51,14 @@ module.exports = {
     const errors = validationResult(req)
     const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!errors.isEmpty()) {
-      const errInfoArray = errors.array()
       createError(
         422,
-        `${errInfoArray.map(
-          error => error.msg + ": " + error.param.toUpperCase()
-        )}`
+        `${errors
+          .array()
+          .map(error => error.msg + ": " + error.param.toUpperCase())}`
       )
     } else if (!unique) {
-      return res.status(400).json({ error: "Duplicate tags are not allowed" })
+      createError(400, duplicateTags)
     }
     newBookmark
       .save()
@@ -76,22 +80,22 @@ module.exports = {
     const errors = validationResult(req)
     const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!errors.isEmpty()) {
-      const errInfoArray = errors.array()
       createError(
         422,
-        `${errInfoArray.map(
-          error => error.msg + ": " + error.param.toUpperCase()
-        )}`
+        `${errors
+          .array()
+          .map(error => error.msg + ": " + error.param.toUpperCase())}`
       )
     } else if (!unique) {
-      return res.status(400).json({ error: "Duplicate tags are not allowed" })
+      createError(400, duplicateTags)
     }
     const updateBookmark = Object.assign({}, req.body, {
       updatedAt: Date.now()
     })
 
     Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, {
-      runValidators: true
+      runValidators: true,
+      new: true
     })
       .then(updatedBookmark => {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
@@ -100,7 +104,7 @@ module.exports = {
         })
       })
       .catch(err => {
-        err.message = "Wrong ID please enter a valid ID"
+        err.message = invalidID
         next(err)
       })
       .finally(() => {
@@ -119,6 +123,7 @@ module.exports = {
         })
       })
       .catch(err => {
+        err.message = invalidID
         next(err)
       })
       .finally(() => {
@@ -130,7 +135,11 @@ module.exports = {
     const { bookmarkIDs } = req.body
 
     Bookmark.deleteMany({ _id: { $in: bookmarkIDs } })
-      .then(() => {
+      .then(deleted => {
+        if (deleted.deletedCount === 0) {
+          createError(400, invalidID)
+        }
+
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           message: `Bookmark with id's ${bookmarkIDs.map(
             id => id
@@ -141,8 +150,12 @@ module.exports = {
       .finally(() => next())
   },
 
-  badRequest: (req, res, next) => {
-    createError(400, noIDDefined)
-    next()
+  noMatch: (req, res, next) => {
+    if (res.locals.response) {
+      next()
+    } else {
+      createError(404, noMatchingRoutes)
+      next()
+    }
   }
 }
