@@ -77,8 +77,16 @@ module.exports = {
 
   updateBookmarkById: (req, res, next) => {
     const { id } = req.params
+    const errors = validationResult(req)
     const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!unique) {
+    if (!errors.isEmpty()) {
+      createError(
+        422,
+        `${errors
+          .array()
+          .map(error => error.msg + ": " + error.param.toUpperCase())}`
+      )
+    } else if (!unique) {
       createError(400, duplicateTags)
     }
     const updateBookmark = Object.assign({}, req.body, {
