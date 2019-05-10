@@ -95,6 +95,7 @@ module.exports = {
 
     Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, {
       runValidators: true,
+      useFindAndModify: false,
       new: true
     })
       .then(updatedBookmark => {
