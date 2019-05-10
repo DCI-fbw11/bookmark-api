@@ -3,6 +3,7 @@ const apiRouter = express.Router({ strict: true })
 
 // Middleware
 const { apiErrorMiddleware, isBodyValid } = require("../middleware/api")
+const checkToken = require("../middleware/checkToken")
 
 //Helper
 const sendJsonResp = require("../helpers/sendJsonResp")
@@ -12,10 +13,10 @@ const {
   getBookmarks,
   getBookmarkByID,
   postBookmark,
-  badRequest,
   updateBookmarkById,
   deleteBookmarkById,
-  batchDeleteBookmarks
+  batchDeleteBookmarks,
+  noMatch
 } = require("../controller/bookmark")
 
 // Route Config
@@ -26,7 +27,7 @@ const apiRoutes = {
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
   batchDeleteBookmarks: "/bookmarks/delete/",
-  falseRoute: "/bookmarks/"
+  all: "*"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
@@ -34,8 +35,8 @@ apiRouter.get("/", (req, res) => {
   res.json({ availableRoutes: apiRoutes })
 })
 
-// Bad Request Route
-apiRouter.all(apiRoutes.falseRoute, badRequest)
+// Protected Route Token Check
+apiRouter.all(apiRoutes.all, checkToken)
 
 // GET
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
@@ -52,6 +53,9 @@ apiRouter.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
 
 // Batch Delete Bookmarks with an Array of ID's
 apiRouter.delete(apiRoutes.batchDeleteBookmarks, batchDeleteBookmarks)
+
+// No match Route
+apiRouter.all(apiRoutes.all, noMatch)
 
 // The middleware that actually sends the response
 apiRouter.use(sendJsonResp)
