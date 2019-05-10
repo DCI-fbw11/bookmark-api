@@ -19,7 +19,6 @@ const {
   sortBookmarks,
   batchDeleteBookmarks,
   noMatch
-
 } = require("../controller/bookmark")
 
 // Route Config
