@@ -5,7 +5,8 @@ const {
   noBookmarkFound,
   noBookmarks,
   noMatchingRoutes,
-  invalidID
+  invalidID,
+  duplicateTags
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -50,9 +51,14 @@ module.exports = {
     const errors = validationResult(req)
     const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() })
+      createError(
+        422,
+        `${errors
+          .array()
+          .map(error => error.msg + ": " + error.param.toUpperCase())}`
+      )
     } else if (!unique) {
-      return res.status(400).json({ error: "Duplicate tags are not allowed" })
+      createError(400, duplicateTags)
     }
     newBookmark
       .save()
@@ -73,7 +79,7 @@ module.exports = {
     const { id } = req.params
     const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
     if (!unique) {
-      return res.status(400).json({ error: "Duplicate tags are not allowed" })
+      createError(400, duplicateTags)
     }
     const updateBookmark = Object.assign({}, req.body, {
       updatedAt: Date.now()

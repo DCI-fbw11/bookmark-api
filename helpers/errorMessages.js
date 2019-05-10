@@ -3,5 +3,6 @@ module.exports = {
   noBookmarkFound: "No bookmark found for id",
   noURLDefined: "No url to bookmark defined",
   noMatchingRoutes: "No matching routes",
-  invalidID: "Invalid ID, please provide a valid ID"
+  invalidID: "Invalid ID, please provide a valid ID",
+  duplicateTags: "Duplicate tags are not allowed"
 }
