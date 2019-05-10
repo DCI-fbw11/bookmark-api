@@ -120,7 +120,11 @@ module.exports = {
     const { bookmarkIDs } = req.body
 
     Bookmark.deleteMany({ _id: { $in: bookmarkIDs } })
-      .then(() => {
+      .then(deleted => {
+        if (deleted.deletedCount === 0) {
+          createError(400, invalidID)
+        }
+
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           message: `Bookmark with id's ${bookmarkIDs.map(
             id => id
