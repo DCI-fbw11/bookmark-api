@@ -4,14 +4,8 @@ const User = require("../models/user.js")
 // Helpers
 const createError = require("../helpers/createError")
 const { hashPassword, checkPassword } = require("../helpers/hash")
-
-//Keys
-const { secret } = require("../config/key")
-
-const jwt = require("jsonwebtoken")
-
-// Helpers
 const sendJsonResp = require("../helpers/sendJsonResp")
+const createToken = require("../helpers/createToken")
 
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
@@ -37,11 +31,7 @@ authRouter.post(authRoutes.login, async (req, res, next) => {
     // succes -> get hashsed pass from db
     const isMatching = await checkPassword(password, user.password)
     // Generate token
-    const token = isMatching
-      ? jwt.sign({ user: user._id }, secret, {
-          expiresIn: "1h"
-        })
-      : null
+    const token = createToken(user, isMatching)
 
     const message = isMatching ? "Login success!!" : "Login failed"
     // success -> thumbs up
