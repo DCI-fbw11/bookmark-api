@@ -40,7 +40,49 @@ apiRouter.get("/", (req, res) => {
 apiRouter.all(apiRoutes.all, checkToken)
 
 // GET
+/**
+ * @swagger
+ *
+ * definitions:
+ *   Bookmark:
+ *     type: object
+ *     required:
+ *       - title
+ *       - url
+ *     properties:
+ *       title:
+ *         type: string
+ *       shortDescription:
+ *         type: string
+ *       url:
+ *         type: string
+ *         format: url
+ */
+
+/**
+ * @swagger
+ *
+ * /:
+ *   get:
+ *     description: List of bookmarks
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: bookmarks
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Bookmark'
+ */
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
+
+/**
+* @swagger
+* /bookmarks/{id}:
+*   get:
+*      description: Get bookmark by id
+*/
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
