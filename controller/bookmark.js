@@ -12,18 +12,22 @@ const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: (req, res, next) => {
-    Bookmark.find({})
-      .then(bookmarkList => {
-        if (!bookmarkList) {
-          createError(400, noBookmarks)
-        } else {
-          res.locals.response = Object.assign({}, res.locals.response || {}, {
-            bookmark: bookmarkList
-          })
-        }
-      })
-      .catch(err => next(err))
-      .finally(() => next())
+    if (!req.query.sortValue && !req.query.sortOrder) {
+      // get all bookmarks as long as there's no query
+      Bookmark.find({})
+        .then(bookmarkList => {
+          if (!bookmarkList) {
+            createError(400, noBookmarks)
+          } else {
+            res.locals.response = Object.assign({}, res.locals.response || {}, {
+              bookmark: bookmarkList
+            })
+          }
+        })
+        .catch(err => next(err))
+        .finally(() => next())
+    }
+    next()
   },
 
   getBookmarkByID: (req, res, next) => {
@@ -132,6 +136,23 @@ module.exports = {
       })
   },
 
+  sortBookmarks: async (req, res, next) => {
+    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
+    let sortedBookmarks
+    try {
+      sortedBookmarks =
+        req.query.sortValue === "url"
+          ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
+          : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        sorted_bookmarks: sortedBookmarks
+      })
+    } catch (err) {
+      next(err)
+    } finally {
+      next()
+    }
+  },
   batchDeleteBookmarks: (req, res, next) => {
     const { bookmarkIDs } = req.body
 
