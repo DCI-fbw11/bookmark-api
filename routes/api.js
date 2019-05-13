@@ -57,6 +57,14 @@ apiRouter.all(apiRoutes.all, checkToken)
  *       url:
  *         type: string
  *         format: url
+ *       tag:
+ *         type: array
+ *         items:
+ *           type: string
+ *       createdAt:
+ *         type: string
+ *       updatedAt:
+ *         type: string
  */
 
 /**
@@ -76,13 +84,6 @@ apiRouter.all(apiRoutes.all, checkToken)
  *             $ref: '#/definitions/Bookmark'
  */
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
-
-/**
-* @swagger
-* /bookmarks/{id}:
-*   get:
-*      description: Get bookmark by id
-*/
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
