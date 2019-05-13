@@ -1,5 +1,5 @@
 const mongoose = require("mongoose")
-
+mongoose.set("useCreateIndex", true)
 const { NODE_ENV } = process.env
 
 const dbPaths = {
