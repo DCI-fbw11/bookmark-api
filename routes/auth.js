@@ -96,4 +96,4 @@ authRouter.use(sendJsonResp)
 // Custom error handler
 authRouter.use(apiErrorMiddleware)
 
-module.exports = { authRouter }
+module.exports = { authRouter, authRoutes }
