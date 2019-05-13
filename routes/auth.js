@@ -6,8 +6,8 @@ const createError = require("../helpers/createError")
 const { hashPassword, checkPassword } = require("../helpers/hash")
 
 //Keys
-require("dotenv").config()
-const secret = process.env.SECRET
+
+const { secret } = require("../config/config")
 
 const jwt = require("jsonwebtoken")
 
