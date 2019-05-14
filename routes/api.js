@@ -1,20 +1,23 @@
 const express = require("express")
-const router = express.Router({ strict: true })
+const apiRouter = express.Router({ strict: true })
 
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
+const { checkURL, checkBody } = require("../middleware/validation")
+const checkToken = require("../middleware/checkToken")
 
 //Helper
-const { sendJsonResp } = require("../helper")
+const sendJsonResp = require("../helpers/sendJsonResp")
 
 // Controller
 const {
   getBookmarks,
   getBookmarkByID,
   postBookmark,
-  badRequest,
   updateBookmarkById,
-  deleteBookmarkById
+  deleteBookmarkById,
+  batchDeleteBookmarks,
+  noMatch
 } = require("../controller/bookmark")
 
 // Route Config
@@ -24,34 +27,46 @@ const apiRoutes = {
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
-  falseRoute: "/bookmarks/"
+  batchDeleteBookmarks: "/bookmarks/delete/",
+  all: "*"
 }
 
 // To show our api users what is possible we can show all endpoints at home route (/)
-router.get("/", (req, res) => {
+apiRouter.get("/", (req, res) => {
   res.json({ availableRoutes: apiRoutes })
 })
 
-// Bad Request Route
-router.all(apiRoutes.falseRoute, badRequest)
+// Protected Route Token Check
+apiRouter.all(apiRoutes.all, checkToken)
 
 // GET
-router.get(apiRoutes.getAllBookmarks, getBookmarks)
-router.get(apiRoutes.getBookmarkByID, getBookmarkByID)
+apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
+apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
-router.post(apiRoutes.postBookmark, postBookmark)
+apiRouter.post(apiRoutes.postBookmark, checkBody, checkURL, postBookmark)
 
 // UPDATE
-router.put(apiRoutes.updateBookmarkById, updateBookmarkById)
+apiRouter.put(
+  apiRoutes.updateBookmarkById,
+  checkBody,
+  checkURL,
+  updateBookmarkById
+)
 
 // DELETE
-router.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
+apiRouter.delete(apiRoutes.deleteBookmarkById, deleteBookmarkById)
+
+// Batch Delete Bookmarks with an Array of ID's
+apiRouter.delete(apiRoutes.batchDeleteBookmarks, batchDeleteBookmarks)
+
+// No match Route
+apiRouter.all(apiRoutes.all, noMatch)
 
 // The middleware that actually sends the response
-router.use(sendJsonResp)
+apiRouter.use(sendJsonResp)
 
 // Custom error handler
-router.use(apiErrorMiddleware)
+apiRouter.use(apiErrorMiddleware)
 
-module.exports = router
+module.exports = { apiRouter, apiRoutes }

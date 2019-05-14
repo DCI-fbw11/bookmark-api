@@ -1,17 +1,22 @@
 const express = require("express")
 const logger = require("morgan")
 
-const PORT = process.env.PORT || 4000
-
-const indexRouter = require("./routes/index")
-const apiRoutes = require("./routes/api")
-
+const { connect } = require("./db/connection")
+const { apiRouter } = require("./routes/api")
+const { authRouter } = require("./routes/auth")
 const app = express()
+
+connect()
+  .then(() => {
+    console.log("Connected to Mongo")
+  })
+  .catch(err => {
+    console.error("Could not connect, ", err)
+  })
 
 app.use(logger("dev"))
 app.use(express.json())
+app.use("/api", apiRouter)
+app.use("/auth", authRouter)
 
-app.use("/", indexRouter)
-app.use("/api", apiRoutes)
-
-app.listen(PORT, console.log("Server is listening on port:", PORT))
+module.exports = app
