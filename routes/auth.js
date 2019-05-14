@@ -21,32 +21,6 @@ const authRoutes = {
   login: "/login"
 }
 
-// Login user
-authRouter.post(authRoutes.login, async (req, res, next) => {
-  const { username, password } = req.body.loginData
-  try {
-    // find user
-    const user = await User.findOne({ username })
-    // compare passwords with bcrypt
-    // succes -> get hashsed pass from db
-    const isMatching = await checkPassword(password, user.password)
-    // Generate token
-    const token = createToken(user, isMatching)
-
-    const message = isMatching ? "Login success!!" : "Login failed"
-    // success -> thumbs up
-    // fail -> login failed
-    res.locals.response = Object.assign({}, res.locals.response || {}, {
-      message,
-      token
-    })
-  } catch (error) {
-    next(error)
-  }
-
-  next()
-})
-
 // Register user
 authRouter.post(authRoutes.register, async (req, res, next) => {
   // TODO validate stuff...
@@ -72,6 +46,32 @@ authRouter.post(authRoutes.register, async (req, res, next) => {
 
     res.locals.response = Object.assign({}, res.locals.response || {}, {
       hashedUser
+    })
+  } catch (error) {
+    next(error)
+  }
+
+  next()
+})
+
+// Login user
+authRouter.post(authRoutes.login, async (req, res, next) => {
+  const { username, password } = req.body.loginData
+  try {
+    // find user
+    const user = await User.findOne({ username })
+    // compare passwords with bcrypt
+    // succes -> get hashsed pass from db
+    const isMatching = await checkPassword(password, user.password)
+    // Generate token
+    const token = createToken(user, isMatching)
+
+    const message = isMatching ? "Login success!!" : "Login failed"
+    // success -> thumbs up
+    // fail -> login failed
+    res.locals.response = Object.assign({}, res.locals.response || {}, {
+      message,
+      token
     })
   } catch (error) {
     next(error)
