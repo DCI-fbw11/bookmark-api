@@ -2,10 +2,9 @@ const { validationResult } = require("express-validator/check")
 const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
 const {
-  noBookmarkFound,
-  noBookmarks,
   noMatchingRoutes,
-  duplicateTags
+  duplicateTags,
+  noBookmarkFound
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -17,8 +16,8 @@ module.exports = {
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: bookmarkList
       })
-    } catch (err) {
-      next(err)
+    } catch (error) {
+      next(error)
     }
     next()
   },
@@ -32,8 +31,9 @@ module.exports = {
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: foundBookmark
       })
-    } catch (err) {
-      next(err)
+    } catch (error) {
+      error.message = noBookmarkFound + id
+      next(error)
     }
     next()
   },
