@@ -17,6 +17,7 @@ const {
   postBookmark,
   updateBookmarkById,
   deleteBookmarkById,
+  sortBookmarks,
   batchDeleteBookmarks,
   noMatch
 } = require("../controller/bookmark")
@@ -42,7 +43,7 @@ apiRouter.get("/", (req, res) => {
 apiRouter.all(apiRoutes.all, checkToken)
 
 // GET
-apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
+apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 apiRouter.get(apiRoutes.getBookmarkByTag, getBookmarkByTag)
 

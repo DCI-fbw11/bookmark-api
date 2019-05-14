@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "bookmark-api",
+  "env": {
+    "DB_PROD_USER": "@bookmark-api-prod-db-user",
+    "DB_PROD_PASSWORD": "@bookmark-api-prod-db-password"
+  },
+  "builds": [
+    {
+      "src": "app.js",
+      "use": "@now/node"
+    }
+  ],
+  "routes": [{ "src": "/(.*)", "dest": "/app.js" }]
+}
