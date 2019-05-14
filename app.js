@@ -3,16 +3,17 @@ const logger = require("morgan")
 // Docs
 const swaggerUi = require("swagger-ui-express")
 const swaggerJSDoc = require("swagger-jsdoc")
+const { version } = require("./package.json")
 
 const options = {
   definition: {
     info: {
       title: "Bookmarks API",
-      version: "0.0.1-alpha",
-    },
+      version
+    }
   },
   // Path to the API docs
-  apis: ["./routes/*.js"],
+  apis: ["./routes/*.js"]
 }
 
 const { connect } = require("./db/connection")
