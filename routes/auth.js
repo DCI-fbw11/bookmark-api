@@ -1,6 +1,7 @@
 const express = require("express")
 const authRouter = express.Router()
 const User = require("../models/user.js")
+
 // Helpers
 const createError = require("../helpers/createError")
 const { hashPassword, checkPassword } = require("../helpers/hash")
@@ -23,7 +24,6 @@ const authRoutes = {
 // Login user
 authRouter.post(authRoutes.login, async (req, res, next) => {
   const { username, password } = req.body.loginData
-
   try {
     // find user
     const user = await User.findOne({ username })
