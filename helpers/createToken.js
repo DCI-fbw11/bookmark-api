@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const { secret } = require("../config/key")
+const { secret } = require("../config/config")
 
 const createToken = (user, isMatching) =>
   isMatching
