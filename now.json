@@ -8,7 +8,8 @@
   "builds": [
     {
       "src": "app.js",
-      "use": "@now/node"
+      "use": "@now/node",
+      "config": { "maxLambdaSize": "15mb" }
     }
   ],
   "routes": [{ "src": "/(.*)", "dest": "/app.js" }]
