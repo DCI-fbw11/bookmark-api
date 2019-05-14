@@ -70,9 +70,15 @@ apiRouter.all(apiRoutes.all, checkToken)
 /**
  * @swagger
  *
- * /:
+ * /api/bookmarks:
  *   get:
  *     description: List of bookmarks
+ *     parameters:
+ *       -
+ *        name: token
+ *        in: header
+ *        type: string
+ *        required: true
  *     produces:
  *       - application/json
  *     responses:
@@ -84,6 +90,34 @@ apiRouter.all(apiRoutes.all, checkToken)
  *             $ref: '#/definitions/Bookmark'
  */
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks)
+
+/**
+ * @swagger
+ *
+ * /api/bookmarks/{id} :
+ *   get:
+ *     description: Receive one specific bookmark by ID
+ *     parameters:
+ *       -
+ *        in: header
+ *        name: token
+ *        required: true
+ *        type: string
+ *       -
+ *        description: ID of the bookmark you want to get
+ *        in: path
+ *        name: id
+ *        required: true
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: bookmark
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Bookmark'
+ */
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 
 // POST
