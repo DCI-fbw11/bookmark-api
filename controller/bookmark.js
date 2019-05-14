@@ -9,7 +9,6 @@ const {
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
-  //get all current bookmarks
   getBookmarks: async (req, res, next) => {
     try {
       const bookmarkList = await Bookmark.find({})
@@ -89,7 +88,6 @@ module.exports = {
           runValidators: true
         }
       )
-
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: updatedBookmark,
         message: `Bookmark with id ${id} was updated!`
@@ -114,6 +112,23 @@ module.exports = {
     next()
   },
 
+  sortBookmarks: async (req, res, next) => {
+    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
+    let sortedBookmarks
+    try {
+      sortedBookmarks =
+        req.query.sortValue === "url"
+          ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
+          : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: sortedBookmarks
+      })
+    } catch (err) {
+      next(err)
+    } finally {
+      next()
+    }
+  },
   //delete multiple bookmarks
   batchDeleteBookmarks: async (req, res, next) => {
     const { bookmarkIDs } = req.body
