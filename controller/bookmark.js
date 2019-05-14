@@ -2,9 +2,10 @@ const { validationResult } = require("express-validator/check")
 const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
 const {
+  noBookmarkFound,
+  noTagProvided,
   noMatchingRoutes,
-  duplicateTags,
-  noBookmarkFound
+  duplicateTags
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
@@ -32,6 +33,25 @@ module.exports = {
       })
     } catch (error) {
       error.message = noBookmarkFound + id
+      next(error)
+    }
+    next()
+  },
+
+  getBookmarkByTag: async (req, res, next) => {
+    try {
+      const { tags } = req.query
+
+      if (!tags) {
+        createError(400, noTagProvided)
+      }
+
+      const searchArray = tags.split(",")
+      const foundBookmarks = await Bookmark.find({ tag: { $all: searchArray } })
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmarks
+      })
+    } catch (error) {
       next(error)
     }
     next()
