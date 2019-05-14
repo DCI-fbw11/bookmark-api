@@ -85,7 +85,8 @@ module.exports = {
         { _id: id },
         updateBookmark,
         {
-          runValidators: true
+          runValidators: true,
+          new: true
         }
       )
       res.locals.response = Object.assign({}, res.locals.response || {}, {
