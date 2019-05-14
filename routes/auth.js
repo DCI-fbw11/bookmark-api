@@ -1,11 +1,18 @@
 const express = require("express")
 const authRouter = express.Router()
 const User = require("../models/user.js")
+
 // Helpers
 const createError = require("../helpers/createError")
 const { hashPassword, checkPassword } = require("../helpers/hash")
 const sendJsonResp = require("../helpers/sendJsonResp")
 const createToken = require("../helpers/createToken")
+
+//Keys
+const { secret } = require("../config/config")
+
+const jwt = require("jsonwebtoken")
+
 
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
@@ -23,7 +30,6 @@ const authRoutes = {
 // Login user
 authRouter.post(authRoutes.login, async (req, res, next) => {
   const { username, password } = req.body.loginData
-
   try {
     // find user
     const user = await User.findOne({ username })
