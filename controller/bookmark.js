@@ -2,29 +2,21 @@ const { validationResult } = require("express-validator/check")
 const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
 const {
-  noBookmarkFound,
-  noBookmarks,
   noMatchingRoutes,
-  duplicateTags
+  duplicateTags,
+  noBookmarkFound
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: async (req, res, next) => {
-    if (!req.query.sortValue && !req.query.sortOrder) {
-      // get all bookmarks as long as there's no query
-      try {
-        const bookmarkList = await Bookmark.find({})
-        if (!bookmarkList) {
-          createError(400, noBookmarks)
-        } else {
-          res.locals.response = Object.assign({}, res.locals.response || {}, {
-            bookmark: bookmarkList
-          })
-        }
-      } catch (err) {
-        next(err)
-      }
+    try {
+      const bookmarkList = await Bookmark.find({})
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: bookmarkList
+      })
+    } catch (error) {
+      next(error)
     }
     next()
   },
@@ -34,35 +26,33 @@ module.exports = {
 
     try {
       const foundBookmark = await Bookmark.findOne({ _id: id })
-      if (!foundBookmark) {
-        createError(400, noBookmarkFound)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: foundBookmark
-        })
-      }
-    } catch (err) {
-      next(err)
+
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmark
+      })
+    } catch (error) {
+      error.message = noBookmarkFound + id
+      next(error)
     }
     next()
   },
 
   //creates a new bookmark
   postBookmark: async (req, res, next) => {
-    const newBookmark = new Bookmark(req.body)
-    const errors = validationResult(req)
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!errors.isEmpty()) {
-      createError(
-        422,
-        `${errors
-          .array()
-          .map(error => error.msg + ": " + error.param.toUpperCase())}`
-      )
-    } else if (!unique) {
-      createError(400, duplicateTags)
-    }
     try {
+      const newBookmark = new Bookmark(req.body)
+      const errors = validationResult(req)
+      const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
+      if (!errors.isEmpty()) {
+        createError(
+          422,
+          `${errors
+            .array()
+            .map(error => error.msg + ": " + error.param.toUpperCase())}`
+        )
+      } else if (!unique) {
+        createError(400, duplicateTags)
+      }
       const savedBookmark = await newBookmark.save()
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: savedBookmark
@@ -74,28 +64,29 @@ module.exports = {
   },
 
   updateBookmarkById: async (req, res, next) => {
-    const { id } = req.params
-    const errors = validationResult(req)
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!errors.isEmpty()) {
-      createError(
-        422,
-        `${errors
-          .array()
-          .map(error => error.msg + ": " + error.param.toUpperCase())}`
-      )
-    } else if (!unique) {
-      createError(400, duplicateTags)
-    }
-    const updateBookmark = Object.assign({}, req.body, {
-      updatedAt: Date.now()
-    })
     try {
+      const { id } = req.params
+      const errors = validationResult(req)
+      const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
+      if (!errors.isEmpty()) {
+        createError(
+          422,
+          `${errors
+            .array()
+            .map(error => error.msg + ": " + error.param.toUpperCase())}`
+        )
+      } else if (!unique) {
+        createError(400, duplicateTags)
+      }
+      const updateBookmark = Object.assign({}, req.body, {
+        updatedAt: Date.now()
+      })
       const updatedBookmark = await Bookmark.findOneAndUpdate(
         { _id: id },
         updateBookmark,
         {
-          runValidators: true
+          runValidators: true,
+          new: true
         }
       )
       res.locals.response = Object.assign({}, res.locals.response || {}, {
