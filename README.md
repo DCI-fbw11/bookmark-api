@@ -1,43 +1,40 @@
 # Bookmark Api
 
-## Objectives
+![CI-Status](https://circleci.com/gh/DCI-fbw11/bookmark-api.svg?style=svg)
 
-```js
-//GET api/bookmarks
-[
-  {
-    id: "<uuid>",
-    url: 'https://twitter.com/iamdevloper/status/1112428799222788099',
-    tag: ['humor', 'sad reality'],
-    createdAt: "<Date>"
-  },
-  {
-    ...
-  }
-]
+> DCI-Students Project of class FBW-11
+
+See live version at: https://bookmark-api.fbw-11.now.sh
+
+## Getting Started
+
+1. Clone Repository
+2. Install Dependencies
+
+```sh
+yarn
+# or
+npm install
 ```
 
-- use lowDB
-  - set some defaults, ok!
-- implement as mentioned above api/bookmarks where `/api` is controlled by a middleware
-- create directories for:
-  - routes
-  - controller
-  - database (lowDB)
+3. Local Database
 
-### Endpoints
+- You need to have mongodb installed on your device
+- You can download it from [here](https://www.mongodb.com/download-center/community)
+- After, you need to start the mongo daemon
 
-> Read about [Route parameters](https://expressjs.com/en/guide/routing.html#route-parameters)
+```sh
+mongod
+```
 
-- GET
-  - api/bookmarks
-  - api/bookmarks/:id
-- POST
-  - api/bookmarks
-- PUT
-  - api/bookmarks/:id
-- DELETE
-  - api/bookmarks/:id
+4. Start the application
+
+```sh
+# Development
+yarn dev
+# or
+npm run dev
+```
 
 # API Documentation
 

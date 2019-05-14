@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken")
-const secret = "shhhhh"
+const { secret } = require("../config/config")
 
 // Token verification middleware
 const checkToken = async (req, res, next) => {
@@ -7,7 +7,7 @@ const checkToken = async (req, res, next) => {
     await jwt.verify(req.headers.token, secret)
 
     next()
-  } catch(error) {
+  } catch (error) {
     next(error)
   }
 }
