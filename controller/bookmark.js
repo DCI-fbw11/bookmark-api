@@ -47,6 +47,28 @@ module.exports = {
     next()
   },
 
+  getBookmarkByDateRange: async (req, res, next) => {
+    const { daterange } = req.params.date
+    const startDate = daterange
+    const endDate = daterange
+
+    try {
+      const bookmarkByDateRange = await Bookmark.find({
+        createdAt: { $gte: startDate, $lt: endDate }
+      })
+      if (!bookmarkByDateRange) {
+        createError(400, noBookmarkFound)
+      } else {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: bookmarkByDateRange
+        })
+      }
+    } catch (err) {
+      next(err)
+    }
+    next()
+  },
+
   //creates a new bookmark
   postBookmark: async (req, res, next) => {
     const newBookmark = new Bookmark(req.body)
