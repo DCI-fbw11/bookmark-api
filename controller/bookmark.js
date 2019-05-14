@@ -145,7 +145,7 @@ module.exports = {
           ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
           : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
       res.locals.response = Object.assign({}, res.locals.response || {}, {
-        sorted_bookmarks: sortedBookmarks
+        bookmark: sortedBookmarks
       })
     } catch (err) {
       next(err)
