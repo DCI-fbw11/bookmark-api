@@ -2,7 +2,7 @@ const request = require("supertest")
 
 const { mongoose } = require("../db/connection")
 const Bookmark = require("../models/bookmark")
-const { app } = require("../app")
+const app = require("../app")
 const { apiRoutes } = require("../routes/api")
 const { authRoutes } = require("../routes/auth")
 
@@ -35,6 +35,7 @@ beforeAll(async () => {
 
   token = loginResponse.body.data.token
 })
+
 afterAll(done => mongoose.disconnect(done))
 
 describe("GET /bookmarks tests", () => {
@@ -56,7 +57,6 @@ describe("GET /bookmarks tests", () => {
     done()
   })
 
-  //TODO update test with authentication
   test("GET /bookmarks contains right amount of bookmarks", async done => {
     // add a bookmark here
     const newBookmarkData = {
