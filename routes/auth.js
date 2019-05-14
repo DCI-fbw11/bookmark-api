@@ -8,12 +8,6 @@ const { hashPassword, checkPassword } = require("../helpers/hash")
 const sendJsonResp = require("../helpers/sendJsonResp")
 const createToken = require("../helpers/createToken")
 
-//Keys
-const { secret } = require("../config/config")
-
-const jwt = require("jsonwebtoken")
-
-
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
 // TODO ednpoints
