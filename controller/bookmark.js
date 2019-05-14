@@ -14,13 +14,9 @@ module.exports = {
   getBookmarks: async (req, res, next) => {
     try {
       const bookmarkList = await Bookmark.find({})
-      if (!bookmarkList) {
-        createError(400, noBookmarks)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: bookmarkList
-        })
-      }
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: bookmarkList
+      })
     } catch (err) {
       next(err)
     }
@@ -32,13 +28,10 @@ module.exports = {
 
     try {
       const foundBookmark = await Bookmark.findOne({ _id: id })
-      if (!foundBookmark) {
-        createError(400, noBookmarkFound)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: foundBookmark
-        })
-      }
+
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmark
+      })
     } catch (err) {
       next(err)
     }
