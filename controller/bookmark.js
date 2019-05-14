@@ -3,7 +3,6 @@ const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
-  noBookmarks,
   noTagProvided,
   noMatchingRoutes,
   duplicateTags
@@ -12,20 +11,13 @@ const Bookmark = require("../models/bookmark")
 
 module.exports = {
   getBookmarks: async (req, res, next) => {
-    if (!req.query.sortValue && !req.query.sortOrder) {
-      // get all bookmarks as long as there's no query
-      try {
-        const bookmarkList = await Bookmark.find({})
-        if (!bookmarkList) {
-          createError(400, noBookmarks)
-        } else {
-          res.locals.response = Object.assign({}, res.locals.response || {}, {
-            bookmark: bookmarkList
-          })
-        }
-      } catch (err) {
-        next(err)
-      }
+    try {
+      const bookmarkList = await Bookmark.find({})
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: bookmarkList
+      })
+    } catch (error) {
+      next(error)
     }
     next()
   },
@@ -35,15 +27,13 @@ module.exports = {
 
     try {
       const foundBookmark = await Bookmark.findOne({ _id: id })
-      if (!foundBookmark) {
-        createError(400, noBookmarkFound)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: foundBookmark
-        })
-      }
-    } catch (err) {
-      next(err)
+
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmark
+      })
+    } catch (error) {
+      error.message = noBookmarkFound + id
+      next(error)
     }
     next()
   },
