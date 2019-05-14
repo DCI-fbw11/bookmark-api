@@ -39,20 +39,20 @@ module.exports = {
 
   //creates a new bookmark
   postBookmark: async (req, res, next) => {
-    const newBookmark = new Bookmark(req.body)
-    const errors = validationResult(req)
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!errors.isEmpty()) {
-      createError(
-        422,
-        `${errors
-          .array()
-          .map(error => error.msg + ": " + error.param.toUpperCase())}`
-      )
-    } else if (!unique) {
-      createError(400, duplicateTags)
-    }
     try {
+      const newBookmark = new Bookmark(req.body)
+      const errors = validationResult(req)
+      const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
+      if (!errors.isEmpty()) {
+        createError(
+          422,
+          `${errors
+            .array()
+            .map(error => error.msg + ": " + error.param.toUpperCase())}`
+        )
+      } else if (!unique) {
+        createError(400, duplicateTags)
+      }
       const savedBookmark = await newBookmark.save()
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: savedBookmark
@@ -64,23 +64,23 @@ module.exports = {
   },
 
   updateBookmarkById: async (req, res, next) => {
-    const { id } = req.params
-    const errors = validationResult(req)
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!errors.isEmpty()) {
-      createError(
-        422,
-        `${errors
-          .array()
-          .map(error => error.msg + ": " + error.param.toUpperCase())}`
-      )
-    } else if (!unique) {
-      createError(400, duplicateTags)
-    }
-    const updateBookmark = Object.assign({}, req.body, {
-      updatedAt: Date.now()
-    })
     try {
+      const { id } = req.params
+      const errors = validationResult(req)
+      const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
+      if (!errors.isEmpty()) {
+        createError(
+          422,
+          `${errors
+            .array()
+            .map(error => error.msg + ": " + error.param.toUpperCase())}`
+        )
+      } else if (!unique) {
+        createError(400, duplicateTags)
+      }
+      const updateBookmark = Object.assign({}, req.body, {
+        updatedAt: Date.now()
+      })
       const updatedBookmark = await Bookmark.findOneAndUpdate(
         { _id: id },
         updateBookmark,
