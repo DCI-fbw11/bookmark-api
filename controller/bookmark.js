@@ -5,52 +5,51 @@ const {
   noBookmarkFound,
   noBookmarks,
   noMatchingRoutes,
-  invalidID,
   duplicateTags
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
-  getBookmarks: (req, res, next) => {
+  getBookmarks: async (req, res, next) => {
     if (!req.query.sortValue && !req.query.sortOrder) {
       // get all bookmarks as long as there's no query
-      Bookmark.find({})
-        .then(bookmarkList => {
-          if (!bookmarkList) {
-            createError(400, noBookmarks)
-          } else {
-            res.locals.response = Object.assign({}, res.locals.response || {}, {
-              bookmark: bookmarkList
-            })
-          }
+    try {
+      const bookmarkList = await Bookmark.find({})
+      if (!bookmarkList) {
+        createError(400, noBookmarks)
+      } else {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: bookmarkList
         })
-        .catch(err => next(err))
-        .finally(() => next())
+      }
+    } catch (err) {
+      next(err)
+
+    }
+    next()
+  }
+},
+
+  getBookmarkByID: async (req, res, next) => {
+    const { id } = req.params
+
+    try {
+      const foundBookmark = await Bookmark.findOne({ _id: id })
+      if (!foundBookmark) {
+        createError(400, noBookmarkFound)
+      } else {
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: foundBookmark
+        })
+      }
+    } catch (err) {
+      next(err)
     }
     next()
   },
 
-  getBookmarkByID: (req, res, next) => {
-    const { id } = req.params
-
-    Bookmark.findOne({ _id: id })
-      .then(foundBookmark => {
-        if (!foundBookmark) {
-          createError(400, noBookmarkFound)
-        } else {
-          res.locals.response = Object.assign({}, res.locals.response || {}, {
-            bookmark: foundBookmark
-          })
-        }
-      })
-      .catch(err => {
-        err.message = invalidID
-        next(err)
-      })
-      .finally(() => next())
-  },
-
-  postBookmark: (req, res, next) => {
+  //creates a new bookmark
+  postBookmark: async (req, res, next) => {
     const newBookmark = new Bookmark(req.body)
     const errors = validationResult(req)
     const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
@@ -64,22 +63,18 @@ module.exports = {
     } else if (!unique) {
       createError(400, duplicateTags)
     }
-    newBookmark
-      .save()
-      .then(savedBookmark => {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: savedBookmark
-        })
+    try {
+      const savedBookmark = await newBookmark.save()
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: savedBookmark
       })
-      .catch(err => {
-        next(err)
-      })
-      .finally(() => {
-        next()
-      })
+    } catch (error) {
+      next(error)
+    }
+    next()
   },
 
-  updateBookmarkById: (req, res, next) => {
+  updateBookmarkById: async (req, res, next) => {
     const { id } = req.params
     const errors = validationResult(req)
     const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
@@ -96,44 +91,36 @@ module.exports = {
     const updateBookmark = Object.assign({}, req.body, {
       updatedAt: Date.now()
     })
-
-    Bookmark.findOneAndUpdate({ _id: id }, updateBookmark, {
-      runValidators: true,
-      useFindAndModify: false,
-      new: true
-    })
-      .then(updatedBookmark => {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: updatedBookmark,
-          message: `Bookmark with id ${id} was updated!`
-        })
+    try {
+      const updatedBookmark = await Bookmark.findOneAndUpdate(
+        { _id: id },
+        updateBookmark,
+        {
+          runValidators: true
+        }
+      )
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: updatedBookmark,
+        message: `Bookmark with id ${id} was updated!`
       })
-      .catch(err => {
-        err.message = invalidID
-        next(err)
-      })
-      .finally(() => {
-        next()
-      })
+    } catch (error) {
+      next(error)
+    }
+    next()
   },
 
-  deleteBookmarkById: (req, res, next) => {
+  deleteBookmarkById: async (req, res, next) => {
     const { id } = req.params
-
-    Bookmark.findByIdAndRemove({ _id: id })
-      .then(deleteBookmark => {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: deleteBookmark,
-          message: `Bookmark with id ${id} was deleted!`
-        })
+    try {
+      const deleteBookmark = await Bookmark.findByIdAndRemove({ _id: id })
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: deleteBookmark,
+        message: `Bookmark with id ${id} was deleted!`
       })
-      .catch(err => {
-        err.message = invalidID
-        next(err)
-      })
-      .finally(() => {
-        next()
-      })
+    } catch (error) {
+      next(error)
+    }
+    next()
   },
 
   sortBookmarks: async (req, res, next) => {
@@ -153,23 +140,18 @@ module.exports = {
       next()
     }
   },
-  batchDeleteBookmarks: (req, res, next) => {
+  //delete multiple bookmarks
+  batchDeleteBookmarks: async (req, res, next) => {
     const { bookmarkIDs } = req.body
-
-    Bookmark.deleteMany({ _id: { $in: bookmarkIDs } })
-      .then(deleted => {
-        if (deleted.deletedCount === 0) {
-          createError(400, invalidID)
-        }
-
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          message: `Bookmark with id's ${bookmarkIDs.map(
-            id => id
-          )} were deleted!`
-        })
+    try {
+      await Bookmark.deleteMany({ _id: { $in: bookmarkIDs } })
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        message: `Bookmark with id's ${bookmarkIDs.map(id => id)} were deleted!`
       })
-      .catch(err => next(err))
-      .finally(() => next())
+    } catch (error) {
+      next(error)
+    }
+    next()
   },
 
   noMatch: (req, res, next) => {
