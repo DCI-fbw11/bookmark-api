@@ -12,7 +12,7 @@ const authRoutePrefix = "/auth"
 let token
 
 beforeAll(async () => {
-  await mongoose.connection.on("connected", () => Promise.resolve())
+  // await mongoose.connection.on("connected", () => Promise.resolve())
   await mongoose.connection.dropDatabase()
 
   await request(app)
