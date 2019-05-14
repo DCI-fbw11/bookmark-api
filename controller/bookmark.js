@@ -10,19 +10,21 @@ const {
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
-  //get all current bookmarks
   getBookmarks: async (req, res, next) => {
-    try {
-      const bookmarkList = await Bookmark.find({})
-      if (!bookmarkList) {
-        createError(400, noBookmarks)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: bookmarkList
-        })
+    if (!req.query.sortValue && !req.query.sortOrder) {
+      // get all bookmarks as long as there's no query
+      try {
+        const bookmarkList = await Bookmark.find({})
+        if (!bookmarkList) {
+          createError(400, noBookmarks)
+        } else {
+          res.locals.response = Object.assign({}, res.locals.response || {}, {
+            bookmark: bookmarkList
+          })
+        }
+      } catch (err) {
+        next(err)
       }
-    } catch (err) {
-      next(err)
     }
     next()
   },
@@ -96,7 +98,6 @@ module.exports = {
           runValidators: true
         }
       )
-
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: updatedBookmark,
         message: `Bookmark with id ${id} was updated!`
@@ -121,6 +122,23 @@ module.exports = {
     next()
   },
 
+  sortBookmarks: async (req, res, next) => {
+    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
+    let sortedBookmarks
+    try {
+      sortedBookmarks =
+        req.query.sortValue === "url"
+          ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
+          : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: sortedBookmarks
+      })
+    } catch (err) {
+      next(err)
+    } finally {
+      next()
+    }
+  },
   //delete multiple bookmarks
   batchDeleteBookmarks: async (req, res, next) => {
     const { bookmarkIDs } = req.body
