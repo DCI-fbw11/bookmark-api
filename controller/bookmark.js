@@ -48,14 +48,16 @@ module.exports = {
   },
 
   getBookmarkByDateRange: async (req, res, next) => {
-    const { daterange } = req.params.date
-    const startDate = daterange
-    const endDate = daterange
+    const { startdate, enddate } = req.query
+    console.log(startdate, enddate)
 
     try {
-      const bookmarkByDateRange = await Bookmark.find({
-        createdAt: { $gte: startDate, $lt: endDate }
-      })
+      const bookmarkByDateRange = await Bookmark.aggregate([
+        {
+          $gte: { createdAt: startdate }
+        },
+        { $lt: { createdAt: enddate } }
+      ])
       if (!bookmarkByDateRange) {
         createError(400, noBookmarkFound)
       } else {

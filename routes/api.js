@@ -26,7 +26,7 @@ const {
 const apiRoutes = {
   getAllBookmarks: "/bookmarks",
   getBookmarkByID: "/bookmarks/:id",
-  getBookmarkByDateRange: "/bookmarks/date/:daterange",
+  getBookmarkByDateRange: "/bookmarks",
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
