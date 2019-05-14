@@ -4,7 +4,7 @@ const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noBookmarks,
-  noTagDefined,
+  noTagProvided,
   noMatchingRoutes,
   duplicateTags
 } = require("../helpers/errorMessages")
@@ -46,21 +46,23 @@ module.exports = {
     next()
   },
 
-  getBookmarkByTag: (req, res, next) => {
-    const { tags } = req.query
+  getBookmarkByTag: async (req, res, next) => {
+    try {
+      const { tags } = req.query
 
-    Bookmark.find({ tag: { $all: tags } })
-      .then(foundByTag => {
-        if (!foundByTag) {
-          createError(400, noTagDefined)
-        } else {
-          res.locals.response = Object.assign({}, res.locals.response || {}, {
-            bookmark: foundByTag
-          })
-        }
+      if (!tags) {
+        createError(400, noTagProvided)
+      }
+
+      const searchArray = tags.split(",")
+      const foundBookmarks = await Bookmark.find({ tag: { $all: searchArray } })
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmarks
       })
-      .catch(err => next(err))
-      .finally(() => next())
+    } catch (error) {
+      next(error)
+    }
+    next()
   },
 
   //creates a new bookmark

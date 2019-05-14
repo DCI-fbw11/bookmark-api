@@ -1,5 +1,5 @@
 module.exports = {
-  noTagDefined: "No bookmark found using this tag(s)",
+  noTagProvided: "No valid tag(s) provided",
   noMatchingRoutes: "No matching routes",
   invalidID: "Invalid ID, please provide a valid ID",
   duplicateTags: "Duplicate tags are not allowed",
