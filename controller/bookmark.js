@@ -13,22 +13,21 @@ module.exports = {
   getBookmarks: async (req, res, next) => {
     if (!req.query.sortValue && !req.query.sortOrder) {
       // get all bookmarks as long as there's no query
-    try {
-      const bookmarkList = await Bookmark.find({})
-      if (!bookmarkList) {
-        createError(400, noBookmarks)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: bookmarkList
-        })
+      try {
+        const bookmarkList = await Bookmark.find({})
+        if (!bookmarkList) {
+          createError(400, noBookmarks)
+        } else {
+          res.locals.response = Object.assign({}, res.locals.response || {}, {
+            bookmark: bookmarkList
+          })
+        }
+      } catch (err) {
+        next(err)
       }
-    } catch (err) {
-      next(err)
-
     }
     next()
-  }
-},
+  },
 
   getBookmarkByID: async (req, res, next) => {
     const { id } = req.params
