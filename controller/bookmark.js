@@ -19,7 +19,7 @@ module.exports = {
         bookmark: bookmarkList
       })
     } catch (error) {
-      error.message = noBookmarkFound
+      error.message = noBookmarks
       next(error)
     }
     next()
@@ -58,7 +58,7 @@ module.exports = {
     }
     next()
   },
-  
+
   //creates a new bookmark
   postBookmark: async (req, res, next) => {
     try {
