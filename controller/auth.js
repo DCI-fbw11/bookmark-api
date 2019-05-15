@@ -52,7 +52,8 @@ module.exports = {
       // fail -> login failed
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
-        token
+        token,
+        your_id: user._id
       })
     } catch (error) {
       next(error)
