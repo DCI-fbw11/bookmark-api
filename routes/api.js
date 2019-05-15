@@ -14,6 +14,7 @@ const {
   getBookmarks,
   getBookmarkByID,
   getBookmarkByDateRange,
+  getBookmarkByTag,
   postBookmark,
   updateBookmarkById,
   deleteBookmarkById,
@@ -27,6 +28,7 @@ const apiRoutes = {
   getAllBookmarks: "/bookmarks",
   getBookmarkByID: "/bookmarks/:id",
   getBookmarkByDateRange: "/bookmarks",
+  getBookmarkByTag: "/bookmarks/tag/",
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
   deleteBookmarkById: "/bookmarks/:id",
@@ -46,6 +48,7 @@ apiRouter.all(apiRoutes.all, checkToken)
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 apiRouter.get(apiRoutes.getBookmarkByDateRange, getBookmarkByDateRange)
+apiRouter.get(apiRoutes.getBookmarkByTag, getBookmarkByTag)
 
 // POST
 apiRouter.post(apiRoutes.postBookmark, checkBody, checkURL, postBookmark)
