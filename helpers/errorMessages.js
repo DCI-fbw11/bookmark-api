@@ -1,4 +1,5 @@
 module.exports = {
+  noBookmarks: "No bookmarks currently exist",
   noTagProvided: "No valid tag(s) provided",
   noBookmarkFound: "No bookmark found for ID: ",
   noURLDefined: "No url to bookmark defined",
