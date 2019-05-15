@@ -4,6 +4,7 @@ const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
   noBookmarks,
+  noTagProvided,
   noMatchingRoutes,
   duplicateTags
 } = require("../helpers/errorMessages")
@@ -14,15 +15,12 @@ module.exports = {
   getBookmarks: async (req, res, next) => {
     try {
       const bookmarkList = await Bookmark.find({})
-      if (!bookmarkList) {
-        createError(400, noBookmarks)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: bookmarkList
-        })
-      }
-    } catch (err) {
-      next(err)
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: bookmarkList
+      })
+    } catch (error) {
+      error.message = noBookmarkFound
+      next(error)
     }
     next()
   },
@@ -32,35 +30,51 @@ module.exports = {
 
     try {
       const foundBookmark = await Bookmark.findOne({ _id: id })
-      if (!foundBookmark) {
-        createError(400, noBookmarkFound)
-      } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: foundBookmark
-        })
-      }
-    } catch (err) {
-      next(err)
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmark
+      })
+    } catch (error) {
+      error.message = noBookmarkFound + id
+      next(error)
     }
     next()
   },
 
+  getBookmarkByTag: async (req, res, next) => {
+    try {
+      const { tags } = req.query
+
+      if (!tags) {
+        createError(400, noTagProvided)
+      }
+
+      const searchArray = tags.split(",")
+      const foundBookmarks = await Bookmark.find({ tag: { $all: searchArray } })
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmarks
+      })
+    } catch (error) {
+      next(error)
+    }
+    next()
+  },
+  
   //creates a new bookmark
   postBookmark: async (req, res, next) => {
-    const newBookmark = new Bookmark(req.body)
-    const errors = validationResult(req)
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!errors.isEmpty()) {
-      createError(
-        422,
-        `${errors
-          .array()
-          .map(error => error.msg + ": " + error.param.toUpperCase())}`
-      )
-    } else if (!unique) {
-      createError(400, duplicateTags)
-    }
     try {
+      const newBookmark = new Bookmark(req.body)
+      const errors = validationResult(req)
+      const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
+      if (!errors.isEmpty()) {
+        createError(
+          422,
+          `${errors
+            .array()
+            .map(error => error.msg + ": " + error.param.toUpperCase())}`
+        )
+      } else if (!unique) {
+        createError(400, duplicateTags)
+      }
       const savedBookmark = await newBookmark.save()
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: savedBookmark
@@ -72,31 +86,31 @@ module.exports = {
   },
 
   updateBookmarkById: async (req, res, next) => {
-    const { id } = req.params
-    const errors = validationResult(req)
-    const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
-    if (!errors.isEmpty()) {
-      createError(
-        422,
-        `${errors
-          .array()
-          .map(error => error.msg + ": " + error.param.toUpperCase())}`
-      )
-    } else if (!unique) {
-      createError(400, duplicateTags)
-    }
-    const updateBookmark = Object.assign({}, req.body, {
-      updatedAt: Date.now()
-    })
     try {
+      const { id } = req.params
+      const errors = validationResult(req)
+      const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
+      if (!errors.isEmpty()) {
+        createError(
+          422,
+          `${errors
+            .array()
+            .map(error => error.msg + ": " + error.param.toUpperCase())}`
+        )
+      } else if (!unique) {
+        createError(400, duplicateTags)
+      }
+      const updateBookmark = Object.assign({}, req.body, {
+        updatedAt: Date.now()
+      })
       const updatedBookmark = await Bookmark.findOneAndUpdate(
         { _id: id },
         updateBookmark,
         {
-          runValidators: true
+          runValidators: true,
+          new: true
         }
       )
-
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: updatedBookmark,
         message: `Bookmark with id ${id} was updated!`
@@ -119,6 +133,24 @@ module.exports = {
       next(error)
     }
     next()
+  },
+
+  sortBookmarks: async (req, res, next) => {
+    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
+    let sortedBookmarks
+    try {
+      sortedBookmarks =
+        req.query.sortValue === "url"
+          ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
+          : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: sortedBookmarks
+      })
+    } catch (err) {
+      next(err)
+    } finally {
+      next()
+    }
   },
 
   //delete multiple bookmarks

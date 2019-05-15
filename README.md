@@ -1,20 +1,39 @@
 # Bookmark Api
 
-## Objectives
+![CI-Status](https://circleci.com/gh/DCI-fbw11/bookmark-api.svg?style=svg)
 
-```js
-//GET api/bookmarks
-[
-  {
-    id: "<uuid>",
-    url: 'https://twitter.com/iamdevloper/status/1112428799222788099',
-    tag: ['humor', 'sad reality'],
-    createdAt: "<Date>"
-  },
-  {
-    ...
-  }
-]
+> DCI-Students Project of class FBW-11
+
+See live version at: https://bookmark-api.fbw-11.now.sh
+
+## Getting Started
+
+1. Clone Repository
+2. Install Dependencies
+
+```sh
+yarn
+# or
+npm install
+```
+
+3. Local Database
+
+- You need to have mongodb installed on your device
+- You can download it from [here](https://www.mongodb.com/download-center/community)
+- After, you need to start the mongo daemon
+
+```sh
+mongod
+```
+
+4. Start the application
+
+```sh
+# Development
+yarn dev
+# or
+npm run dev
 ```
 
 - use lowDB
