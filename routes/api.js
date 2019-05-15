@@ -45,7 +45,84 @@ apiRouter.get("/", (req, res) => {
 apiRouter.all(apiRoutes.all, checkToken)
 
 // GET
+/**
+ * @swagger
+ *
+ * definitions:
+ *   Bookmark:
+ *     type: object
+ *     required:
+ *       - title
+ *       - url
+ *     properties:
+ *       title:
+ *         type: string
+ *       shortDescription:
+ *         type: string
+ *       url:
+ *         type: string
+ *         format: url
+ *       tag:
+ *         type: array
+ *         items:
+ *           type: string
+ *       createdAt:
+ *         type: string
+ *       updatedAt:
+ *         type: string
+ */
+
+/**
+ * @swagger
+ *
+ * /api/bookmarks:
+ *   get:
+ *     description: List of bookmarks
+ *     parameters:
+ *       -
+ *        name: token
+ *        in: header
+ *        type: string
+ *        required: true
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: bookmarks
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Bookmark'
+ */
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
+
+/**
+ * @swagger
+ *
+ * /api/bookmarks/{id} :
+ *   get:
+ *     description: Receive one specific bookmark by ID
+ *     parameters:
+ *       -
+ *        in: header
+ *        name: token
+ *        required: true
+ *        type: string
+ *       -
+ *        description: ID of the bookmark you want to get
+ *        in: path
+ *        name: id
+ *        required: true
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: bookmark
+ *         schema:
+ *           type: array
+ *           items:
+ *             $ref: '#/definitions/Bookmark'
+ */
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 apiRouter.get(apiRoutes.getBookmarkByDateRange, getBookmarkByDateRange)
 apiRouter.get(apiRoutes.getBookmarkByTag, getBookmarkByTag)
