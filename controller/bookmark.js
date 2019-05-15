@@ -9,15 +9,20 @@ const {
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 
+
 module.exports = {
   getBookmarks: async (req, res, next) => {
-    try {
-      const bookmarkList = await Bookmark.find({})
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        bookmark: bookmarkList
-      })
-    } catch (error) {
-      next(error)
+    const { user_ID } = req.params
+    if (!req.query.sortValue && !req.query.sortOrder) {
+      // get all bookmarks as long as there's no query
+      try {
+        const bookmarkList = await Bookmark.find({ userID: user_ID})
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: bookmarkList
+        })
+      } catch (error) {
+        next(error)
+      }
     }
     next()
   },
@@ -134,21 +139,24 @@ module.exports = {
   },
 
   sortBookmarks: async (req, res, next) => {
-    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
-    let sortedBookmarks
-    try {
-      sortedBookmarks =
-        req.query.sortValue === "url"
-          ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
-          : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        bookmark: sortedBookmarks
-      })
-    } catch (err) {
-      next(err)
-    } finally {
-      next()
-    }
+    if (req.query.sortValue || req.query.sortOrder) {
+      // sort bookmarks only of theres a query
+      const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
+      let sortedBookmarks
+      try {
+        sortedBookmarks =
+          req.query.sortValue === "url"
+            ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
+            : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: sortedBookmarks
+        })
+      } catch (err) {
+        next(err)
+      } 
+    } 
+    next()
+    
   },
   //delete multiple bookmarks
   batchDeleteBookmarks: async (req, res, next) => {
