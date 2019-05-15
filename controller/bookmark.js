@@ -8,6 +8,7 @@ const {
   duplicateTags
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
+const dateParser = require("../helpers/dateParser")
 
 module.exports = {
   getBookmarks: async (req, res, next) => {
@@ -56,18 +57,17 @@ module.exports = {
     }
     next()
   },
-
+  // ?startDate=2018.12.01&endDate=2019.05.15 example request
+  // this function gets the range between these dates
   getBookmarkByDateRange: async (req, res, next) => {
-    const { startdate, enddate } = req.query
-    console.log(startdate, enddate)
+    const { startDate, endDate } = req.query
+    // you can find more notes in dateParser.js
+    const { parsedStart, parsedEnd } = dateParser(startDate, endDate)
 
     try {
-      const bookmarkByDateRange = await Bookmark.aggregate([
-        {
-          $gte: { createdAt: startdate }
-        },
-        { $lt: { createdAt: enddate } }
-      ])
+      const bookmarkByDateRange = await Bookmark.find({
+        createdAt: { $gte: new Date(parsedStart), $lt: new Date(parsedEnd) }
+      })
       if (!bookmarkByDateRange) {
         createError(400, noBookmarkFound)
       } else {
