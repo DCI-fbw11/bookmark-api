@@ -36,6 +36,28 @@ yarn dev
 npm run dev
 ```
 
+- use lowDB
+  - set some defaults, ok!
+- implement as mentioned above api/bookmarks where `/api` is controlled by a middleware
+- create directories for:
+  - routes
+  - controller
+  - database (lowDB)
+
+### Endpoints
+
+> Read about [Route parameters](https://expressjs.com/en/guide/routing.html#route-parameters)
+
+- GET
+  - api/bookmarks
+  - api/bookmarks/:id
+- POST
+  - api/bookmarks
+- PUT
+  - api/bookmarks/:id
+- DELETE
+  - api/bookmarks/:id
+
 # API Documentation
 
 This will show you the expected **input** for each **endpoint** and the **value** it returns.

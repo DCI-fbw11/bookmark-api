@@ -3,6 +3,7 @@ const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
 const {
   noBookmarkFound,
+  noBookmarks,
   noTagProvided,
   noMatchingRoutes,
   duplicateTags
@@ -10,6 +11,7 @@ const {
 const Bookmark = require("../models/bookmark")
 
 module.exports = {
+  //get all current bookmarks
   getBookmarks: async (req, res, next) => {
     try {
       const bookmarkList = await Bookmark.find({})
@@ -17,6 +19,7 @@ module.exports = {
         bookmark: bookmarkList
       })
     } catch (error) {
+      error.message = noBookmarks
       next(error)
     }
     next()
@@ -27,7 +30,6 @@ module.exports = {
 
     try {
       const foundBookmark = await Bookmark.findOne({ _id: id })
-
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: foundBookmark
       })
@@ -150,6 +152,7 @@ module.exports = {
       next()
     }
   },
+
   //delete multiple bookmarks
   batchDeleteBookmarks: async (req, res, next) => {
     const { bookmarkIDs } = req.body

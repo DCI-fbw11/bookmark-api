@@ -3,6 +3,7 @@ const authRouter = express.Router()
 
 // auth controller
 const { register, login } = require("../controller/auth")
+
 // Helpers
 const sendJsonResp = require("../helpers/sendJsonResp")
 
