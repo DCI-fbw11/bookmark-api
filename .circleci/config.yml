@@ -34,4 +34,9 @@ jobs:
           key: v1-dependencies-{{ checksum "package.json" }}
 
       # run tests!
-      - run: yarn test
+      - run:
+          name: Run test
+          command: yarn test
+          # Environment variable for a single command shell
+          environment:
+            SECRET: shhhhh
