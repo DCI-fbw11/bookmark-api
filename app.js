@@ -19,7 +19,7 @@ const options = {
 const { connect } = require("./db/connection")
 const { apiRouter } = require("./routes/api")
 const { authRouter } = require("./routes/auth")
-const path = require("path")
+const { docsRouter } = require("./routes/docs")
 const app = express()
 
 connect()
@@ -38,9 +38,6 @@ app.use("/auth", authRouter)
 // Docs
 const swaggerSpec = swaggerJSDoc(options)
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-
-app.use("/", (req, res) => {
-  res.sendFile(path.join(__dirname + "/docs.html"))
-})
+app.use("/", docsRouter)
 
 module.exports = app
