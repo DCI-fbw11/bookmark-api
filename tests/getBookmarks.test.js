@@ -1,15 +1,17 @@
 const request = require("supertest")
-
-const { mongoose } = require("../db/connection")
-const Bookmark = require("../models/bookmark")
 const app = require("../app")
+const { mongoose } = require("../db/connection")
+
+const Bookmark = require("../models/bookmark")
 const { apiRoutes } = require("../routes/api")
 const { authRoutes } = require("../routes/auth")
+const decodeToken = require("../helpers/decodeToken")
 
 const apiRoutePrefix = "/api"
 const authRoutePrefix = "/auth"
 
 let token
+let userID
 
 beforeAll(async () => {
   await mongoose.connection.on("connected", () => Promise.resolve())
@@ -34,6 +36,10 @@ beforeAll(async () => {
     })
 
   token = loginResponse.body.data.token
+  // decode token here to get the ID from it
+  const { user: stringID } = await decodeToken(token)
+
+  userID = mongoose.Types.ObjectId(stringID)
 })
 
 afterAll(done => mongoose.disconnect(done))
@@ -61,7 +67,8 @@ describe("GET /bookmarks tests", () => {
     // add a bookmark here
     const newBookmarkData = {
       url: "https://awesomedomain.tld",
-      title: "best bookmark ever"
+      title: "best bookmark ever",
+      userID
     }
     await new Bookmark(newBookmarkData).save()
 

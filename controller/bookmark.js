@@ -1,6 +1,7 @@
 const { validationResult } = require("express-validator/check")
 const checkIfUnique = require("../helpers/checkIfUniqe")
 const createError = require("../helpers/createError")
+const decodeToken = require("../helpers/decodeToken")
 const {
   noBookmarkFound,
   noBookmarks,
@@ -9,18 +10,25 @@ const {
   duplicateTags
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
+const mongoose = require("mongoose")
 
 module.exports = {
   //get all current bookmarks
   getBookmarks: async (req, res, next) => {
-    try {
-      const bookmarkList = await Bookmark.find({})
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        bookmark: bookmarkList
-      })
-    } catch (error) {
-      error.message = noBookmarks
-      next(error)
+    // decode token here to get the ID from it
+    const { user: userID } = await decodeToken(req.headers.token)
+
+    if (!req.query.sortValue && !req.query.sortOrder) {
+      // get all bookmarks as long as there's no query
+      try {
+        const bookmarkList = await Bookmark.find({ userID })
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: bookmarkList
+        })
+      } catch (error) {
+        error.message = noBookmarks
+        next(error)
+      }
     }
     next()
   },
@@ -41,6 +49,7 @@ module.exports = {
   },
 
   getBookmarkByTag: async (req, res, next) => {
+    // TODO needs to be implemented with the personal bookmark approach
     try {
       const { tags } = req.query
 
@@ -62,7 +71,12 @@ module.exports = {
   //creates a new bookmark
   postBookmark: async (req, res, next) => {
     try {
-      const newBookmark = new Bookmark(req.body)
+      // decode token here to get the ID from it
+      const { user: stringID } = await decodeToken(req.headers.token)
+
+      const userID = mongoose.Types.ObjectId(stringID)
+      const newBookmark = new Bookmark({ ...req.body, userID })
+
       const errors = validationResult(req)
       const unique = req.body.tag ? checkIfUnique(req.body.tag) : true
       if (!errors.isEmpty()) {
@@ -136,21 +150,24 @@ module.exports = {
   },
 
   sortBookmarks: async (req, res, next) => {
-    const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
-    let sortedBookmarks
-    try {
-      sortedBookmarks =
-        req.query.sortValue === "url"
-          ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
-          : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
-      res.locals.response = Object.assign({}, res.locals.response || {}, {
-        bookmark: sortedBookmarks
-      })
-    } catch (err) {
-      next(err)
-    } finally {
-      next()
+    // TODO needs to be implemented with the personal bookmark approach
+    if (req.query.sortValue || req.query.sortOrder) {
+      // sort bookmarks only of theres a query
+      const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
+      let sortedBookmarks
+      try {
+        sortedBookmarks =
+          req.query.sortValue === "url"
+            ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
+            : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
+        res.locals.response = Object.assign({}, res.locals.response || {}, {
+          bookmark: sortedBookmarks
+        })
+      } catch (err) {
+        next(err)
+      }
     }
+    next()
   },
 
   //delete multiple bookmarks

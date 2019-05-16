@@ -25,6 +25,10 @@ const BookmarkSchema = new Schema({
   },
   updatedAt: {
     type: Date
+  },
+  userID: {
+    type: Schema.Types.ObjectId,
+    required: true
   }
 })
 
