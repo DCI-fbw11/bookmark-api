@@ -1,10 +1,11 @@
 const request = require("supertest")
-
-const { mongoose } = require("../db/connection")
-const Bookmark = require("../models/bookmark")
 const app = require("../app")
+const { mongoose } = require("../db/connection")
+
+const Bookmark = require("../models/bookmark")
 const { apiRoutes } = require("../routes/api")
 const { authRoutes } = require("../routes/auth")
+const decodeToken = require("../helpers/decodeToken")
 
 const apiRoutePrefix = "/api"
 const authRoutePrefix = "/auth"
@@ -35,7 +36,10 @@ beforeAll(async () => {
     })
 
   token = loginResponse.body.data.token
-  userID = loginResponse.body.data.userID
+  // decode token here to get the ID from it
+  const { user: stringID } = await decodeToken(token)
+
+  userID = mongoose.Types.ObjectId(stringID)
 })
 
 afterAll(done => mongoose.disconnect(done))
@@ -43,7 +47,7 @@ afterAll(done => mongoose.disconnect(done))
 describe("GET /bookmarks tests", () => {
   test("Get all bookmarks WITHOUT authentication should respond with status code 500", async done => {
     const response = await request(app).get(
-      apiRoutePrefix + apiRoutes.getAllBookmarks + "/" + userID
+      apiRoutePrefix + apiRoutes.getAllBookmarks
     )
 
     expect(response.statusCode).toBe(500)
@@ -52,7 +56,7 @@ describe("GET /bookmarks tests", () => {
 
   test("Get all bookmarks WITH authentication should respond with status code 200", async done => {
     const response = await request(app)
-      .get(apiRoutePrefix + apiRoutes.getAllBookmarks + "/" + userID)
+      .get(apiRoutePrefix + apiRoutes.getAllBookmarks)
       .set("token", token)
 
     expect(response.statusCode).toBe(200)
@@ -63,12 +67,13 @@ describe("GET /bookmarks tests", () => {
     // add a bookmark here
     const newBookmarkData = {
       url: "https://awesomedomain.tld",
-      title: "best bookmark ever"
+      title: "best bookmark ever",
+      userID
     }
     await new Bookmark(newBookmarkData).save()
 
     const response = await request(app)
-      .get(apiRoutePrefix + apiRoutes.getAllBookmarks + "/" + userID)
+      .get(apiRoutePrefix + apiRoutes.getAllBookmarks)
       .set("token", token)
 
     const {
