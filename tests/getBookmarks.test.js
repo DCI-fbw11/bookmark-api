@@ -10,6 +10,7 @@ const apiRoutePrefix = "/api"
 const authRoutePrefix = "/auth"
 
 let token
+let userID
 
 beforeAll(async () => {
   await mongoose.connection.on("connected", () => Promise.resolve())
@@ -34,6 +35,7 @@ beforeAll(async () => {
     })
 
   token = loginResponse.body.data.token
+  userID = loginResponse.body.data.userID
 })
 
 afterAll(done => mongoose.disconnect(done))
@@ -41,7 +43,7 @@ afterAll(done => mongoose.disconnect(done))
 describe("GET /bookmarks tests", () => {
   test("Get all bookmarks WITHOUT authentication should respond with status code 500", async done => {
     const response = await request(app).get(
-      apiRoutePrefix + apiRoutes.getAllBookmarks
+      apiRoutePrefix + apiRoutes.getAllBookmarks + "/" + userID
     )
 
     expect(response.statusCode).toBe(500)
@@ -50,7 +52,7 @@ describe("GET /bookmarks tests", () => {
 
   test("Get all bookmarks WITH authentication should respond with status code 200", async done => {
     const response = await request(app)
-      .get(apiRoutePrefix + apiRoutes.getAllBookmarks)
+      .get(apiRoutePrefix + apiRoutes.getAllBookmarks + "/" + userID)
       .set("token", token)
 
     expect(response.statusCode).toBe(200)
@@ -66,7 +68,7 @@ describe("GET /bookmarks tests", () => {
     await new Bookmark(newBookmarkData).save()
 
     const response = await request(app)
-      .get(apiRoutePrefix + apiRoutes.getAllBookmarks)
+      .get(apiRoutePrefix + apiRoutes.getAllBookmarks + "/" + userID)
       .set("token", token)
 
     const {

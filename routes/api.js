@@ -24,7 +24,7 @@ const {
 
 // Route Config
 const apiRoutes = {
-  getAllBookmarks: "/bookmarks/:user_ID",
+  getAllBookmarks: "/bookmarks",
   getBookmarkByID: "/bookmarks/:userID/:id",
   getBookmarkByTag: "/bookmarks/tag/",
   postBookmark: "/bookmarks",
