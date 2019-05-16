@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <title>Document</title>
+    <style>
+      body {
+        margin: 1em;
+        padding: 0;
+      }
+      #content {
+        background-color: rgb(247, 247, 247);
+        padding: 1em;
+        border-radius: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="content" class="container">
+      <!-- INNER HTML GOES BELOW THIS LINE -->
+      <h1 id="bookmark-api">Bookmark Api</h1>
+      <blockquote>
+        <p>DCI-Students Project of class FBW-11</p>
+      </blockquote>
+      <p>
+        Base URL:
+        <a href="https://bookmark-api.fbw-11.now.sh/"
+          >https://bookmark-api.fbw-11.now.sh/</a
+        >
+      </p>
+      <h2 id="authentication-endpoints">Authentication Endpoints</h2>
+      <h3 id="register">Register</h3>
+      <ul>
+        <li>
+          POST
+          <ul>
+            <li>auth/register</li>
+          </ul>
+        </li>
+      </ul>
+      <pre><code class="language-js">{
+ &quot;registerData&quot; : {
+    &quot;username&quot;: &quot;string&quot;,
+    &quot;password&quot;: &quot;string&quot;,
+  }
+}</code></pre>
+      <h3 id="login">Login</h3>
+      <ul>
+        <li>
+          POST
+          <ul>
+            <li>auth/login</li>
+          </ul>
+        </li>
+      </ul>
+      <pre><code class="language-js">{
+ &quot;loginData&quot; : {
+    &quot;username&quot;: &quot;string&quot;,
+    &quot;password&quot;: &quot;string&quot;,
+  }
+}</code></pre>
+      <p>
+        The response returns a token which you need to pass into the header
+        named token
+      </p>
+      <p><strong>Returned example</strong></p>
+      <pre><code class="language-js">{
+    &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNWNkYTc3ODAyZWZiNDMwN2I1NTUwZTgxIiwiaWF0IjoxNTU4MDE1NzE2LCJleHAiOjE1NTgwMTkzMTZ9.8rpXz-yrHADIKhhHN_7Xpw42Zja9dceXLWDaX83GYqQ&quot;
+}</code></pre>
+      <h1 id="bookmarks-endpoints">Bookmarks Endpoints</h1>
+      <p>
+        This will show you the expected <strong>input</strong> for each
+        <strong>endpoint</strong> and the <strong>value</strong> it returns.
+      </p>
+      <h2 id="get-all-bookmarks">Get <strong>ALL</strong> Bookmarks</h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>api/bookmarks</li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        The endpoint <code>/api/bookmarks</code> will show all bookmarks in the
+        database.
+      </p>
+      <h2 id="get-bookmark-by-id">Get Bookmark by ID</h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>api/bookmarks/:id</li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        To see a specific bookmark, the bookmark _id is required and can be
+        added in the following way : <code>/api/bookmarks/:id</code>.
+      </p>
+      <h2 id="create-a-new-bookmark">Create a new Bookmark</h2>
+      <ul>
+        <li>
+          <p>POST</p>
+          <ul>
+            <li>api/bookmarks</li>
+          </ul>
+          <p>In POST please provide the minimum</p>
+        </li>
+      </ul>
+      <pre><code class="language-js">{
+    title: {
+      type: String,
+      maxlength: 50,
+    },
+    shortDescription: {
+      type: String,
+      maxlength: 150,
+    },
+    url: {
+      type: String,
+      required: true
+    }
+}</code></pre>
+      <p>
+        To add a bookmark to the database, use the
+        <code>/api/bookmarks</code> endpoint.
+        <strong>A url is required.</strong> A title, short description or tags
+        are optional.
+      </p>
+      <h2 id="update-bookmark-by-id">Update Bookmark by ID</h2>
+      <ul>
+        <li>
+          PUT
+          <ul>
+            <li>api/bookmarks/:id</li>
+          </ul>
+        </li>
+      </ul>
+      <pre><code class="language-js">{
+    url: {
+      type: String,
+      required: true
+    }
+}</code></pre>
+      <p>In update please provide the minimum</p>
+      <p>
+        To update a bookmark in the database, use the
+        <code>/api/bookmarks</code> endpoint. To update a bookmark, the bookmark
+        _id, the key and the updated value are required.
+      </p>
+      <h2 id="delete-bookmark-by-id">Delete Bookmark by ID</h2>
+      <ul>
+        <li>
+          DELETE
+          <ul>
+            <li>api/bookmarks/:id</li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        Provide the _id of the bookmark you want to delete to the
+        <code>/api/bookmarks</code> endpoint in this way:
+        <code>/api/bookmarks/:id</code>.
+      </p>
+      <blockquote>
+        <p>
+          <strong>ProTip:</strong> The routes a strict, which means that a
+          <strong>&quot;/&quot;</strong> at the <strong>end</strong> of a route
+          will throw an error.
+        </p>
+      </blockquote>
+      <!-- INNER HTML GOES UNTIL THIS LINE -->
+    </div>
+  </body>
+</html>
