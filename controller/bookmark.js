@@ -163,8 +163,8 @@ module.exports = {
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           bookmark: sortedBookmarks
         })
-      } catch (err) {
-        next(err)
+      } catch (error) {
+        next(error)
       }
     }
     next()
