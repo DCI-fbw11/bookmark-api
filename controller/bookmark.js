@@ -49,16 +49,21 @@ module.exports = {
   },
 
   getBookmarkByTag: async (req, res, next) => {
-    // TODO needs to be implemented with the personal bookmark approach
     try {
       const { tags } = req.query
+      const { user: stringID } = await decodeToken(req.headers.token)
+
+      const userID = mongoose.Types.ObjectId(stringID)
 
       if (!tags) {
         createError(400, noTagProvided)
       }
 
       const searchArray = tags.split(",")
-      const foundBookmarks = await Bookmark.find({ tag: { $all: searchArray } })
+      const foundBookmarks = await Bookmark.find({
+        userID,
+        tag: { $all: searchArray }
+      })
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: foundBookmarks
       })
@@ -150,16 +155,22 @@ module.exports = {
   },
 
   sortBookmarks: async (req, res, next) => {
-    // TODO needs to be implemented with the personal bookmark approach
     if (req.query.sortValue || req.query.sortOrder) {
-      // sort bookmarks only of theres a query
-      const sortOrder = req.query.sortOrder === "ASC" ? 1 : -1
-      let sortedBookmarks
       try {
+        // sort bookmarks only of theres a query
+        const order = req.query.sortOrder || "ASC"
+        const sortOrder = order === "ASC" ? 1 : -1
+
+        let sortedBookmarks
+
+        const { user: stringID } = await decodeToken(req.headers.token)
+        const userID = mongoose.Types.ObjectId(stringID)
+
         sortedBookmarks =
           req.query.sortValue === "url"
-            ? await Bookmark.aggregate([{ $sort: { url: sortOrder } }])
-            : await Bookmark.aggregate([{ $sort: { createdAt: sortOrder } }])
+            ? await Bookmark.find({ userID }).sort({ url: sortOrder })
+            : await Bookmark.find({ userID }).sort({ createdAt: sortOrder })
+
         res.locals.response = Object.assign({}, res.locals.response || {}, {
           bookmark: sortedBookmarks
         })
