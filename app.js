@@ -26,8 +26,8 @@ connect()
   .then(() => {
     console.log("Connected to Mongo") // eslint-disable-line no-console
   })
-  .catch(err => {
-    console.error("Could not connect, ", err) // eslint-disable-line no-console
+  .catch(error => {
+    console.error("Could not connect, ", error) // eslint-disable-line no-console
   })
 
 app.use(logger("dev"))
