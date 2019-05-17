@@ -19,7 +19,7 @@ describe("Auth tests", () => {
       .post(authRoutePrefix + authRoutes.register)
       .send({
         registerData: {
-          username: "testUser",
+          username: "testUser2",
           password: "12345678"
         }
       })
@@ -33,7 +33,7 @@ describe("Auth tests", () => {
       .post(authRoutePrefix + authRoutes.login)
       .send({
         loginData: {
-          username: "testUser",
+          username: "testUser2",
           password: "12345678"
         }
       })
@@ -47,7 +47,7 @@ describe("Auth tests", () => {
       .post(authRoutePrefix + authRoutes.login)
       .send({
         loginData: {
-          username: "testUser",
+          username: "testUser2",
           password: "1234asasda5678"
         }
       })
