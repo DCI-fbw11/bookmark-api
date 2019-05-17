@@ -200,7 +200,7 @@ module.exports = {
     next()
   },
 
-  // @route   GET api/bookmarks/delete/
+  // @route   DELETE api/bookmarks/delete/
   // @desc    Delete the bookmarks that match the passed in array of bookmark IDs
   // @access  Private
   batchDeleteBookmarks: async (req, res, next) => {
