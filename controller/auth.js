@@ -6,6 +6,9 @@ const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
 
 module.exports = {
+  // @route   POST auth/register
+  // @desc    Register a new user
+  // @access  Public
   register: async (req, res, next) => {
     const { registerData } = req.body
 
@@ -36,6 +39,10 @@ module.exports = {
 
     next()
   },
+
+  // @route   POST auth/login
+  // @desc    Login a registered user
+  // @access  Public
   login: async (req, res, next) => {
     const { username, password } = req.body.loginData
     try {
