@@ -216,7 +216,7 @@ module.exports = {
     next()
   },
 
-  // @route   404
+  // @route   N/A
   // @desc    Non matching route
   // @access  Private
   noMatch: (req, res, next) => {
