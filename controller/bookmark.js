@@ -13,7 +13,9 @@ const Bookmark = require("../models/bookmark")
 const mongoose = require("mongoose")
 
 module.exports = {
-  //get all current bookmarks
+  // @route   GET api/bookmarks
+  // @desc    Get all bookmarks
+  // @access  Private
   getBookmarks: async (req, res, next) => {
     // decode token here to get the ID from it
     const { user: userID } = await decodeToken(req.headers.token)
@@ -33,6 +35,9 @@ module.exports = {
     next()
   },
 
+  // @route   GET api/bookmarks/:id
+  // @desc    Get one bookmark by ID
+  // @access  Private
   getBookmarkByID: async (req, res, next) => {
     const { id } = req.params
 
@@ -48,6 +53,9 @@ module.exports = {
     next()
   },
 
+  // @route   GET api/bookmarks/tag/?tags=<search string>,<search string>
+  // @desc    Search bookmarks by tag
+  // @access  Private
   getBookmarkByTag: async (req, res, next) => {
     try {
       const { tags } = req.query
@@ -73,7 +81,9 @@ module.exports = {
     next()
   },
 
-  //creates a new bookmark
+  // @route   POST api/bookmarks
+  // @desc    Create a new bookmark
+  // @access  Private
   postBookmark: async (req, res, next) => {
     try {
       // decode token here to get the ID from it
@@ -104,6 +114,9 @@ module.exports = {
     next()
   },
 
+  // @route   PUT api/bookmarks/:id
+  // @desc    Update one bookmark by ID
+  // @access  Private
   updateBookmarkById: async (req, res, next) => {
     try {
       const { id } = req.params
@@ -140,6 +153,9 @@ module.exports = {
     next()
   },
 
+  // @route   DELETE api/bookmarks/:id
+  // @desc    Delete one bookmark by ID
+  // @access  Private
   deleteBookmarkById: async (req, res, next) => {
     const { id } = req.params
     try {
@@ -154,6 +170,9 @@ module.exports = {
     next()
   },
 
+  // @route   GET api/bookmarks?sortOrder=<string>&sortValue=<string>
+  // @desc    Get and sort all bookmarks
+  // @access  Private
   sortBookmarks: async (req, res, next) => {
     if (req.query.sortValue || req.query.sortOrder) {
       try {
@@ -181,7 +200,9 @@ module.exports = {
     next()
   },
 
-  //delete multiple bookmarks
+  // @route   GET api/bookmarks/delete/
+  // @desc    Delete the bookmarks that match the passed in array of bookmark IDs
+  // @access  Private
   batchDeleteBookmarks: async (req, res, next) => {
     const { bookmarkIDs } = req.body
     try {
@@ -195,6 +216,9 @@ module.exports = {
     next()
   },
 
+  // @route   404
+  // @desc    Non matching route
+  // @access  Private
   noMatch: (req, res, next) => {
     if (res.locals.response) {
       next()
