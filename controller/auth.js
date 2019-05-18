@@ -4,8 +4,12 @@ const User = require("../models/user.js")
 const { hashPassword, checkPassword } = require("../helpers/hash")
 const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
+const decodeToken = require("../helpers/decodeToken")
 
 module.exports = {
+  // @route   POST auth/register
+  // @desc    Register a new user
+  // @access  Public
   register: async (req, res, next) => {
     const { registerData } = req.body
 
@@ -36,6 +40,10 @@ module.exports = {
 
     next()
   },
+
+  // @route   POST auth/login
+  // @desc    Login a registered user
+  // @access  Public
   login: async (req, res, next) => {
     const { username, password } = req.body.loginData
     try {
@@ -54,6 +62,26 @@ module.exports = {
         message,
         token,
         userID: user._id
+      })
+    } catch (error) {
+      next(error)
+    }
+
+    next()
+  },
+
+  // @route   DELETE auth/delete-account
+  // @desc    Delete a registered user account
+  // @access  Private
+  deleteAccount: async (req, res, next) => {
+    try {
+      const { user: userID } = await decodeToken(req.headers.token)
+      // delete user
+      await User.findOneAndDelete({ _id: userID })
+      // success -> thumbs up
+      // fail -> login failed
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        message: `Account with ID:${userID} has been successfully deleted.`
       })
     } catch (error) {
       next(error)
