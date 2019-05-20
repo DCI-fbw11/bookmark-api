@@ -6,5 +6,6 @@ module.exports = {
   noMatchingRoutes: "No matching routes",
   invalidID: "Invalid ID, please provide a valid ID",
   duplicateTags: "Duplicate tags are not allowed",
-  emptyBody: "Body is empty"
+  emptyBody: "Body is empty",
+  notAuthorized: "Not authorized"
 }

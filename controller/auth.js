@@ -1,7 +1,8 @@
-const User = require("../models/user.js")
+const User = require("../models/User.js")
 
 //helpers
-const { hashPassword, checkPassword } = require("../helpers/hash")
+const hashPassword = require("../helpers/hashPassword")
+const checkPassword = require("../helpers/checkPassword")
 const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
 const decodeToken = require("../helpers/decodeToken")

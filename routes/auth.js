@@ -9,7 +9,7 @@ const sendJsonResp = require("../helpers/sendJsonResp")
 
 // Middleware
 const checkToken = require("../middleware/checkToken")
-const { apiErrorMiddleware } = require("../middleware/api")
+const apiErrorMiddleware = require("../middleware/apiErrorMiddleware")
 
 const authRoutes = {
   register: "/register",

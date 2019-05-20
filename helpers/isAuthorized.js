@@ -1,4 +1,5 @@
-const User = require("../models/user")
+const User = require("../models/User")
+
 const isAuthorized = async (userID, role) => {
   try {
     const user = await User.findOne({ _id: userID })
