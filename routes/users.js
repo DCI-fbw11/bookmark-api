@@ -5,9 +5,6 @@ const User = require("../models/user")
 
 // Helpers
 const sendJsonResp = require("../helpers/sendJsonResp")
-const createError = require("../helpers/createError")
-const decodeToken = require("../helpers/decodeToken")
-const isAuthorized = require("../helpers/isAuthorized")
 
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
@@ -22,7 +19,7 @@ const usersRoutes = {
 
 // Protected Route Token Check
 usersRouter.all(usersRoutes.all, checkToken, async (req, res, next) => {
-  await checkPermission(req, res, next, 'admin')
+  await checkPermission(req, res, next, "admin")
 })
 
 usersRouter.get(usersRoutes.users, async (req, res, next) => {
