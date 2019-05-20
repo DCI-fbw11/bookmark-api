@@ -12,7 +12,7 @@ const isAuthorized = require("../helpers/isAuthorized")
 // Middleware
 const { apiErrorMiddleware } = require("../middleware/api")
 const checkToken = require("../middleware/checkToken")
-
+const checkPermission = require("../middleware/checkPermission")
 
 const usersRoutes = {
   users: "/users",
@@ -21,27 +21,17 @@ const usersRoutes = {
 }
 
 // Protected Route Token Check
-usersRouter.all(usersRoutes.all, checkToken)
+usersRouter.all(usersRoutes.all, checkToken, async (req, res, next) => {
+  await checkPermission(req, res, next, 'admin')
+})
 
 usersRouter.get(usersRoutes.users, async (req, res, next) => {
   try {
-    const { user: userID } = await decodeToken(req.headers.token)
-    const isAdmin = isAuthorized(userID, "admin")
+    const users = await User.find({})
 
-    if (isAdmin) {
-      try {
-        const users = await User.find({})
-
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          users
-        })
-      } catch(error) {
-        next(error)
-      }
-    } else {
-      // Not authorized
-      createError(401, "Not authorized")
-    }
+    res.locals.response = Object.assign({}, res.locals.response || {}, {
+      users
+    })
   } catch(error) {
     next(error)
   }
@@ -51,29 +41,16 @@ usersRouter.get(usersRoutes.users, async (req, res, next) => {
 
 usersRouter.delete(usersRoutes.deleteUser, async (req, res, next) => {
   // Delete user login
-
   try {
-    const { user: userID } = await decodeToken(req.headers.token)
-    const isAdmin = isAuthorized(userID, "admin")
+    await User.findOneAndDelete({
+      _id: req.params.id
+    })
 
-    if (isAdmin) {
-      try {
-        await User.findOneAndDelete({
-          _id: req.params.id
-        })
-
-        res.locals.response = Object.assign(
-          {},
-          res.locals.response || {}, {
-          message: `User with id ${req.params.id} deleted`
-        })
-      } catch(error) {
-        next(error)
-      }
-    } else {
-      // Not authorized
-      createError(401, "Not authorized")
-    }
+    res.locals.response = Object.assign(
+      {},
+      res.locals.response || {}, {
+      message: `User with id ${req.params.id} deleted`
+    })
   } catch(error) {
     next(error)
   }
