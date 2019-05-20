@@ -26,7 +26,7 @@ usersRouter.all(usersRoutes.all, checkToken)
 usersRouter.get(usersRoutes.users, async (req, res, next) => {
   try {
     const { user: userID } = await decodeToken(req.headers.token)
-    const isAdmin = isAuthorized(userID, 'admin')
+    const isAdmin = isAuthorized(userID, "admin")
 
     if (isAdmin) {
       try {
@@ -40,7 +40,7 @@ usersRouter.get(usersRoutes.users, async (req, res, next) => {
       }
     } else {
       // Not authorized
-      const error = createError(401, 'Not authorized')
+      createError(401, "Not authorized")
     }
   } catch(error) {
     next(error)
@@ -54,11 +54,11 @@ usersRouter.delete(usersRoutes.deleteUser, async (req, res, next) => {
 
   try {
     const { user: userID } = await decodeToken(req.headers.token)
-    const isAdmin = isAuthorized(userID, 'admin')
+    const isAdmin = isAuthorized(userID, "admin")
 
     if (isAdmin) {
       try {
-        const users = await User.findOneAndDelete({
+        await User.findOneAndDelete({
           _id: req.params.id
         })
 
@@ -72,7 +72,7 @@ usersRouter.delete(usersRoutes.deleteUser, async (req, res, next) => {
       }
     } else {
       // Not authorized
-      const error = createError(401, 'Not authorized')
+      createError(401, "Not authorized")
     }
   } catch(error) {
     next(error)
