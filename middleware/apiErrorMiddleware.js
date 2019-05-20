@@ -1,4 +1,4 @@
-exports.apiErrorMiddleware = (error, req, res, next) => {
+const apiErrorMiddleware = (error, req, res, next) => {
   if (!error.statusCode) error.statusCode = 500
 
   res.status(error.statusCode).json({
@@ -7,3 +7,5 @@ exports.apiErrorMiddleware = (error, req, res, next) => {
   })
   next(error)
 }
+
+module.exports = apiErrorMiddleware

@@ -3,7 +3,7 @@ const app = require("../app")
 const { mongoose } = require("../db/connection")
 
 const Bookmark = require("../models/bookmark")
-const { apiRoutes } = require("../routes/api")
+const { apiRoutes } = require("../routes/bookmarks")
 const { authRoutes } = require("../routes/auth")
 const decodeToken = require("../helpers/decodeToken")
 

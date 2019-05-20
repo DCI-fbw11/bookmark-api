@@ -1,15 +1,19 @@
 const express = require("express")
 const usersRouter = express.Router()
 
-const User = require("../models/user")
-
 // Helpers
 const sendJsonResp = require("../helpers/sendJsonResp")
 
 // Middleware
-const { apiErrorMiddleware } = require("../middleware/api")
+const apiErrorMiddleware = require("../middleware/apiErrorMiddleware")
 const checkToken = require("../middleware/checkToken")
-const checkPermission = require("../middleware/checkPermission")
+
+// Controllers
+const {
+  checkPermissionController,
+  getAllUsers,
+  deleteOneUserByID
+} = require("../controller/user")
 
 const usersRoutes = {
   users: "/users",
@@ -18,45 +22,18 @@ const usersRoutes = {
 }
 
 // Protected Route Token Check
-usersRouter.all(usersRoutes.all, checkToken, async (req, res, next) => {
-  await checkPermission(req, res, next, "admin")
-})
+usersRouter.all(usersRoutes.all, checkToken, checkPermissionController)
 
-usersRouter.get(usersRoutes.users, async (req, res, next) => {
-  try {
-    const users = await User.find({})
+// Get all users
+usersRouter.get(usersRoutes.users, getAllUsers)
 
-    res.locals.response = Object.assign({}, res.locals.response || {}, {
-      users
-    })
-  } catch(error) {
-    next(error)
-  }
+// Delete one user
+usersRouter.delete(usersRoutes.deleteUser, deleteOneUserByID)
 
-  next()
-})
-
-usersRouter.delete(usersRoutes.deleteUser, async (req, res, next) => {
-  // Delete user login
-  try {
-    await User.findOneAndDelete({
-      _id: req.params.id
-    })
-
-    res.locals.response = Object.assign(
-      {},
-      res.locals.response || {}, {
-      message: `User with id ${req.params.id} deleted`
-    })
-  } catch(error) {
-    next(error)
-  }
-
-  next()
-})
-
+// The middleware that actually sends the response
 usersRouter.use(sendJsonResp)
 
+// Custom error handler
 usersRouter.use(apiErrorMiddleware)
 
 module.exports = { usersRouter }

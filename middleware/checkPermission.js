@@ -1,6 +1,10 @@
+// Helpers
 const decodeToken = require("../helpers/decodeToken")
 const isAuthorized = require("../helpers/isAuthorized")
 const createError = require("../helpers/createError")
+
+// Error Messages
+const { notAuthorized } = require("../helpers/errorMessages")
 
 const checkPermission = async (req, res, next, role) => {
   try {
@@ -11,9 +15,9 @@ const checkPermission = async (req, res, next, role) => {
       next()
     } else {
       // Not authorized
-      createError(401, "Not authorized")
+      createError(401, notAuthorized)
     }
-  } catch(error) {
+  } catch (error) {
     next(error)
   }
 }
