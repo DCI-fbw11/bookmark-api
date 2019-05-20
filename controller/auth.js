@@ -1,4 +1,4 @@
-const User = require("../models/User.js")
+const User = require("../models/user")
 
 //helpers
 const hashPassword = require("../helpers/hashPassword")

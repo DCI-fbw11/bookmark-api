@@ -9,7 +9,7 @@ const {
   noMatchingRoutes,
   duplicateTags
 } = require("../helpers/errorMessages")
-const Bookmark = require("../models/Bookmark")
+const Bookmark = require("../models/bookmark")
 const mongoose = require("mongoose")
 
 module.exports = {
