@@ -1,7 +1,8 @@
-const User = require("../models/user.js")
+const User = require("../models/user")
 
 //helpers
-const { hashPassword, checkPassword } = require("../helpers/hash")
+const hashPassword = require("../helpers/hashPassword")
+const checkPassword = require("../helpers/checkPassword")
 const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
 const decodeToken = require("../helpers/decodeToken")
@@ -61,6 +62,43 @@ module.exports = {
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         token,
+        userID: user._id
+      })
+    } catch (error) {
+      next(error)
+    }
+
+    next()
+  },
+  // @route   POST auth/password
+  // @desc    Change a users password
+  // @access  Public
+  changePassword: async (req, res, next) => {
+    const {
+      username,
+      password: oldPassword,
+      new_password: newPassword
+    } = req.body.loginData
+    try {
+      // find user
+      const user = await User.findOne({ username })
+      // compare passwords with bcrypt
+      // succes -> get hashsed pass from db
+      const isMatching = await checkPassword(oldPassword, user.password)
+
+      if (isMatching) {
+        const hashedNewPassword = await hashPassword(newPassword)
+        user.password = hashedNewPassword
+        await user.save()
+      }
+
+      const message = isMatching
+        ? "Password change success"
+        : "Old password is wrong, password change failed"
+      // success -> thumbs up
+      // fail -> login failed
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        message,
         userID: user._id
       })
     } catch (error) {

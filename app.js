@@ -17,9 +17,10 @@ const options = {
 }
 
 const { connect } = require("./db/connection")
-const { apiRouter } = require("./routes/api")
+const { apiRouter } = require("./routes/bookmarks")
 const { authRouter } = require("./routes/auth")
 const { docsRouter } = require("./routes/docs")
+const { usersRouter } = require("./routes/users")
 const app = express()
 
 connect()
@@ -34,6 +35,7 @@ app.use(logger("dev"))
 app.use(express.json())
 app.use("/api", apiRouter)
 app.use("/auth", authRouter)
+app.use("/admin", usersRouter)
 
 // Docs
 const swaggerSpec = swaggerJSDoc(options)

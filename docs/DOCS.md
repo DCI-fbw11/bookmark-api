@@ -15,7 +15,7 @@ Base URL: https://bookmark-api.fbw-11.now.sh/
 {
  "registerData" : {
     "username": "string",
-    "password": "string",
+    "password": "string"
   }
 }
 ```
@@ -29,7 +29,7 @@ Base URL: https://bookmark-api.fbw-11.now.sh/
 {
  "loginData" : {
     "username": "string",
-    "password": "string",
+    "password": "string"
   }
 }
 ```
@@ -74,11 +74,11 @@ To see a specific bookmark, the bookmark \_id is required and can be added in th
 {
     title: {
       type: String,
-      maxlength: 50,
+      maxlength: 50
     },
     shortDescription: {
       type: String,
-      maxlength: 150,
+      maxlength: 150
     },
     url: {
       type: String,
