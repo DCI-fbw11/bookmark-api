@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
+    "chalk": "^2.4.2",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "dotenv": "^8.0.0",
