@@ -11,11 +11,11 @@ const dbPaths = {
 let connectionString
 
 if (NODE_ENV === "production") {
-  connectionString = `mongodb://${DB_PROD_USER}:${DB_PROD_PASSWORD}@cluster0-shard-00-00-u0h0i.mongodb.net:27017,cluster0-shard-00-01-u0h0i.mongodb.net:27017,cluster0-shard-00-02-u0h0i.mongodb.net:27017/test?replicaSet=Cluster0-shard-0&ssl=true&authSource=admin`
+  connectionString = `mongodb+srv://${DB_PROD_USER}:${DB_PROD_PASSWORD}@cluster0-u0h0i.mongodb.net/test?retryWrites=true`
 } else {
   connectionString = "mongodb://127.0.0.1/"
 }
-
+console.log(connectionString)
 module.exports = {
   mongoose,
   connect: () => {
