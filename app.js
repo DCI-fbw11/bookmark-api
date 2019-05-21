@@ -1,6 +1,8 @@
 require("dotenv").config()
 const express = require("express")
 const logger = require("morgan")
+const chalk = require("chalk")
+
 // Docs
 const swaggerUi = require("swagger-ui-express")
 const swaggerJSDoc = require("swagger-jsdoc")
@@ -26,10 +28,10 @@ const app = express()
 
 connect()
   .then(() => {
-    console.log("Connected to Mongo") // eslint-disable-line no-console
+    console.log(chalk.green("Connected to Mongo")) // eslint-disable-line no-console
   })
   .catch(error => {
-    console.error("Could not connect, ", error) // eslint-disable-line no-console
+    console.error(chalk.red("Could not connect, ", error)) // eslint-disable-line no-console
   })
 
 app.use(logger("dev"))
