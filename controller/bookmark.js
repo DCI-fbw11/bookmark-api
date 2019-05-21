@@ -81,8 +81,11 @@ module.exports = {
     }
     next()
   },
-  // ?startDate=2018.12.01&endDate=2019.05.15 example request
-  // this function gets the range between these dates
+
+  // @route   GET api/bookmarks/tag/// /dates/?startDate=2018.12.01&endDate=2019.05.15,
+  // @desc    Search bookmarks by date or dates
+  // @access  Private
+
   getBookmarkByDateRange: async (req, res, next) => {
     const { startDate, endDate } = req.query
     // you can find more notes in dateParser.js
@@ -102,6 +105,7 @@ module.exports = {
     } catch (err) {
       next(err)
     }
+
     next()
   },
 
