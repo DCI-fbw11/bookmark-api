@@ -7,8 +7,13 @@
     "dev": "NODE_ENV=development nodemon server.js",
     "test": "NODE_ENV=test jest",
     "dev-test": "NODE_ENV=test jest --watchAll",
-    "lint": "eslint --fix .",
-    "precommit": "npm run lint"
+    "lint": "eslint --fix ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint && npm test"
+    }
   },
   "dependencies": {
     "bcrypt": "^3.0.6",
