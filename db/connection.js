@@ -15,7 +15,7 @@ if (NODE_ENV === "production") {
 } else {
   connectionString = "mongodb://127.0.0.1/"
 }
-console.log(connectionString)
+
 module.exports = {
   mongoose,
   connect: () => {
