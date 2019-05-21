@@ -55,4 +55,38 @@ describe("Auth tests", () => {
     expect(response.body.data.token).toBeNull()
     done()
   })
+
+  test("Trying password change with wrong password should respond with failed message", async done => {
+    const response = await request(app)
+      .post(authRoutePrefix + authRoutes.changePassword)
+      .send({
+        loginData: {
+          username: "testUser2",
+          password: "123123",
+          new_password: "asdfghjk"
+        }
+      })
+
+    expect(response.body.data.message).toEqual(
+      expect.stringContaining("failed")
+    )
+    done()
+  })
+
+  test("Trying password change with correct password should respond with success message", async done => {
+    const response = await request(app)
+      .post(authRoutePrefix + authRoutes.changePassword)
+      .send({
+        loginData: {
+          username: "testUser2",
+          password: "12345678",
+          new_password: "hahahaha"
+        }
+      })
+
+    expect(response.body.data.message).toEqual(
+      expect.stringContaining("success")
+    )
+    done()
+  })
 })
