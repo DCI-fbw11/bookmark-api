@@ -2,7 +2,7 @@ const express = require("express")
 const apiRouter = express.Router({ strict: true })
 
 // Middleware
-const { apiErrorMiddleware } = require("../middleware/api")
+const apiErrorMiddleware = require("../middleware/apiErrorMiddleware")
 const { checkURL, checkBody } = require("../middleware/validation")
 const checkToken = require("../middleware/checkToken")
 
