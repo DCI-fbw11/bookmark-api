@@ -70,6 +70,9 @@ module.exports = {
 
     next()
   },
+  // @route   POST auth/password
+  // @desc    Change a users password
+  // @access  Public
   changePassword: async (req, res, next) => {
     const {
       username,
