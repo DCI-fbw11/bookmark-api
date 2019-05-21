@@ -70,6 +70,40 @@ module.exports = {
 
     next()
   },
+  changePassword: async (req, res, next) => {
+    const {
+      username,
+      password: oldPassword,
+      new_password: newPassword
+    } = req.body.loginData
+    try {
+      // find user
+      const user = await User.findOne({ username })
+      // compare passwords with bcrypt
+      // succes -> get hashsed pass from db
+      const isMatching = await checkPassword(oldPassword, user.password)
+
+      if (isMatching) {
+        const hashedNewPassword = await hashPassword(newPassword)
+        user.password = hashedNewPassword
+        await user.save()
+      }
+
+      const message = isMatching
+        ? "Password change success"
+        : "Old password is wrong, password change failed"
+      // success -> thumbs up
+      // fail -> login failed
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        message,
+        userID: user._id
+      })
+    } catch (error) {
+      next(error)
+    }
+
+    next()
+  },
 
   // @route   DELETE auth/delete-account
   // @desc    Delete a registered user account
