@@ -85,4 +85,33 @@ describe("GET /bookmarks tests", () => {
 
     done()
   })
+
+  test("GET /bookmarks/date/ gets all the bookmarks for one date", async done => {
+    //add a new Bookmark here with date
+    const newBookmarkWithDate = {
+      url: "https://awesomedomain.tld",
+      title: "date range test",
+      userID,
+      createdAt: "2011,12,27"
+    }
+
+    await new Bookmark(newBookmarkWithDate).save()
+
+    const response = await request(app)
+      .get(
+        apiRoutePrefix +
+          apiRoutes.getBookmarkByDateRange +
+          "?startDate=2011.12.27"
+      )
+      .set("token", token)
+
+    const {
+      body: { data }
+    } = response
+
+    expect(data.bookmark[0].createdAt.toString()).toBe(
+      "2011-12-26T23:00:00.000Z"
+    )
+    done()
+  })
 })
