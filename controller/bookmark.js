@@ -81,8 +81,8 @@ module.exports = {
     }
     next()
   },
-
-  // @route   GET api/bookmarks/tag/// /dates/?startDate=2018.12.01&endDate=2019.05.15,
+  // @route   GET date api/bookmarks/dates/?startDate=2018.12.01
+  // @route   GET date range api/bookmarks/dates/?startDate=2018.12.01&endDate=2019.05.15
   // @desc    Search bookmarks by date or dates
   // @access  Private
 
@@ -90,11 +90,10 @@ module.exports = {
     const { startDate, endDate } = req.query
     // you can find more notes in dateParser.js
     const { parsedStart, parsedEnd } = dateParser(startDate, endDate)
-    //  this returns the list of bookmarks
+    //  this contains the list of bookmarks
     let foundBookmarks
-
     try {
-      // if date range is given this runs
+      // if date range is provided this runs
       if (parsedStart !== parsedEnd) {
         foundBookmarks = await Bookmark.find({
           createdAt: {
