@@ -13,6 +13,7 @@ const sendJsonResp = require("../helpers/sendJsonResp")
 const {
   getBookmarks,
   getBookmarkByID,
+  getBookmarkByDateRange,
   getBookmarkByTag,
   postBookmark,
   updateBookmarkById,
@@ -26,6 +27,7 @@ const {
 const apiRoutes = {
   getAllBookmarks: "/bookmarks",
   getBookmarkByID: "/bookmarks/:id",
+  getBookmarkByDateRange: "/bookmarks/date/",
   getBookmarkByTag: "/bookmarks/tag/",
   postBookmark: "/bookmarks",
   updateBookmarkById: "/bookmarks/:id",
@@ -122,7 +124,7 @@ apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
  *             $ref: '#/definitions/Bookmark'
  */
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
-
+apiRouter.get(apiRoutes.getBookmarkByDateRange, getBookmarkByDateRange)
 apiRouter.get(apiRoutes.getBookmarkByTag, getBookmarkByTag)
 
 // POST

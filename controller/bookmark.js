@@ -10,6 +10,7 @@ const {
   duplicateTags
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
+const dateParser = require("../helpers/dateParser")
 const mongoose = require("mongoose")
 
 module.exports = {
@@ -77,6 +78,44 @@ module.exports = {
       })
     } catch (error) {
       next(error)
+    }
+    next()
+  },
+  // @route   GET date api/bookmarks/dates/?startDate=2018.12.01
+  // @route   GET date range api/bookmarks/dates/?startDate=2018.12.01&endDate=2019.05.15
+  // @desc    Search bookmarks by date or dates
+  // @access  Private
+
+  getBookmarkByDateRange: async (req, res, next) => {
+    const { startDate, endDate } = req.query
+    // you can find more notes in dateParser.js
+    const { parsedStart, parsedEnd } = dateParser(startDate, endDate)
+    //  this contains the list of bookmarks
+    let foundBookmarks
+    try {
+      // if date range is provided this runs
+      if (parsedStart !== parsedEnd) {
+        foundBookmarks = await Bookmark.find({
+          createdAt: {
+            $gte: new Date(parsedStart),
+            $lt: new Date(parsedEnd)
+          }
+        })
+        //if only one date provided this runs
+      } else {
+        const end = new Date(parsedEnd).setHours(23, 59, 59, 999)
+        foundBookmarks = await Bookmark.find({
+          createdAt: {
+            $gte: new Date(parsedStart),
+            $lt: end
+          }
+        })
+      }
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmarks
+      })
+    } catch (err) {
+      next(err)
     }
     next()
   },
