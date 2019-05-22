@@ -90,22 +90,34 @@ module.exports = {
     const { startDate, endDate } = req.query
     // you can find more notes in dateParser.js
     const { parsedStart, parsedEnd } = dateParser(startDate, endDate)
+    //  this returns the list of bookmarks
+    let foundBookmarks
 
     try {
-      const bookmarkByDateRange = await Bookmark.find({
-        createdAt: { $gte: new Date(parsedStart), $lt: new Date(parsedEnd) }
-      })
-      if (!bookmarkByDateRange) {
-        createError(400, noBookmarkFound)
+      // if date range is given this runs
+      if (parsedStart !== parsedEnd) {
+        foundBookmarks = await Bookmark.find({
+          createdAt: {
+            $gte: new Date(parsedStart),
+            $lt: new Date(parsedEnd)
+          }
+        })
+        //if only one date provided this runs
       } else {
-        res.locals.response = Object.assign({}, res.locals.response || {}, {
-          bookmark: bookmarkByDateRange
+        const end = new Date(parsedEnd).setHours(23, 59, 59, 999)
+        foundBookmarks = await Bookmark.find({
+          createdAt: {
+            $gte: new Date(parsedStart),
+            $lt: end
+          }
         })
       }
+      res.locals.response = Object.assign({}, res.locals.response || {}, {
+        bookmark: foundBookmarks
+      })
     } catch (err) {
       next(err)
     }
-
     next()
   },
 

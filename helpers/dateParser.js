@@ -2,7 +2,7 @@
 // user input query: /bookmarks?startDate=2018.12.01&endDate=2019.05.15
 // parsed result = 2018,12,1 2019,5,15 which is the required format needed for new Date() in controller
 
-const dateParser = (start, end) => {
+const dateParser = (start, end = start) => {
   let parseStart = start.replace(/(\.)/g, ",")
   let parseEnd = end.replace(/(\.)/g, ",")
   let parsedStart = parseStart.replace(/,0/g, ",")
