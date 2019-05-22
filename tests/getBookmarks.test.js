@@ -86,7 +86,7 @@ describe("GET /bookmarks tests", () => {
     done()
   })
 
-  test("GET /bookmarks/date/ gets all the bookmarks for one date", async done => {
+  test("GET /bookmarks/date/ returns one matched bookmark", async done => {
     //add a new Bookmark here with date
     const newBookmarkWithDate = {
       url: "https://awesomedomain.tld",
@@ -109,9 +109,7 @@ describe("GET /bookmarks tests", () => {
       body: { data }
     } = response
 
-    expect(data.bookmark[0].createdAt.toString()).toBe(
-      "2011-12-26T23:00:00.000Z"
-    )
+    expect(data.bookmark.length).toBe(1)
     done()
   })
 })
