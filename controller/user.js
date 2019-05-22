@@ -4,6 +4,9 @@ const User = require("../models/user")
 // Middleware
 const checkPermission = require("../middleware/checkPermission")
 
+// Helpers
+const cleanUpAfterUserDeletion = require("../helpers/cleanUpAfterUserDeletion")
+
 module.exports = {
   // @route   N/A
   // @desc    Controller + Middleware Function
@@ -36,6 +39,8 @@ module.exports = {
       await User.findOneAndDelete({
         _id: req.params.id
       })
+
+      await cleanUpAfterUserDeletion(req.params.id)
 
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message: `User with id ${req.params.id} deleted`

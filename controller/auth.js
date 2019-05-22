@@ -6,6 +6,7 @@ const checkPassword = require("../helpers/checkPassword")
 const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
 const decodeToken = require("../helpers/decodeToken")
+const cleanUpAfterUserDeletion = require("../helpers/cleanUpAfterUserDeletion")
 
 module.exports = {
   // @route   POST auth/register
@@ -118,6 +119,8 @@ module.exports = {
       await User.findOneAndDelete({ _id: userID })
       // success -> thumbs up
       // fail -> login failed
+      await cleanUpAfterUserDeletion(userID)
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message: `Account with ID:${userID} has been successfully deleted.`
       })
