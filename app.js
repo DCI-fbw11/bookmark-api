@@ -3,22 +3,6 @@ const express = require("express")
 const logger = require("morgan")
 const chalk = require("chalk")
 
-// Docs
-const swaggerUi = require("swagger-ui-express")
-const swaggerJSDoc = require("swagger-jsdoc")
-const { version } = require("./package.json")
-
-const options = {
-  definition: {
-    info: {
-      title: "Bookmarks API",
-      version
-    }
-  },
-  // Path to the API docs
-  apis: ["./routes/*.js"]
-}
-
 const { connect } = require("./db/connection")
 const { apiRouter } = require("./routes/bookmarks")
 const { authRouter } = require("./routes/auth")
@@ -41,8 +25,6 @@ app.use("/auth", authRouter)
 app.use("/admin", usersRouter)
 
 // Docs
-const swaggerSpec = swaggerJSDoc(options)
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use("/", docsRouter)
 
 module.exports = app
