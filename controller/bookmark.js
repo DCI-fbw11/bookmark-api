@@ -190,6 +190,7 @@ module.exports = {
         { _id: id },
         updateBookmark,
         {
+          useFindAndModify: false,
           runValidators: true,
           new: true
         }
@@ -211,7 +212,12 @@ module.exports = {
   deleteBookmarkById: async (req, res, next) => {
     const { id } = req.params
     try {
-      const deleteBookmark = await Bookmark.findByIdAndRemove({ _id: id })
+      const deleteBookmark = await Bookmark.findByIdAndRemove(
+        { _id: id },
+        {
+          useFindAndModify: false
+        }
+      )
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: deleteBookmark,
         message: `Bookmark with id ${id} was deleted!`
