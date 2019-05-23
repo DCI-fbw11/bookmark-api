@@ -5,7 +5,12 @@
 <p>Base URL: <a href="https://bookmark-api.fbw-11.now.sh/">https://bookmark-api.fbw-11.now.sh/</a></p>
 <h1 id="roles">Roles</h1>
 <p>There a two existing roles for the api <strong>user</strong> and <strong>admin</strong>.
+<<<<<<< HEAD
 By default every new registered account will be flag as a user and need to be manualy edited in the database to to be an admin.</p>
+=======
+By default every new registered account will be flag as a user.
+If you want to create an admin please contact FBW-11 :)</p>
+>>>>>>> develop
 <h1 id="schema">Schema</h1>
 <p>The schema of the API are the following:</p>
 <h2 id="user-schema">User-Schema</h2>
@@ -21,11 +26,14 @@ By default every new registered account will be flag as a user and need to be ma
     required: true,
     trim: true,
     minlength: 8
+<<<<<<< HEAD
   },
   role: {
     type: String,
     enum: [&quot;admin&quot;, &quot;user&quot;],
     default:&quot;user&quot;
+=======
+>>>>>>> develop
   }
 }</code></pre>
 <h2 id="bookmark-schema">Bookmark-Schema</h2>
@@ -151,13 +159,21 @@ By default every new registered account will be flag as a user and need to be ma
 <h2 id="get-sorted-bookmarks">Get sorted Bookmarks</h2>
 <ul>
 <li>GET<ul>
+<<<<<<< HEAD
 <li>api/bookmarks?sortOrder=&quot;string&quot;&amp;sortValue=&quot;string&quot;</li>
+=======
+<li>api/bookmarks?sortOrder=ORDER&amp;sortValue=VALUE</li>
+>>>>>>> develop
 </ul>
 </li>
 </ul>
 <p>To get a sorted view of the bookmarks add the <code>?sortOrder=&quot;string&quot;&amp;sortValue=&quot;string&quot;</code> to your query. Only one of the query string is required
 the other one will use a default value.
+<<<<<<< HEAD
 The <code>sortOrder</code> will be ascending by default and <code>sortValue</code> will use the <strong>createdAt</strong> as default value.
+=======
+The <code>sortOrder</code> will be ascending (&quot;ASC&quot;) by default (the other option is &quot;DESC&quot;) and <code>sortValue</code> will use the <strong>createdAt</strong> as default value.
+>>>>>>> develop
 The <code>sortValue</code> can be either <strong>url</strong>, <strong>title</strong> or <strong>createdAt</strong>.</p>
 <h2 id="create-a-new-bookmark">Create a new Bookmark</h2>
 <ul>
@@ -214,10 +230,17 @@ The <code>sortValue</code> can be either <strong>url</strong>, <strong>title</st
 </li>
 </ul>
 <pre><code class="language-js">{
+<<<<<<< HEAD
   &quot;bookmarkIDs&quot; : []
 }</code></pre>
 <p>To delete multiple bookmarks at once use the <code>/api/bookmarks/delete</code> endpoint and provide the bookmark _id`s you want to delete in the &quot;bookmarkIDs&quot; array.</p>
 <h1 id="user-endpoints">User Endpoints</h1>
+=======
+  &quot;bookmarkIDs&quot; : [ID,ID...]
+}</code></pre>
+<p>To delete multiple bookmarks at once use the <code>/api/bookmarks/delete</code> endpoint and provide the bookmark _id`s you want to delete in the &quot;bookmarkIDs&quot; array.</p>
+<h1 id="admin-endpoints">Admin Endpoints</h1>
+>>>>>>> develop
 <h2 id="get-all-users">Get <strong>ALL</strong> Users</h2>
 <ul>
 <li>GET<ul>
@@ -233,9 +256,12 @@ The <code>sortValue</code> can be either <strong>url</strong>, <strong>title</st
 </ul>
 </li>
 </ul>
+<<<<<<< HEAD
 <pre><code class="language-js">{
   &quot;id&quot; : &quot;string&quot;
 }</code></pre>
+=======
+>>>>>>> develop
 <p>An account with the admin role can delete any acount by using the <code>admin/users/:id</code> endpoint, deleting the account all its bookmark will also be deleted.</p>
 <blockquote>
 <p><strong>ProTip:</strong> The routes a strict, which means that a <strong>&quot;/&quot;</strong> at the <strong>end</strong> of a route will throw an error.</p>

@@ -41,8 +41,13 @@
       <p>
         There a two existing roles for the api <strong>user</strong> and
         <strong>admin</strong>. By default every new registered account will be
+<<<<<<< HEAD
         flag as a user and need to be manualy edited in the database to to be an
         admin.
+=======
+        flagged as a user. If you want to create an admin please contact FBW-11
+        :)
+>>>>>>> develop
       </p>
       <h1 id="schema">Schema</h1>
       <p>The schema of the API are the following:</p>
@@ -59,11 +64,14 @@
     required: true,
     trim: true,
     minlength: 8
+<<<<<<< HEAD
   },
   role: {
     type: String,
     enum: [&quot;admin&quot;, &quot;user&quot;],
     default:&quot;user&quot;
+=======
+>>>>>>> develop
   }
 }</code></pre>
       <h2 id="bookmark-schema">Bookmark-Schema</h2>
@@ -159,16 +167,26 @@
       <h3 id="delete-account">Delete Account</h3>
       <ul>
         <li>
+<<<<<<< HEAD
           DELTE
+=======
+          DELETE
+>>>>>>> develop
           <ul>
             <li>auth/delete-account</li>
           </ul>
         </li>
       </ul>
       <p>
+<<<<<<< HEAD
         To delete an user account login and use the
         <code>auth/delete-account</code> on deletion all of the users bookmarks
         will also be deleted
+=======
+        To delete a user account, login and use the
+        <code>auth/delete-account</code> endpoint. On deletion all of the user
+        bookmarks will also be deleted.
+>>>>>>> develop
       </p>
       <h1 id="bookmarks-endpoints">Bookmarks Endpoints</h1>
       <p>
@@ -198,8 +216,66 @@
         </li>
       </ul>
       <p>
-        To see a specific bookmark, the bookmark _id is required and can be
-        added in the following way : <code>/api/bookmarks/:id</code>.
+        To see a specific bookmark, the bookmark <code>_id</code> is required
+        and can be added in the following way : <code>/api/bookmarks/:id</code>.
+      </p>
+      <h2 id="get-bookmark-by-tag">Get Bookmark by Tag</h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>
+              api/bookmarks/tag/?tags=&quot;search string&quot;,&quot;search
+              string&quot;
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        To see bookmarks with a specific tag or combination of tags use the
+        <code>api/bookmarks/tag</code> endpoint. If multiple tags are given only
+        the bookmarks are shown wich contain <strong>ALL</strong> of the tags.
+      </p>
+      <h2 id="get-bookmark-by-date-and-date-range">
+        Get Bookmark by Date and Date Range
+      </h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>
+              api/bookmarks/date/?startDate=year.month.day&amp;endDate=year.month.day
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        To get bookmark from a specific date or date range , the
+        <code>?startDate</code> is required and can be added in the query. The
+        <code>endDate</code> can be added in case you want bookmarks from a date
+        range.
+      </p>
+      <h2 id="get-sorted-bookmarks">Get sorted Bookmarks</h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>api/bookmarks?sortOrder=ORDER&amp;sortValue=VALUE</li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        To get a sorted view of the bookmarks add the
+        <code
+          >?sortOrder=&quot;string&quot;&amp;sortValue=&quot;string&quot;</code
+        >
+        to your query. Only one of the query string is required the other one
+        will use a default value. The <code>sortOrder</code> will be ascending
+        (&quot;ASC&quot;) by default (the other option is &quot;DESC&quot;) and
+        <code>sortValue</code> will use the <strong>createdAt</strong> as
+        default value. The <code>sortValue</code> can be either
+        <strong>url</strong>, <strong>title</strong> or
+        <strong>createdAt</strong>.
       </p>
       <h2 id="get-bookmark-by-tag">Get Bookmark by Tag</h2>
       <ul>
@@ -335,14 +411,22 @@
         </li>
       </ul>
       <pre><code class="language-js">{
+<<<<<<< HEAD
   &quot;bookmarkIDs&quot; : []
+=======
+  &quot;bookmarkIDs&quot; : [ID,ID...]
+>>>>>>> develop
 }</code></pre>
       <p>
         To delete multiple bookmarks at once use the
         <code>/api/bookmarks/delete</code> endpoint and provide the bookmark
         _id`s you want to delete in the &quot;bookmarkIDs&quot; array.
       </p>
+<<<<<<< HEAD
       <h1 id="user-endpoints">User Endpoints</h1>
+=======
+      <h1 id="admin-endpoints">Admin Endpoints</h1>
+>>>>>>> develop
       <h2 id="get-all-users">Get <strong>ALL</strong> Users</h2>
       <ul>
         <li>
@@ -365,9 +449,12 @@
           </ul>
         </li>
       </ul>
+<<<<<<< HEAD
       <pre><code class="language-js">{
   &quot;id&quot; : &quot;string&quot;
 }</code></pre>
+=======
+>>>>>>> develop
       <p>
         An account with the admin role can delete any acount by using the
         <code>admin/users/:id</code> endpoint, deleting the account all its

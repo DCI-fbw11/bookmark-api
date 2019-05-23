@@ -7,7 +7,12 @@ Base URL: https://bookmark-api.fbw-11.now.sh/
 # Roles
 
 There a two existing roles for the api **user** and **admin**.
+<<<<<<< HEAD
 By default every new registered account will be flag as a user and need to be manualy edited in the database to to be an admin.
+=======
+By default every new registered account will be flag as a user.
+If you want to create an admin please contact FBW-11 :)
+>>>>>>> develop
 
 # Schema
 
@@ -28,11 +33,14 @@ The schema of the API are the following:
     required: true,
     trim: true,
     minlength: 8
+<<<<<<< HEAD
   },
   role: {
     type: String,
     enum: ["admin", "user"],
     default:"user"
+=======
+>>>>>>> develop
   }
 }
 ```
@@ -171,11 +179,19 @@ To get bookmark from a specific date or date range , the `?startDate` is require
 ## Get sorted Bookmarks
 
 - GET
+<<<<<<< HEAD
   - api/bookmarks?sortOrder="string"&sortValue="string"
 
 To get a sorted view of the bookmarks add the `?sortOrder="string"&sortValue="string"` to your query. Only one of the query string is required
 the other one will use a default value.
 The `sortOrder` will be ascending by default and `sortValue` will use the **createdAt** as default value.
+=======
+  - api/bookmarks?sortOrder=ORDER&sortValue=VALUE
+
+To get a sorted view of the bookmarks add the `?sortOrder="string"&sortValue="string"` to your query. Only one of the query string is required
+the other one will use a default value.
+The `sortOrder` will be ascending ("ASC") by default (the other option is "DESC") and `sortValue` will use the **createdAt** as default value.
+>>>>>>> develop
 The `sortValue` can be either **url**, **title** or **createdAt**.
 
 ## Create a new Bookmark
@@ -237,13 +253,21 @@ Provide the \_id of the bookmark you want to delete to the `/api/bookmarks` endp
 
 ```js
 {
+<<<<<<< HEAD
   "bookmarkIDs" : []
+=======
+  "bookmarkIDs" : [ID,ID...]
+>>>>>>> develop
 }
 ```
 
 To delete multiple bookmarks at once use the `/api/bookmarks/delete` endpoint and provide the bookmark \_id`s you want to delete in the "bookmarkIDs" array.
 
+<<<<<<< HEAD
 # User Endpoints
+=======
+# Admin Endpoints
+>>>>>>> develop
 
 ## Get **ALL** Users
 
@@ -257,12 +281,15 @@ If an account has an admin role, the `admin/users` endpoint can be used to displ
 - DELETE
   - admin/users/:id
 
+<<<<<<< HEAD
 ```js
 {
   "id" : "string"
 }
 ```
 
+=======
+>>>>>>> develop
 An account with the admin role can delete any acount by using the `admin/users/:id` endpoint, deleting the account all its bookmark will also be deleted.
 
 > **ProTip:** The routes a strict, which means that a **"/"** at the **end** of a route will throw an error.

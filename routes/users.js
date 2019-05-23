@@ -36,4 +36,4 @@ usersRouter.use(sendJsonResp)
 // Custom error handler
 usersRouter.use(apiErrorMiddleware)
 
-module.exports = { usersRouter }
+module.exports = { usersRouter, usersRoutes }
