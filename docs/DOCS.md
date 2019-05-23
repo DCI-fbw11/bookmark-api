@@ -237,7 +237,7 @@ Provide the \_id of the bookmark you want to delete to the `/api/bookmarks` endp
 
 ```js
 {
-  "bookmarkIDs" : []
+  "bookmarkIDs" : ["string","string"]
 }
 ```
 

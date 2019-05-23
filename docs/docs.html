@@ -48,55 +48,55 @@
       <p>The schema of the API are the following:</p>
       <h2 id="user-schema">User-Schema</h2>
       <pre><code class="language-js">{
-  username: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 8
-  },
-  role: {
-    type: String,
-    enum: [&quot;admin&quot;, &quot;user&quot;],
-    default:&quot;user&quot;
-  }
-}</code></pre>
+        username: {
+          type: String,
+          required: true,
+          trim: true,
+          unique: true
+        },
+        password: {
+          type: String,
+          required: true,
+          trim: true,
+          minlength: 8
+        },
+        role: {
+          type: String,
+          enum: [&quot;admin&quot;, &quot;user&quot;],
+          default:&quot;user&quot;
+        }
+      }</code></pre>
       <h2 id="bookmark-schema">Bookmark-Schema</h2>
       <pre><code class="language-js">{
-  title: {
-    type: String,
-    maxlength: 50,
-    default: &quot;No title&quot;
-  },
-  shortDescription: {
-    type: String,
-    maxlength: 150,
-    default: &quot;&quot;
-  },
-  url: {
-    type: String,
-    required: true
-  },
-  tag: {
-    type: [{ type: String, maxlength: 50 }]
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now()
-  },
-  updatedAt: {
-    type: Date
-  },
-  userID: {
-    type: Schema.Types.ObjectId,
-    required: true
-  }
-}</code></pre>
+        title: {
+          type: String,
+          maxlength: 50,
+          default: &quot;No title&quot;
+        },
+        shortDescription: {
+          type: String,
+          maxlength: 150,
+          default: &quot;&quot;
+        },
+        url: {
+          type: String,
+          required: true
+        },
+        tag: {
+          type: [{ type: String, maxlength: 50 }]
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now()
+        },
+        updatedAt: {
+          type: Date
+        },
+        userID: {
+          type: Schema.Types.ObjectId,
+          required: true
+        }
+      }</code></pre>
       <h1 id="authentication-endpoints">Authentication Endpoints</h1>
       <h3 id="register">Register</h3>
       <ul>
@@ -108,11 +108,11 @@
         </li>
       </ul>
       <pre><code class="language-js">{
- &quot;registerData&quot; : {
-    &quot;username&quot;: &quot;string&quot;,
-    &quot;password&quot;: &quot;string&quot;
-  }
-}</code></pre>
+       &quot;registerData&quot; : {
+          &quot;username&quot;: &quot;string&quot;,
+          &quot;password&quot;: &quot;string&quot;
+        }
+      }</code></pre>
       <h3 id="login">Login</h3>
       <ul>
         <li>
@@ -123,19 +123,19 @@
         </li>
       </ul>
       <pre><code class="language-js">{
- &quot;loginData&quot; : {
-    &quot;username&quot;: &quot;string&quot;,
-    &quot;password&quot;: &quot;string&quot;
-  }
-}</code></pre>
+       &quot;loginData&quot; : {
+          &quot;username&quot;: &quot;string&quot;,
+          &quot;password&quot;: &quot;string&quot;
+        }
+      }</code></pre>
       <p>
         The response returns a token which you need to pass into the header
         named token
       </p>
       <p><strong>Returned example</strong></p>
       <pre><code class="language-js">{
-    &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNWNkYTc3ODAyZWZiNDMwN2I1NTUwZTgxIiwiaWF0IjoxNTU4MDE1NzE2LCJleHAiOjE1NTgwMTkzMTZ9.8rpXz-yrHADIKhhHN_7Xpw42Zja9dceXLWDaX83GYqQ&quot;
-}</code></pre>
+          &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNWNkYTc3ODAyZWZiNDMwN2I1NTUwZTgxIiwiaWF0IjoxNTU4MDE1NzE2LCJleHAiOjE1NTgwMTkzMTZ9.8rpXz-yrHADIKhhHN_7Xpw42Zja9dceXLWDaX83GYqQ&quot;
+      }</code></pre>
       <h3 id="change-password">Change Password</h3>
       <ul>
         <li>
@@ -146,12 +146,12 @@
         </li>
       </ul>
       <pre><code class="language-js">{
- &quot;loginData&quot; : {
-    &quot;username&quot;: &quot;string&quot;,
-    &quot;password&quot;: &quot;string&quot;,
-    &quot;new_password&quot;: &quot;string&quot;
-  }
-}</code></pre>
+       &quot;loginData&quot; : {
+          &quot;username&quot;: &quot;string&quot;,
+          &quot;password&quot;: &quot;string&quot;,
+          &quot;new_password&quot;: &quot;string&quot;
+        }
+      }</code></pre>
       <p>
         To change a password of a user use the
         <code>auth/password</code> endpoint.
@@ -271,19 +271,19 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-    title: {
-      type: String,
-      maxlength: 50
-    },
-    shortDescription: {
-      type: String,
-      maxlength: 150
-    },
-    url: {
-      type: String,
-      required: true
-    }
-}</code></pre>
+          title: {
+            type: String,
+            maxlength: 50
+          },
+          shortDescription: {
+            type: String,
+            maxlength: 150
+          },
+          url: {
+            type: String,
+            required: true
+          }
+      }</code></pre>
       <p>
         To add a bookmark to the database, use the
         <code>/api/bookmarks</code> endpoint.
@@ -300,11 +300,11 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-    url: {
-      type: String,
-      required: true
-    }
-}</code></pre>
+          url: {
+            type: String,
+            required: true
+          }
+      }</code></pre>
       <p>In update please provide the minimum</p>
       <p>
         To update a bookmark in the database, use the
@@ -335,8 +335,8 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-  &quot;bookmarkIDs&quot; : []
-}</code></pre>
+        &quot;bookmarkIDs&quot; : [&quot;string&quot;,&quot;string&quot;]
+      }</code></pre>
       <p>
         To delete multiple bookmarks at once use the
         <code>/api/bookmarks/delete</code> endpoint and provide the bookmark
@@ -366,8 +366,8 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-  &quot;id&quot; : &quot;string&quot;
-}</code></pre>
+        &quot;id&quot; : &quot;string&quot;
+      }</code></pre>
       <p>
         An account with the admin role can delete any acount by using the
         <code>admin/users/:id</code> endpoint, deleting the account all its
