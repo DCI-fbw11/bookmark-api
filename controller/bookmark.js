@@ -247,6 +247,8 @@ module.exports = {
         sortedBookmarks =
           req.query.sortValue === "url"
             ? await Bookmark.find({ userID }).sort({ url: sortOrder })
+            : req.query.sortValue === "title"
+            ? await Bookmark.find({ userID }).sort({ title: sortOrder })
             : await Bookmark.find({ userID }).sort({ createdAt: sortOrder })
 
         res.locals.response = Object.assign({}, res.locals.response || {}, {
