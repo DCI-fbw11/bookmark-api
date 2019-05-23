@@ -88,6 +88,11 @@ module.exports = {
 
   getBookmarkByDateRange: async (req, res, next) => {
     const { startDate, endDate } = req.query
+
+    // decode token here to get the ID from it
+    const { user: stringID } = await decodeToken(req.headers.token)
+    const userID = mongoose.Types.ObjectId(stringID)
+
     // you can find more notes in dateParser.js
     const { parsedStart, parsedEnd } = dateParser(startDate, endDate)
     //  this contains the list of bookmarks
@@ -96,6 +101,7 @@ module.exports = {
       // if date range is provided this runs
       if (parsedStart !== parsedEnd) {
         foundBookmarks = await Bookmark.find({
+          userID,
           createdAt: {
             $gte: new Date(parsedStart),
             $lt: new Date(parsedEnd)
@@ -105,6 +111,7 @@ module.exports = {
       } else {
         const end = new Date(parsedEnd).setHours(23, 59, 59, 999)
         foundBookmarks = await Bookmark.find({
+          userID,
           createdAt: {
             $gte: new Date(parsedStart),
             $lt: end
