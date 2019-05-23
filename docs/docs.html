@@ -41,13 +41,8 @@
       <p>
         There a two existing roles for the api <strong>user</strong> and
         <strong>admin</strong>. By default every new registered account will be
-<<<<<<< HEAD
-        flag as a user and need to be manualy edited in the database to to be an
-        admin.
-=======
         flagged as a user. If you want to create an admin please contact FBW-11
         :)
->>>>>>> develop
       </p>
       <h1 id="schema">Schema</h1>
       <p>The schema of the API are the following:</p>
@@ -64,14 +59,6 @@
     required: true,
     trim: true,
     minlength: 8
-<<<<<<< HEAD
-  },
-  role: {
-    type: String,
-    enum: [&quot;admin&quot;, &quot;user&quot;],
-    default:&quot;user&quot;
-=======
->>>>>>> develop
   }
 }</code></pre>
       <h2 id="bookmark-schema">Bookmark-Schema</h2>
@@ -167,26 +154,16 @@
       <h3 id="delete-account">Delete Account</h3>
       <ul>
         <li>
-<<<<<<< HEAD
-          DELTE
-=======
           DELETE
->>>>>>> develop
           <ul>
             <li>auth/delete-account</li>
           </ul>
         </li>
       </ul>
       <p>
-<<<<<<< HEAD
-        To delete an user account login and use the
-        <code>auth/delete-account</code> on deletion all of the users bookmarks
-        will also be deleted
-=======
         To delete a user account, login and use the
         <code>auth/delete-account</code> endpoint. On deletion all of the user
         bookmarks will also be deleted.
->>>>>>> develop
       </p>
       <h1 id="bookmarks-endpoints">Bookmarks Endpoints</h1>
       <p>
@@ -411,22 +388,14 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-<<<<<<< HEAD
-  &quot;bookmarkIDs&quot; : []
-=======
   &quot;bookmarkIDs&quot; : [ID,ID...]
->>>>>>> develop
 }</code></pre>
       <p>
         To delete multiple bookmarks at once use the
         <code>/api/bookmarks/delete</code> endpoint and provide the bookmark
         _id`s you want to delete in the &quot;bookmarkIDs&quot; array.
       </p>
-<<<<<<< HEAD
-      <h1 id="user-endpoints">User Endpoints</h1>
-=======
       <h1 id="admin-endpoints">Admin Endpoints</h1>
->>>>>>> develop
       <h2 id="get-all-users">Get <strong>ALL</strong> Users</h2>
       <ul>
         <li>
@@ -449,12 +418,6 @@
           </ul>
         </li>
       </ul>
-<<<<<<< HEAD
-      <pre><code class="language-js">{
-  &quot;id&quot; : &quot;string&quot;
-}</code></pre>
-=======
->>>>>>> develop
       <p>
         An account with the admin role can delete any acount by using the
         <code>admin/users/:id</code> endpoint, deleting the account all its
