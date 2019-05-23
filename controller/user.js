@@ -6,6 +6,10 @@ const checkPermission = require("../middleware/checkPermission")
 
 // Helpers
 const cleanUpAfterUserDeletion = require("../helpers/cleanUpAfterUserDeletion")
+const {
+  couldNotGetUsersList,
+  couldNotDeleteUser
+} = require("../helpers/errorMessages")
 
 module.exports = {
   // @route   N/A
@@ -25,6 +29,7 @@ module.exports = {
         users
       })
     } catch (error) {
+      error.message = couldNotGetUsersList
       next(error)
     }
 
@@ -46,6 +51,7 @@ module.exports = {
         message: `User with id ${req.params.id} deleted`
       })
     } catch (error) {
+      error.message = couldNotDeleteUser
       next(error)
     }
 
