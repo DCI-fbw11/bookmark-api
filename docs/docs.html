@@ -41,62 +41,57 @@
       <p>
         There a two existing roles for the api <strong>user</strong> and
         <strong>admin</strong>. By default every new registered account will be
-        flag as a user and need to be manualy edited in the database to to be an
-        admin.
+        flagged as a user. If you want to create an admin please contact FBW-11
+        :)
       </p>
       <h1 id="schema">Schema</h1>
       <p>The schema of the API are the following:</p>
       <h2 id="user-schema">User-Schema</h2>
       <pre><code class="language-js">{
-        username: {
-          type: String,
-          required: true,
-          trim: true,
-          unique: true
-        },
-        password: {
-          type: String,
-          required: true,
-          trim: true,
-          minlength: 8
-        },
-        role: {
-          type: String,
-          enum: [&quot;admin&quot;, &quot;user&quot;],
-          default:&quot;user&quot;
-        }
-      }</code></pre>
+  username: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 8
+  }
+}</code></pre>
       <h2 id="bookmark-schema">Bookmark-Schema</h2>
       <pre><code class="language-js">{
-        title: {
-          type: String,
-          maxlength: 50,
-          default: &quot;No title&quot;
-        },
-        shortDescription: {
-          type: String,
-          maxlength: 150,
-          default: &quot;&quot;
-        },
-        url: {
-          type: String,
-          required: true
-        },
-        tag: {
-          type: [{ type: String, maxlength: 50 }]
-        },
-        createdAt: {
-          type: Date,
-          default: Date.now()
-        },
-        updatedAt: {
-          type: Date
-        },
-        userID: {
-          type: Schema.Types.ObjectId,
-          required: true
-        }
-      }</code></pre>
+  title: {
+    type: String,
+    maxlength: 50,
+    default: &quot;No title&quot;
+  },
+  shortDescription: {
+    type: String,
+    maxlength: 150,
+    default: &quot;&quot;
+  },
+  url: {
+    type: String,
+    required: true
+  },
+  tag: {
+    type: [{ type: String, maxlength: 50 }]
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  },
+  updatedAt: {
+    type: Date
+  },
+  userID: {
+    type: Schema.Types.ObjectId,
+    required: true
+  }
+}</code></pre>
       <h1 id="authentication-endpoints">Authentication Endpoints</h1>
       <h3 id="register">Register</h3>
       <ul>
@@ -108,11 +103,11 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-       &quot;registerData&quot; : {
-          &quot;username&quot;: &quot;string&quot;,
-          &quot;password&quot;: &quot;string&quot;
-        }
-      }</code></pre>
+ &quot;registerData&quot; : {
+    &quot;username&quot;: &quot;string&quot;,
+    &quot;password&quot;: &quot;string&quot;
+  }
+}</code></pre>
       <h3 id="login">Login</h3>
       <ul>
         <li>
@@ -123,19 +118,19 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-       &quot;loginData&quot; : {
-          &quot;username&quot;: &quot;string&quot;,
-          &quot;password&quot;: &quot;string&quot;
-        }
-      }</code></pre>
+ &quot;loginData&quot; : {
+    &quot;username&quot;: &quot;string&quot;,
+    &quot;password&quot;: &quot;string&quot;
+  }
+}</code></pre>
       <p>
         The response returns a token which you need to pass into the header
         named token
       </p>
       <p><strong>Returned example</strong></p>
       <pre><code class="language-js">{
-          &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNWNkYTc3ODAyZWZiNDMwN2I1NTUwZTgxIiwiaWF0IjoxNTU4MDE1NzE2LCJleHAiOjE1NTgwMTkzMTZ9.8rpXz-yrHADIKhhHN_7Xpw42Zja9dceXLWDaX83GYqQ&quot;
-      }</code></pre>
+    &quot;token&quot;: &quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiNWNkYTc3ODAyZWZiNDMwN2I1NTUwZTgxIiwiaWF0IjoxNTU4MDE1NzE2LCJleHAiOjE1NTgwMTkzMTZ9.8rpXz-yrHADIKhhHN_7Xpw42Zja9dceXLWDaX83GYqQ&quot;
+}</code></pre>
       <h3 id="change-password">Change Password</h3>
       <ul>
         <li>
@@ -146,12 +141,12 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-       &quot;loginData&quot; : {
-          &quot;username&quot;: &quot;string&quot;,
-          &quot;password&quot;: &quot;string&quot;,
-          &quot;new_password&quot;: &quot;string&quot;
-        }
-      }</code></pre>
+ &quot;loginData&quot; : {
+    &quot;username&quot;: &quot;string&quot;,
+    &quot;password&quot;: &quot;string&quot;,
+    &quot;new_password&quot;: &quot;string&quot;
+  }
+}</code></pre>
       <p>
         To change a password of a user use the
         <code>auth/password</code> endpoint.
@@ -159,16 +154,16 @@
       <h3 id="delete-account">Delete Account</h3>
       <ul>
         <li>
-          DELTE
+          DELETE
           <ul>
             <li>auth/delete-account</li>
           </ul>
         </li>
       </ul>
       <p>
-        To delete an user account login and use the
-        <code>auth/delete-account</code> on deletion all of the users bookmarks
-        will also be deleted
+        To delete a user account, login and use the
+        <code>auth/delete-account</code> endpoint. On deletion all of the user
+        bookmarks will also be deleted.
       </p>
       <h1 id="bookmarks-endpoints">Bookmarks Endpoints</h1>
       <p>
@@ -198,8 +193,8 @@
         </li>
       </ul>
       <p>
-        To see a specific bookmark, the bookmark _id is required and can be
-        added in the following way : <code>/api/bookmarks/:id</code>.
+        To see a specific bookmark, the bookmark <code>_id</code> is required
+        and can be added in the following way : <code>/api/bookmarks/:id</code>.
       </p>
       <h2 id="get-bookmark-by-tag">Get Bookmark by Tag</h2>
       <ul>
@@ -215,7 +210,7 @@
       </ul>
       <p>
         To see bookmarks with a specific tag or combination of tags use the
-        <code>api/bookmarks/tag</code> endpoint. If multiple tag are given only
+        <code>api/bookmarks/tag</code> endpoint. If multiple tags are given only
         the bookmarks are shown wich contain <strong>ALL</strong> of the tags.
       </p>
       <h2 id="get-bookmark-by-date-and-date-range">
@@ -242,9 +237,7 @@
         <li>
           GET
           <ul>
-            <li>
-              api/bookmarks?sortOrder=&quot;string&quot;&amp;sortValue=&quot;string&quot;
-            </li>
+            <li>api/bookmarks?sortOrder=ORDER&amp;sortValue=VALUE</li>
           </ul>
         </li>
       </ul>
@@ -255,10 +248,11 @@
         >
         to your query. Only one of the query string is required the other one
         will use a default value. The <code>sortOrder</code> will be ascending
-        by default and <code>sortValue</code> will use the
-        <strong>createdAt</strong> as default value. The
-        <code>sortValue</code> can be either <strong>url</strong>,
-        <strong>title</strong> or <strong>createdAt</strong>.
+        (&quot;ASC&quot;) by default (the other option is &quot;DESC&quot;) and
+        <code>sortValue</code> will use the <strong>createdAt</strong> as
+        default value. The <code>sortValue</code> can be either
+        <strong>url</strong>, <strong>title</strong> or
+        <strong>createdAt</strong>.
       </p>
       <h2 id="create-a-new-bookmark">Create a new Bookmark</h2>
       <ul>
@@ -271,19 +265,19 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-          title: {
-            type: String,
-            maxlength: 50
-          },
-          shortDescription: {
-            type: String,
-            maxlength: 150
-          },
-          url: {
-            type: String,
-            required: true
-          }
-      }</code></pre>
+    title: {
+      type: String,
+      maxlength: 50
+    },
+    shortDescription: {
+      type: String,
+      maxlength: 150
+    },
+    url: {
+      type: String,
+      required: true
+    }
+}</code></pre>
       <p>
         To add a bookmark to the database, use the
         <code>/api/bookmarks</code> endpoint.
@@ -300,11 +294,11 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-          url: {
-            type: String,
-            required: true
-          }
-      }</code></pre>
+    url: {
+      type: String,
+      required: true
+    }
+}</code></pre>
       <p>In update please provide the minimum</p>
       <p>
         To update a bookmark in the database, use the
@@ -335,14 +329,14 @@
         </li>
       </ul>
       <pre><code class="language-js">{
-        &quot;bookmarkIDs&quot; : [&quot;string&quot;,&quot;string&quot;]
-      }</code></pre>
+  &quot;bookmarkIDs&quot; : [ID,ID...]
+}</code></pre>
       <p>
         To delete multiple bookmarks at once use the
         <code>/api/bookmarks/delete</code> endpoint and provide the bookmark
         _id`s you want to delete in the &quot;bookmarkIDs&quot; array.
       </p>
-      <h1 id="user-endpoints">User Endpoints</h1>
+      <h1 id="admin-endpoints">Admin Endpoints</h1>
       <h2 id="get-all-users">Get <strong>ALL</strong> Users</h2>
       <ul>
         <li>
@@ -365,9 +359,6 @@
           </ul>
         </li>
       </ul>
-      <pre><code class="language-js">{
-        &quot;id&quot; : &quot;string&quot;
-      }</code></pre>
       <p>
         An account with the admin role can delete any acount by using the
         <code>admin/users/:id</code> endpoint, deleting the account all its
