@@ -7,7 +7,9 @@ const {
   noBookmarks,
   noTagProvided,
   noMatchingRoutes,
-  duplicateTags
+  duplicateTags,
+  couldNotPost,
+  couldNotDelete
 } = require("../helpers/errorMessages")
 const Bookmark = require("../models/bookmark")
 const dateParser = require("../helpers/dateParser")
@@ -77,6 +79,7 @@ module.exports = {
         bookmark: foundBookmarks
       })
     } catch (error) {
+      error.message = noBookmarks
       next(error)
     }
     next()
@@ -121,8 +124,9 @@ module.exports = {
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         bookmark: foundBookmarks
       })
-    } catch (err) {
-      next(err)
+    } catch (error) {
+      error.message = noBookmarks
+      next(error)
     }
     next()
   },
@@ -155,6 +159,7 @@ module.exports = {
         bookmark: savedBookmark
       })
     } catch (error) {
+      error.message = couldNotPost
       next(error)
     }
     next()
@@ -194,6 +199,7 @@ module.exports = {
         message: `Bookmark with id ${id} was updated!`
       })
     } catch (error) {
+      error.message = couldNotPost
       next(error)
     }
     next()
@@ -211,6 +217,7 @@ module.exports = {
         message: `Bookmark with id ${id} was deleted!`
       })
     } catch (error) {
+      error.message = couldNotDelete
       next(error)
     }
     next()
@@ -240,6 +247,7 @@ module.exports = {
           bookmark: sortedBookmarks
         })
       } catch (error) {
+        error.message = noBookmarks
         next(error)
       }
     }
@@ -257,6 +265,7 @@ module.exports = {
         message: `Bookmark with id's ${bookmarkIDs.map(id => id)} were deleted!`
       })
     } catch (error) {
+      error.message = couldNotDelete
       next(error)
     }
     next()

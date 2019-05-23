@@ -7,6 +7,12 @@ const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
 const decodeToken = require("../helpers/decodeToken")
 const cleanUpAfterUserDeletion = require("../helpers/cleanUpAfterUserDeletion")
+const {
+  couldNotRegister,
+  couldNotLogin,
+  couldNotChangePassword,
+  couldNotDeleteAccount
+} = require("../helpers/errorMessages")
 
 module.exports = {
   // @route   POST auth/register
@@ -37,6 +43,7 @@ module.exports = {
         hashedUser
       })
     } catch (error) {
+      error.message = couldNotRegister
       next(error)
     }
 
@@ -66,6 +73,7 @@ module.exports = {
         userID: user._id
       })
     } catch (error) {
+      error.message = couldNotLogin
       next(error)
     }
 
@@ -103,6 +111,7 @@ module.exports = {
         userID: user._id
       })
     } catch (error) {
+      error.message = couldNotChangePassword
       next(error)
     }
 
@@ -125,6 +134,7 @@ module.exports = {
         message: `Account with ID:${userID} has been successfully deleted.`
       })
     } catch (error) {
+      error.message = couldNotDeleteAccount
       next(error)
     }
 
