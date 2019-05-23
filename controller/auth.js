@@ -32,6 +32,7 @@ module.exports = {
       // Delete pass before sending in res
       const hashedUser = newUser.toObject()
       delete hashedUser.password
+      delete hashedUser.role
 
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         hashedUser
