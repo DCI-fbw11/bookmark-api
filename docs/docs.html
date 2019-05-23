@@ -254,6 +254,65 @@
         <strong>url</strong>, <strong>title</strong> or
         <strong>createdAt</strong>.
       </p>
+      <h2 id="get-bookmark-by-tag">Get Bookmark by Tag</h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>
+              api/bookmarks/tag/?tags=&quot;search string&quot;,&quot;search
+              string&quot;
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        To see bookmarks with a specific tag or combination of tags use the
+        <code>api/bookmarks/tag</code> endpoint. If multiple tag are given only
+        the bookmarks are shown wich contain <strong>ALL</strong> of the tags.
+      </p>
+      <h2 id="get-bookmark-by-date-and-date-range">
+        Get Bookmark by Date and Date Range
+      </h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>
+              api/bookmarks/date/?startDate=year.month.day&amp;endDate=year.month.day
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        To get bookmark from a specific date or date range , the
+        <code>?startDate</code> is required and can be added in the query. The
+        <code>endDate</code> can be added in case you want bookmarks from a date
+        range.
+      </p>
+      <h2 id="get-sorted-bookmarks">Get sorted Bookmarks</h2>
+      <ul>
+        <li>
+          GET
+          <ul>
+            <li>
+              api/bookmarks?sortOrder=&quot;string&quot;&amp;sortValue=&quot;string&quot;
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p>
+        To get a sorted view of the bookmarks add the
+        <code
+          >?sortOrder=&quot;string&quot;&amp;sortValue=&quot;string&quot;</code
+        >
+        to your query. Only one of the query string is required the other one
+        will use a default value. The <code>sortOrder</code> will be ascending
+        by default and <code>sortValue</code> will use the
+        <strong>createdAt</strong> as default value. The
+        <code>sortValue</code> can be either <strong>url</strong>,
+        <strong>title</strong> or <strong>createdAt</strong>.
+      </p>
       <h2 id="create-a-new-bookmark">Create a new Bookmark</h2>
       <ul>
         <li>
