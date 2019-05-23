@@ -65,8 +65,7 @@ module.exports = {
       const token = createToken(user, isMatching)
 
       const message = isMatching ? "Login success!!" : "Login failed"
-      // success -> thumbs up
-      // fail -> login failed
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         token,
@@ -89,10 +88,8 @@ module.exports = {
       new_password: newPassword
     } = req.body.loginData
     try {
-      // find user
       const user = await User.findOne({ username })
-      // compare passwords with bcrypt
-      // succes -> get hashsed pass from db
+
       const isMatching = await checkPassword(oldPassword, user.password)
 
       if (isMatching) {
@@ -104,8 +101,7 @@ module.exports = {
       const message = isMatching
         ? "Password change success"
         : "Old password is wrong, password change failed"
-      // success -> thumbs up
-      // fail -> login failed
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         userID: user._id
@@ -124,10 +120,11 @@ module.exports = {
   deleteAccount: async (req, res, next) => {
     try {
       const { user: userID } = await decodeToken(req.headers.token)
-      // delete user
+
+      // Delete User
       await User.findOneAndDelete({ _id: userID })
-      // success -> thumbs up
-      // fail -> login failed
+
+      // Delete Bookmarks
       await cleanUpAfterUserDeletion(userID)
 
       res.locals.response = Object.assign({}, res.locals.response || {}, {
