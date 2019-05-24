@@ -66,7 +66,6 @@ module.exports = {
       const token = createToken(user, isMatching)
 
       const message = isMatching ? "Login success!!" : "Login failed"
-
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         token,
@@ -102,7 +101,6 @@ module.exports = {
       const message = isMatching
         ? "Password change success"
         : "Old password is wrong, password change failed"
-
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         userID: user._id
