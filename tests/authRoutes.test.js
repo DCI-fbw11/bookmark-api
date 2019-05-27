@@ -6,6 +6,9 @@ const { authRoutes } = require("../routes/auth")
 
 const authRoutePrefix = "/auth"
 
+
+let token
+
 beforeAll(async () => {
   await mongoose.connection.on("connected", () => Promise.resolve())
   await mongoose.connection.dropDatabase()
@@ -37,6 +40,9 @@ describe("Auth tests", () => {
           password: "12345678"
         }
       })
+
+
+    token = response.body.data.token
 
     expect(response.body.data.token).not.toBeNull()
     done()
@@ -89,4 +95,17 @@ describe("Auth tests", () => {
     )
     done()
   })
+
+
+  test("Deleting account should respond with success message", async done => {
+    const response = await request(app)
+      .delete(authRoutePrefix + authRoutes.deleteAccount)
+      .set("token", token)
+
+    expect(response.body.data.message).toEqual(
+      expect.stringContaining("deleted")
+    )
+    done()
+  })
+
 })

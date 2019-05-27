@@ -1,21 +1,7 @@
 require("dotenv").config()
 const express = require("express")
 const logger = require("morgan")
-// Docs
-const swaggerUi = require("swagger-ui-express")
-const swaggerJSDoc = require("swagger-jsdoc")
-const { version } = require("./package.json")
-
-const options = {
-  definition: {
-    info: {
-      title: "Bookmarks API",
-      version
-    }
-  },
-  // Path to the API docs
-  apis: ["./routes/*.js"]
-}
+const chalk = require("chalk")
 
 const { connect } = require("./db/connection")
 const { apiRouter } = require("./routes/bookmarks")
@@ -26,10 +12,10 @@ const app = express()
 
 connect()
   .then(() => {
-    console.log("Connected to Mongo") // eslint-disable-line no-console
+    console.log(chalk.green("Connected to Mongo")) // eslint-disable-line no-console
   })
   .catch(error => {
-    console.error("Could not connect, ", error) // eslint-disable-line no-console
+    console.error(chalk.red("Could not connect, ", error)) // eslint-disable-line no-console
   })
 
 app.use(logger("dev"))
@@ -39,8 +25,6 @@ app.use("/auth", authRouter)
 app.use("/admin", usersRouter)
 
 // Docs
-const swaggerSpec = swaggerJSDoc(options)
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 app.use("/", docsRouter)
 
 module.exports = app

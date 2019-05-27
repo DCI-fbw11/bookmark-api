@@ -7,6 +7,14 @@ const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
 const decodeToken = require("../helpers/decodeToken")
 
+const cleanUpAfterUserDeletion = require("../helpers/cleanUpAfterUserDeletion")
+const {
+  couldNotRegister,
+  couldNotLogin,
+  couldNotChangePassword,
+  couldNotDeleteAccount
+} = require("../helpers/errorMessages")
+
 module.exports = {
   // @route   POST auth/register
   // @desc    Register a new user
@@ -31,11 +39,13 @@ module.exports = {
       // Delete pass before sending in res
       const hashedUser = newUser.toObject()
       delete hashedUser.password
+      delete hashedUser.role
 
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         hashedUser
       })
     } catch (error) {
+      error.message = couldNotRegister
       next(error)
     }
 
@@ -57,14 +67,14 @@ module.exports = {
       const token = createToken(user, isMatching)
 
       const message = isMatching ? "Login success!!" : "Login failed"
-      // success -> thumbs up
-      // fail -> login failed
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         token,
         userID: user._id
       })
     } catch (error) {
+      error.message = couldNotLogin
       next(error)
     }
 
@@ -80,10 +90,8 @@ module.exports = {
       new_password: newPassword
     } = req.body.loginData
     try {
-      // find user
       const user = await User.findOne({ username })
-      // compare passwords with bcrypt
-      // succes -> get hashsed pass from db
+      
       const isMatching = await checkPassword(oldPassword, user.password)
 
       if (isMatching) {
@@ -95,13 +103,13 @@ module.exports = {
       const message = isMatching
         ? "Password change success"
         : "Old password is wrong, password change failed"
-      // success -> thumbs up
-      // fail -> login failed
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         userID: user._id
       })
     } catch (error) {
+      error.message = couldNotChangePassword
       next(error)
     }
 
@@ -114,14 +122,18 @@ module.exports = {
   deleteAccount: async (req, res, next) => {
     try {
       const { user: userID } = await decodeToken(req.headers.token)
-      // delete user
+
+      // Delete User
       await User.findOneAndDelete({ _id: userID })
-      // success -> thumbs up
-      // fail -> login failed
+
+      // Delete Bookmarks
+      await cleanUpAfterUserDeletion(userID)
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message: `Account with ID:${userID} has been successfully deleted.`
       })
     } catch (error) {
+      error.message = couldNotDeleteAccount
       next(error)
     }
 
