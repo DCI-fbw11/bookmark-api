@@ -43,6 +43,8 @@ apiRouter.get("/", (req, res) => {
 
 // Protected Route Token Check
 apiRouter.all(apiRoutes.all, checkToken)
+
+// GET
 apiRouter.get(apiRoutes.getAllBookmarks, getBookmarks, sortBookmarks)
 apiRouter.get(apiRoutes.getBookmarkByID, getBookmarkByID)
 apiRouter.get(apiRoutes.getBookmarkByDateRange, getBookmarkByDateRange)

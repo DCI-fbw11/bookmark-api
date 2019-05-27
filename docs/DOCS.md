@@ -150,6 +150,7 @@ The endpoint `/api/bookmarks` will show all bookmarks in the database.
 
 To see a specific bookmark, the bookmark \_id is required and can be added in the following way : `/api/bookmarks/:id`.
 
+
 ## Get Bookmark by Tag
 
 - GET
@@ -226,6 +227,7 @@ To update a bookmark in the database, use the `/api/bookmarks` endpoint. To upda
 
 Provide the \_id of the bookmark you want to delete to the `/api/bookmarks` endpoint in this way: `/api/bookmarks/:id`.
 
+
 ## Batch Delete Bookmarks
 
 - DELETE
@@ -254,5 +256,6 @@ If an account has an admin role, the `admin/users` endpoint can be used to displ
   - admin/users/:id
 
 An account with the admin role can delete any acount by using the `admin/users/:id` endpoint, deleting the account all its bookmark will also be deleted.
+
 
 > **ProTip:** The routes a strict, which means that a **"/"** at the **end** of a route will throw an error.

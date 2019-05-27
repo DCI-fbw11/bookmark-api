@@ -14,6 +14,7 @@ let token
 let userID
 let singleBookmarkID
 
+
 beforeAll(async () => {
   await mongoose.connection.on("connected", () => Promise.resolve())
   await mongoose.connection.dropDatabase()

@@ -6,6 +6,7 @@ const checkPassword = require("../helpers/checkPassword")
 const createToken = require("../helpers/createToken")
 const createError = require("../helpers/createError")
 const decodeToken = require("../helpers/decodeToken")
+
 const cleanUpAfterUserDeletion = require("../helpers/cleanUpAfterUserDeletion")
 const {
   couldNotRegister,
@@ -66,6 +67,7 @@ module.exports = {
       const token = createToken(user, isMatching)
 
       const message = isMatching ? "Login success!!" : "Login failed"
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         token,
@@ -89,7 +91,7 @@ module.exports = {
     } = req.body.loginData
     try {
       const user = await User.findOne({ username })
-
+      
       const isMatching = await checkPassword(oldPassword, user.password)
 
       if (isMatching) {
@@ -101,6 +103,7 @@ module.exports = {
       const message = isMatching
         ? "Password change success"
         : "Old password is wrong, password change failed"
+
       res.locals.response = Object.assign({}, res.locals.response || {}, {
         message,
         userID: user._id
