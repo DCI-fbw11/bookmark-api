@@ -2,7 +2,7 @@ const request = require("supertest")
 const app = require("../app")
 const { mongoose } = require("../db/connection")
 
-// Route Strings
+// Route Strings are here
 const { usersRoutes } = require("../routes/users")
 const { authRoutes } = require("../routes/auth")
 
